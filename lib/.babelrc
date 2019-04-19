@@ -1,0 +1,13 @@
+{
+    "extends": "../.babelrc",
+    "presets": [
+        [
+            "@babel/env",
+            {
+                "modules": false,
+                "useBuiltIns": "usage",
+                "targets": "node 6, > 0.25%, not dead"
+            }
+        ]
+    ]
+}
