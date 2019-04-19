@@ -14,7 +14,7 @@
 
 > 需要先在本地通过`--rpc`参数启动一个[LemoChain 节点](https://github.com/LemoFoundationLtd/lemochain-go)，或远程连接到一个已存在的 LemoChain 节点，才能运行本项目
 
-[lemochain-distribution-sdk](https://github.com/LemoFoundationLtd/lemo-client/blob/master/README.md)
+[lemochain-distribution-sdk](https://github.com/LemoFoundationLtd/lemo-distribution-sdk/blob/master/README.md)
 
 ## 安装
 
