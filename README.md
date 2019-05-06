@@ -14,13 +14,11 @@
 
 > 需要先在本地通过`--rpc`参数启动一个[LemoChain 节点](https://github.com/LemoFoundationLtd/lemochain-go)，或远程连接到一个已存在的 LemoChain 节点，才能运行本项目
 
-[lemochain-distribution-sdk](https://github.com/LemoFoundationLtd/lemo-distribution-sdk/blob/master/README.md)
-
 ## 安装
 
 ### 使用 Yarn
 
-```bash
+```bash 
 yarn add lemo-client
 ```
 
@@ -77,7 +75,11 @@ lemo.chain.getBlockByNumber(0).then(function(block) {
 | [lemo.tx.signCandidate(privateKey, txInfo, candidateInfo)](#submodule-tx-signCandidate)   | 签名注册/编辑候选节点的特殊交易   | ✖    | ✓          |
 | [lemo.tx.signCreateAsset(privateKey, txConfig, createAssetInfo) ](#submodule-tx-signCreateAsset)   | 签名创建资产的交易   | ✖    | ✓          |
 | [lemo.tx.signIssueAsset(privateKey, txConfig, issueAssetInfo)](#submodule-tx-signIssueAsset)   | 签名发行资产的交易   | ✖    | ✓          |
+| [lemo.tx.signReplenishAsset(privateKey, txConfig, replenishInfo)](#submodule-tx-signReplenishAsset)   | 签名增发资产交易   | ✖    | ✓         |
+| [lemo.tx.signModifyAsset(privateKey, txConfig, modifyInfo)](#submodule-tx-signModifyAsset)   | 签名修改资产交易   | ✖    | ✓         |
 | [lemo.tx.signTransferAsset(privateKey, txConfig, transferAssetInfo)](#submodule-tx-signTransferAsset)   | 签名交易资产交易   | ✖    | ✓          |
+| [lemo.tx.signNoGas(privateKey, txConfig, payer)](#submodule-tx-signNoGas)   | 签名免Gas费用交易   | ✖    | ✓         |
+| [lemo.tx.signReimbursement(privateKey, noGasTxStr, gasPrice, gasLimit)](#submodule-tx-signReimbursement)   | 签名代付Gas交易   | ✖    | ✓         |
 | [lemo.tx.send(signedTxInfo)](#submodule-tx-send)                           | 发送已签名的交易               | ✓    | ✓          |
 | [lemo.tx.watchTx(filterTxConfig, callback)](#submodule-tx-watchTx)         | 监听过滤区块的交易            | ✖    | ✓          |
 | [lemo.tx.stopWatchTx(subscribeId)](#submodule-tx-stopWatchTx)                | 停止指定交易            | ✖    | ✓          |
@@ -87,6 +89,7 @@ lemo.chain.getBlockByNumber(0).then(function(block) {
 | [lemo.tool.verifyAddress(addr)](#submodule-tool-verifyAddress)             | LemoChain地址校验             | ✖    | ✓          |
 | [lemo.tool.moToLemo(mo)](#submodule-tool-moToLemo)             | 将单位从mo转换为LEMO             | ✖    | ✓          |
 | [lemo.tool.lemoToMo(ether)](#submodule-tool-lemoToMo)             | 将单位从LEMO转换为mo             | ✖    | ✓          |
+| [lemo.tool.toBuffer(data)](#submodule-tool-toBuffer)             | 将数据转换为Buffer类型             | ✖    | ✓          |
 
 | 常量                                                                        | 功能                           |
 | -------------------------------------------------------------------------- | ------------------------------ |
@@ -220,6 +223,9 @@ lemo.chain.getBlockByNumber(0).then(function(block) {
 
 ```json
 {
+    "type": "1",
+    "chainID": "1",
+    "version": "1",
     "from": "Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D",
     "to": "Lemo83JW7TBPA7P2P6AR9ZC2WCQJYRNHZ4NJD4CY",
     "toName": "",
@@ -230,12 +236,14 @@ lemo.chain.getBlockByNumber(0).then(function(block) {
     "gasPrice": "3000000000",
     "hash": "0x6d3062a9f5d4400b2002b436bc69485449891c83e23bf9e27229234da5b25dcf",
     "message": "",
-    "r": "0xaf5e573f07e4aaa2932b21b90a4b1b1a317b00a83d66908a0053a337319b149d",
-    "s": "0x6c1fbad11a56720fe219ef67c0ada27fa3c76212cc849f519e5fbcbe83a88b6b",
-    "v": "0x20001"
+    "sig": "0xd9a9f9f41ea020185a6480fe6938d776f0a675d89057c071fc890e09742a4dd96edb9d48c9978c2f12fbde0d0445f2ff5f08a448b91469511c663567d0b015f601",
+    "gasPayerSig": "0x800be6a0cf31ab9e86d547fb8cf964339276233a2b260ad8a4b4c93b39a48d6b1761e125f601bc6953e30eaad3e698c12add332a5740f1618915c12432dc610601"
 }
 ```
 
+-   `type` 交易类型
+-   `chainID` LemoChain的ID
+-   `version` 当前交易版本，介于0-128之间
 -   `from` 交易发送者的账户地址。由签名字段解析得到
 -   `to` 交易接收者的账户地址
 -   `toName` (可选) 交易接收者的账户名，会与账户地址进行比对校验。类似银行转账时填写的姓名与卡号的关系。最大长度为100字符
@@ -246,21 +254,89 @@ lemo.chain.getBlockByNumber(0).then(function(block) {
 -   `gasPrice` 交易消耗 gas 的单价，`BigNumber`对象，单位为`mo`。单价越高越优先被打包
 -   `hash` 交易 hash
 -   `message` (可选) 交易附带的文本消息。最大长度为1024字符
--   `r` 交易签名字段
--   `s` 交易签名字段
--   `v` 交易类型、交易编码版本号(当前为 0)、交易签名字段、chainID 这 4 个字段组合而成的数据
+-   `sig` 交易签名字段，长度为65个字节
+-   `gasPayerSig` 代付 gas 交易签名字段，长度为65个字节
 
 <a name="data-transaction-type"></a>
+
 | 交易类型                 | 数值 | 说明                       |
 | ----------------------- | --- | -------------------------- |
 | lemo.TxType.ORDINARY    | 0   | 普通转账交易或合约执行交易    |
 | lemo.TxType.VOTE        | 1   | 设置投票对象                |
 | lemo.TxType.CANDIDATE   | 2   | 注册或修改候选人信息         |
+| lemo.TxType.CREATE_ASSET | 3   | 创建资产信息                |
+| lemo.TxType.ISSUE_ASSET  | 4   | 发行资产                   |
+| lemo.TxType.REPLENISH_ASSET   | 5   | 增发资产交易           |
+| lemo.TxType.MODIFY_ASSET | 6   | 修改资产交易                |
+| lemo.TxType.TRANSFER_ASSET| 7   | 交易资产                   |
 
 | chainID | 说明           |
 | ------- | -------------- |
 | 1       | LemoChain 主网 |
 | 100     | LemoChain 测试网 |
+
+<a name="data-structure-asset"></a>
+
+#### asset
+
+资产信息
+
+```json
+{
+    "category": "1",
+    "decimal": 18,
+    "totalSupply": "15000000000000000000",
+    "isReplenishable": true,
+    "isDivisible": true,
+    "issuer": "Lemo83GWNWJQ3DQFN6F24WFZF5TGQ39A696GJ7Z3",
+    "profile": {
+        "name": "Demo Asset",
+        "symbol": "DT",
+        "description": "this is a asset information",
+        "suggestedGasLimit": "60000",
+        "freeze": "false"
+    }
+}
+```
+
+-   `category` 资产类型
+-   `decimal` 发行资产的小数位，表示将总数细化到小数点后多少位，默认为18位
+-   `totalSupply` 发行的资产总量，当资产在增发和销毁时发行的资产总量会实时变化，发行资产总量为`发行量*10^decimal`
+-   `isReplenishable` 该资产是否可增发，在创建资产时设置，设置后不可再次修改，默认为`true`
+-   `isDivisible` 该资产是否可分割，在创建资产时设置，设置后不可再次修改，默认为`true`
+-   `issuer` 发行者地址，根据创建资产时的签名字段得到
+-   `profile` 资产的其他信息，此部分内容可以再次修改
+    -   `name` 创建该资产时的资产名称
+    -   `symbol` 资产标识
+    -   `description` 资产基本信息
+    -   `suggestedGasLimit` 交易消耗的gas上限，和`gasLimit`相同用法，创建资产时由用户自己设置，默认为60000
+    -   `freeze` 是否冻结资产，默认为`false`，将其设置为`true`可以停止该资产除查询以外的一切操作
+
+<a name="data-asset-category"></a>
+
+| category| 说明          |
+| ------- | -------------- |
+| 1       | 通证资产，和以太坊的ERC20代币类似，发行时可以设置是否允许今后增发，用户收到币后可以任意分割转账 |
+| 2       | 非同质化资产，和以太坊的ERC721代币类似，可以携带少量资产信息，并且不可分割 |
+| 3       | 通用资产，更加灵活的数字资产，适用于更加复杂的场景，以上两种资产都由通用资产特化而来 |
+
+<a name="data-structure-equity"></a>
+
+#### equity
+
+记录资产持有者的资产信息，保存在持有者的账户中
+
+```json
+{
+    "assetCode": "0xd0befd3850c574b7f6ad6f7943fe19b212affb90162978adc2193a035ced8884",
+    "assetId": "0x34b04e018488f37f449193af2f24feb3b034c994cde95d30e3181403ac76528a",
+    "balance": "15000000000000000000"
+}
+```
+
+-   `assetCode` 资产码，创建资产时得到
+-   `assetId` 资产Id，发行资产时得到，如果资产类型为1，则 assetCode 和 assetId 相同
+-   `balance` 资产余额，单位是`mo`
 
 <a name="data-structure-changeLog"></a>
 
@@ -692,13 +768,14 @@ lemo.getDeputyNodeList()
 无
 
 ##### Returns
-`Promise` - 通过`then`可以获取当前所有共识节点的地址列表。该地址可用于连接节点
+`Promise` - 通过`then`可以获取当前所有共识节点的地址列表。该地址可用于[连接节点](#submodule-net-connect)  
 
 ##### Example
 ```js
 lemo.getDeputyNodeList().then(function(nodeList) {
     console.log(nodeList.length) // 1
     console.log(nodeList[0]) // "5e3600755f9b512a65603b38e30885c98cbac70259c3235c9b3f42ee563b480edea351ba0ff5748a638fe0aeff5d845bf37a3b437831871b48fd32f33cd9a3c0@149.28.68.93:7003"
+    lemo.net.connect(nodeList[0])
 })
 ```
 
@@ -773,7 +850,7 @@ lemo.stopWatchBlock(watchBlockId)
 lemo.account.newKeyPair()
 ```
 
-创新账户公私钥
+创建新的账户地址和私钥
 
 ##### Parameters
 
@@ -914,7 +991,7 @@ lemo.account.getAssetInfo(assetCode)
 ##### Example
 ```js
 lemo.account.getAssetInfo('0xd0befd3850c574b7f6ad6f7943fe19b212affb90162978adc2193a035ced8884').then(function(result) {
-    console.log(result.category) // 1
+    console.log(result.category) // "1"
     console.log(result.profile.suggestedGasLimit) //"60000"
 })
 ```
@@ -939,7 +1016,7 @@ lemo.account.getAssetMetaData(assetId)
 ```js
 lemo.account.getAssetMetaData('0x34b04e018488f37f449193af2f24feb3b034c994cde95d30e3181403ac76528a').then(function(result) {
     console.log(result.metaDate) // "This is user-defined data"
-    console.log(result.owner) //"Lemo8498CBCJSY9G7JF4CGZDP64PRRNGP4HQ2QPF"
+    console.log(result.owner) // "Lemo8498CBCJSY9G7JF4CGZDP64PRRNGP4HQ2QPF"
 })
 ```
 
@@ -1036,6 +1113,7 @@ lemo.tx.sendTx(privateKey, txconfig, waitConfirm)
 1. `string` - 账户私钥
 2. `object` - 签名前的交易信息
     - `type` - (number) (选填) 交易类型，默认值为`0`
+    - `chainID` - (number) (选填) LemoChain 的ID，默认值为`1`
     - `version` - (number) (选填) 交易编码版本号，默认值为`0`
     - `to` - (string) (选填) 交易接收者的账户地址。为空表示这是创建智能合约的交易，必须携带`data`
     - `toName` - (string) (选填) 交易接收者的账户名，会与账户地址进行比对校验。类似银行转账时填写的姓名与卡号的关系
@@ -1123,7 +1201,7 @@ lemo.tx.signVote(privateKey, txInfo)
 const txInfo = {to: 'Lemo83BYKZJ4RN4TKC9C78RFW7YHW6S87TPRSH34'}
 const signedTxStr = lemo.tx.signVote('0xfdbd9978910ce9e1ed276a75132aacb0a12e6c517d9bd0311a736c57a228ee52', txInfo)
 console.log(signedTxStr)
-// {"gasPrice":"3000000000","gasLimit":"2000000","amount":"0","expirationTime":"1548337992","v":"0x010300c8","r":"0xc9230ed3a37b85603cd0ac690994d6f207d0744e9d451f9ff02ae0ef5c83ba21","s":"0x61848625fea8a18c0648d6c0f21407a4c347a5815bc01956842c91aec053fd38","to":"Lemo83BYKZJ4RN4TKC9C78RFW7YHW6S87TPRSH34"}
+// {"type":"1","version":"1","chainID":"1","gasPrice":"3000000000","gasLimit":"2000000","amount":"0","expirationTime":"1557054086","to":"Lemo83BYKZJ4RN4TKC9C78RFW7YHW6S87TPRSH34","sig":"0x8eb17851931bcd0c6e2d53e6f01dcde5c124991f6f7c6d09db19cad83d24f6be668dad376dbdbc0793853565053a0ac12183ef6953ca7586cf07cede73f124d900"}
 ```
 
 ---
@@ -1152,7 +1230,7 @@ lemo.tx.signCandidate(privateKey, txInfo, candidateInfo)
 ##### Example
 
 ```js
-const txInfo = {to: 'Lemo83BYKZJ4RN4TKC9C78RFW7YHW6S87TPRSH34'}
+const txInfo = {chainID: '1'}
 const candidateInfo = {
     isCandidate: true,
     minerAddress: 'Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG',
@@ -1162,7 +1240,7 @@ const candidateInfo = {
 }
 const signedTxStr = lemo.tx.signCandidate('0xfdbd9978910ce9e1ed276a75132aacb0a12e6c517d9bd0311a736c57a228ee52', txInfo, candidateInfo)
 console.log(signedTxStr)
-// {"gasPrice":"3000000000","gasLimit":"2000000","amount":"0","expirationTime":"1548337908","v":"0x020300c8","r":"0x3a3bfc3c82c3f712b25917d9aa347474f3b1842f05c0d54c84442a7eea7cccde","s":"0x2a9bbf04db371dd11846ee46a0ffeafe6b4955b929fcda9391c3a026a984763b","data":"0x7b22697343616e646964617465223a747275652c226d696e657241646472657373223a224c656d6f3833474e3732475948324e5a3842413732395a39544354374b5135464333435236444a47222c226e6f64654944223a223565333630303735356639623531326136353630336233386533303838356339386362616337303235396333323335633962336634326565353633623438306564656133353162613066663537343861363338666530616566663564383435626633376133623433373833313837316234386664333266333363643961336330222c22686f7374223a223132372e302e302e31222c22706f7274223a2237303031227d"}
+// {"type":"2","version":"1","chainID":"1","gasPrice":"3000000000","gasLimit":"2000000","amount":"0","expirationTime":"1557054141","data":"0x7b22697343616e646964617465223a2274727565222c226d696e657241646472657373223a224c656d6f3833474e3732475948324e5a3842413732395a39544354374b5135464333435236444a47222c226e6f64654944223a223565333630303735356639623531326136353630336233386533303838356339386362616337303235396333323335633962336634326565353633623438306564656133353162613066663537343861363338666530616566663564383435626633376133623433373833313837316234386664333266333363643961336330222c22686f7374223a223132372e302e302e31222c22706f7274223a2237303031227d","sig":"0xd81f37f282cac1aba65bd263bf1b2340da19e9e4a101f0aff2a414821185c340573e540fbb79e83cb24f92727789dbe781c018e040a58f0505109cd4949d13d501"}
 ```
 
 ---
@@ -1182,19 +1260,19 @@ lemo.tx.signCreateAsset(privateKey, txConfig, createAssetInfo)
 
 1. `string` - 账户私钥
 2. `object` - 签名前的交易信息，细节参考[`lemo.tx.sendTx`](#submodule-tx-sendTx)。这里的 `to`, `amount`, `toName` 字段会被忽略
-3. `object` - 创建资产信息
+3. `object` - 创建[资产](#data-structure-asset)信息
 
 ##### Returns
 
-`string` - 签名后的[交易](#data-structure-transaction)信息字符串
+`string` - 签名后的[交易](#data-structure-transaction)信息字符串，`data`里面包含创建资产的信息。
 
 ##### Example
 
 ```js
-const txInfo = {to: 'Lemo83BYKZJ4RN4TKC9C78RFW7YHW6S87TPRSH34'}
+const txInfo = {chainID: '1'}
 const createAssetInfo = {
-    category: 1,
-    decimals: 18,
+    category: '1',
+    decimal: 18,
     isReplenishable: true,
     isDivisible: true,
     profile: {
@@ -1206,7 +1284,7 @@ const createAssetInfo = {
 }
 const signCreateAsset = lemo.tx.signCreateAsset('0x432a86ab8765d82415a803e29864dcfc1ed93dac949abf6f95a583179f27e4bb', txInfo, createAssetInfo)
 console.log(signCreateAsset)
-// {"type":"3","version":"1","chainID":"200","gasPrice":"3000000000","gasLimit":"2000000","amount":"0","expirationTime":"1544584596","data":"0x7b2263617465676f7279223a312c22646563696d616c73223a31382c2269735265706c656e69736861626c65223a747275652c226973446976697369626c65223a747275652c2270726f66696c65223a7b226e616d65223a2244656d6f204173736574222c2273796d626f6c223a224454222c226465736372697074696f6e223a2264656d6f206173736574222c227375676765737465644761734c696d6974223a223630303030222c2273746f70223a2266616c7365227d7d","sig":"0xf1c837a5621c1e62800099ead94668da3a6a8358187a3251e5e2936dea7205df5eeb75fc4c7737caa8a0b63cf1846f22426696ce96a581188c9fb6fece257fc900"}
+// {"type":"3","version":"1","chainID":"1","gasPrice":"3000000000","gasLimit":"2000000","amount":"0","expirationTime":"1557054204","data":"0x7b2263617465676f7279223a312c22646563696d616c73223a31382c2269735265706c656e69736861626c65223a747275652c226973446976697369626c65223a747275652c2270726f66696c65223a7b226e616d65223a2244656d6f204173736574222c2273796d626f6c223a224454222c226465736372697074696f6e223a2264656d6f206173736574222c227375676765737465644761734c696d6974223a223630303030222c2273746f70223a2266616c7365227d7d","sig":"0x067752b1f07813623e1d3b18042e2925a8745e1c585b2281ad1f4c00a9c72a7331ca4e7639533b7623cc417bef9acb3617c320a48d12c00423c191a17a77657300"}
 ```
 
 ---
@@ -1230,7 +1308,7 @@ lemo.tx.signIssueAsset(privateKey, txConfig, issueAssetInfo)
 
 ##### Returns
 
-`string` - 签名后的[交易](#data-structure-transaction)信息字符串
+`string` - 签名后的[交易](#data-structure-transaction)信息字符串，`data`里面包含发行资产的信息。
 
 ##### Example
 
@@ -1243,7 +1321,84 @@ const issueAssetInfo = {
 }
 const signIssueAsset = lemo.tx.signIssueAsset('0x432a86ab8765d82415a803e29864dcfc1ed93dac949abf6f95a583179f27e4bb', txInfo, issueAssetInfo)
 console.log(signIssueAsset)
-// {"type":"4","version":"1","chainID":"200","gasPrice":"3000000000","gasLimit":"2000000","amount":"0","expirationTime":"1544584596","data":"0x7b226173736574436f6465223a22307864306265666433383530633537346237663661643666373934336665313962323132616666623930313632393738616463323139336130333563656438383834222c226d65746144617461223a226973737565206173736574206d65746144617461222c22737570706c79416d6f756e74223a22313030303030227d","sig":"0x4b92594415a58adbade0774753922d7e34ae32f0545f38efa67d5fcbca6821fd0b57ef2ada36ef994fd06426feadabd030130b9e7e30064a4b2bf60c6b5832a400"}
+// {"type":"4","version":"1","chainID":"1","gasPrice":"3000000000","gasLimit":"2000000","amount":"0","expirationTime":"1557054355","to":"Lemo83BYKZJ4RN4TKC9C78RFW7YHW6S87TPRSH34","data":"0x7b226173736574436f6465223a22307864306265666433383530633537346237663661643666373934336665313962323132616666623930313632393738616463323139336130333563656438383834222c226d65746144617461223a226973737565206173736574206d65746144617461222c22737570706c79416d6f756e74223a22313030303030227d","sig":"0xed8441c8d93fa8389ec7512ff24608199c1d6c9ffbf29d5293e25d1446956d75628f39e8492d7b8d33707ffa001a1caa2f34e3ebe46b27550daae6f4e474d72c00"}
+```
+
+---
+
+<a name="submodule-tx-signReplenishAsset"></a>
+
+#### lemo.tx.signReplenishAsset
+
+```
+lemo.tx.signReplenishAsset(privateKey, txConfig, replenishInfo)
+```
+
+签名用于增发资产的交易并返回签名后的交易信息字符串  
+与[`lemo.tx.sign`](#submodule-tx-sign)用法相同，只是在交易中填充了特殊的数据    
+
+##### Parameters
+
+1. `string` - 账户私钥
+2. `object` - 签名前的交易信息，细节参考[`lemo.tx.sendTx`](#submodule-tx-sendTx)，这里的`amount`字段会被忽略
+3. `object` - 增发资产信息，包含`assetID`、`replenishAmount`字段
+
+##### Returns
+
+`string` - 签名后的[交易](#data-structure-transaction)信息字符串，`data`里面包含增发资产的信息。
+
+##### Example
+
+```js
+const txInfo = {to: 'Lemo83JW7TBPA7P2P6AR9ZC2WCQJYRNHZ4NJD4CY'}
+const replenishAssetInfo = {
+    assetCode: '0xd0befd3850c574b7f6ad6f7943fe19b212affb90162978adc2193a035ced8884',
+    assetId: '0xd0befd3850c574b7f6ad6f7943fe19b212affb90162978adc2193a035ced8884',
+    replenishAmount: '100000',
+}
+const signReplenishAsset = lemo.tx.signReplenishAsset('0x432a86ab8765d82415a803e29864dcfc1ed93dac949abf6f95a583179f27e4bb', txInfo, replenishAssetInfo)
+console.log(signReplenishAsset)
+// {"type":"5","version":"1","chainID":"1","gasPrice":"3000000000","gasLimit":"2000000","amount":"0","expirationTime":"1557054506","to":"Lemo83JW7TBPA7P2P6AR9ZC2WCQJYRNHZ4NJD4CY","data":"0x7b226173736574436f6465223a22307864306265666433383530633537346237663661643666373934336665313962323132616666623930313632393738616463323139336130333563656438383834222c2261737365744964223a22307864306265666433383530633537346237663661643666373934336665313962323132616666623930313632393738616463323139336130333563656438383834222c227265706c656e697368416d6f756e74223a22313030303030227d","sig":"0x057955895c00aeef80d56effc0cb981628a0bfff303d3d76af4d7532560615f04230cf6a5f849de5b818fe13ce1b4819a0284865be4d477bb12de0536a940de500"}
+```
+
+---
+
+<a name="submodule-tx-signModifyAsset"></a>
+
+#### lemo.tx.signModifyAsset
+
+```
+lemo.tx.signModifyAsset(privateKey, txConfig, modifyInfo)
+```
+
+签名用于修改资产信息的交易并返回签名后的交易信息字符串  
+与[`lemo.tx.sign`](#submodule-tx-sign)用法相同，只是在交易中填充了特殊的数据    
+
+##### Parameters
+
+1. `string` - 账户私钥
+2. `object` - 签名前的交易信息，细节参考[`lemo.tx.sendTx`](#submodule-tx-sendTx)，这里的`amount`、`to`、`toName`字段会被忽略
+3. `object` - 修改资产的信息，包含`assetCode`和`info`字段，`info`对象中包含需要修改的内容，如`name`、`symbol`、`description`、`freeze`、`suggestedGasLimit`等
+
+##### Returns
+
+`string` - 签名后的[交易](#data-structure-transaction)信息字符串，`data`里面包含修改资产的信息。
+
+##### Example
+
+```js
+const txInfo = {chainID: '1'}
+const ModifyAssetInfo = {
+    assetCode: '0xd0befd3850c574b7f6ad6f7943fe19b212affb90162978adc2193a035ced8884',
+    info: {
+        name: 'Demo Asset',
+        symbol: 'DT',
+        description: 'demo asset',
+    },
+}
+const signModifyAsset = lemo.tx.signModifyAsset('0x432a86ab8765d82415a803e29864dcfc1ed93dac949abf6f95a583179f27e4bb', txInfo, ModifyAssetInfo)
+console.log(signModifyAsset)
+// {"type":"6","version":"1","chainID":"1","gasPrice":"3000000000","gasLimit":"2000000","amount":"0","expirationTime":"1557054562","data":"0x7b226173736574436f6465223a22307864306265666433383530633537346237663661643666373934336665313962323132616666623930313632393738616463323139336130333563656438383834222c22696e666f223a7b226e616d65223a2244656d6f204173736574222c2273796d626f6c223a224454222c226465736372697074696f6e223a2264656d6f206173736574227d7d","sig":"0x989529bed1afbd162cde2097dbaa33c9f8b15e3bec5d187a58a7f8aa7d941ccb1bc0402278d52a47790262683c3ad77ed9face932f9403f0431117cff7ff962000"}
 ```
 
 ---
@@ -1267,7 +1422,7 @@ lemo.tx.signTransferAsset(privateKey, txConfig, transferAssetInfo)
 
 ##### Returns
 
-`string` - 签名后的[交易](#data-structure-transaction)信息字符串
+`string` - 签名后的[交易](#data-structure-transaction)信息字符串，`data`里面包含交易资产的信息。
 
 ##### Example
 
@@ -1275,10 +1430,83 @@ lemo.tx.signTransferAsset(privateKey, txConfig, transferAssetInfo)
 const txInfo = {to: 'Lemo83BYKZJ4RN4TKC9C78RFW7YHW6S87TPRSH34'}
 const transferAsset = {
     assetId: '0xd0befd3850c574b7f6ad6f7943fe19b212affb90162978adc2193a035ced8884',
+    transferAmount: '110000',
 }
 const signTransferAsset = lemo.tx.signTransferAsset('0x432a86ab8765d82415a803e29864dcfc1ed93dac949abf6f95a583179f27e4bb', txInfo, transferAsset)
 console.log(signTransferAsset)
-// {"type":"7","version":"1","chainID":"200","gasPrice":"3000000000","gasLimit":"2000000","amount":"0","expirationTime":"1544584596","data":"0x7b2261737365744964223a22307864306265666433383530633537346237663661643666373934336665313962323132616666623930313632393738616463323139336130333563656438383834227d","sig":"0x1555aa9541db00b02bc0d0632052b3a5533031315d200369cd9001965abec98e231a53ca5b89d82e88f5d2fd76e11f10bfed759f0d5cbca06527100e580bf1a801"}
+// {"type":"7","version":"1","chainID":"1","gasPrice":"3000000000","gasLimit":"2000000","amount":"0","expirationTime":"1557054587","to":"Lemo83BYKZJ4RN4TKC9C78RFW7YHW6S87TPRSH34","data":"0x7b2261737365744964223a22307864306265666433383530633537346237663661643666373934336665313962323132616666623930313632393738616463323139336130333563656438383834222c227472616e73666572416d6f756e74223a22313130303030227d","sig":"0x4d01229abf436c1d96ab6414b7da1b448035bcb1e0ed936974f94683fc253d973f34a4bce64e8b30178c3e735550e0c75bc6abc9fdcf85ff142d9fadeff1c78c00"}
+```
+
+---
+
+<a name="submodule-tx-signNoGas"></a>
+
+#### lemo.tx.signNoGas
+
+```
+lemo.tx.signNoGas(privateKey, txConfig, payer)
+```
+
+签名用于免Gas费用的交易并返回签名后的交易信息字符串  
+
+1. 对包含`payer`账户地址的交易信息进行签名，该交易信息中不含`gasLimit`和`gasPrice`字段
+2. 把返回的字符串交给代付gas的人
+3. 代付gas的人填上`gasLimit`和`gasPrice`字段，然后用自己的私钥对其进行签名，返回最终的交易信息字符串
+3. 通过[`lemo.tx.send`](#submodule-tx-send)方法把交易信息字符串发送到 LemoChain
+
+##### Parameters
+
+1. `string` - 账户私钥
+2. `object` - 签名前的交易信息，细节参考[`lemo.tx.sendTx`](#submodule-tx-sendTx)，这里的`gasLimit`、`gasPrice`字段会被忽略
+3. `string` - Gas代付账户的地址
+
+##### Returns
+
+`string` - 用于代付交易的字符串 [`lemo.tx.signReimbursement`](#submodule-tx-signReimbursement)
+
+##### Example
+
+```js
+const txInfo = {to: 'Lemo83JW7TBPA7P2P6AR9ZC2WCQJYRNHZ4NJD4CY'}
+const payer = 'Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D'
+const noGasInfo = lemo.tx.signNoGas('0x432a86ab8765d82415a803e29864dcfc1ed93dac949abf6f95a583179f27e4bb', txInfo, payer)
+console.log(noGasInfo)
+// {"type":0,"version":"1","chainID":"1","to":"Lemo83JW7TBPA7P2P6AR9ZC2WCQJYRNHZ4NJD4CY","toName":"","gasPrice":3000000000,"gasLimit":2000000,"amount":"0","data":"","expirationTime":1557054625,"message":"","sig":"0xbb713b4e6a955e3bf5934dc7e7b02e0cf04936b1f7603cc646c380a0c6d5217f0923cff69b1d388da52983167072114898cbeb055cf6296ca1292b610fc91fdb01","gasPayerSig":"","from":"Lemo83AHRG46C3JP3D4QQP897ACCJD4G8BT5ZS67","payer":"Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D"}
+```
+
+---
+
+<a name="submodule-tx-signReimbursement"></a>
+
+#### lemo.tx.signReimbursement
+
+```
+lemo.tx.signReimbursement(privateKey, noGasTxStr, gasPrice, gasLimit)
+```
+
+对免 gas 费用交易信息进行签名，为其代付 gas，并返回签名后的交易信息字符串  
+使用方式请参考 [`lemo.tx.signNoGas`](#submodule-tx-signNoGas) 
+
+##### Parameters
+
+1. `string` - 账户私钥
+2. `string` - signNoGas 方法返回的字符串，里面带有`payer`字段，细节参考[`lemo.tx.sendTx`](#submodule-tx-sendTx)
+3. `string` - 交易消耗 gas 的单价
+3. `string` - 交易消耗的总 gas 上限
+
+##### Returns
+
+`string` - 签名后的[交易](#data-structure-transaction)信息字符串
+
+##### Example
+
+```js
+const txInfo = {to: 'Lemo83JW7TBPA7P2P6AR9ZC2WCQJYRNHZ4NJD4CY'}
+const payer = 'Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D'
+const noGasInfo = lemo.tx.signNoGas('0x432a86ab8765d82415a803e29864dcfc1ed93dac949abf6f95a583179f27e4bb', txInfo, payer)
+const result = lemo.tx.signReimbursement('0x432a86ab8765d82415a803e29864dcfc1ed93dac949abf6f95a583179f27e4bb', noGasInfo, 2, 100)
+console.log(result)
+// {"type":"0","version":"1","chainID":"1","gasPrice":"2","gasLimit":"100","amount":"0","expirationTime":"1557054706","to":"Lemo83JW7TBPA7P2P6AR9ZC2WCQJYRNHZ4NJD4CY","sig":"0x5b13c147a7e700dbe24d76f245daaf0ebcd35d9ecf17e436a0ceb691b26d79c46cc4f0fc3bb88b20f3c179bb61adfa008bfc31fe0648aa299052375a61317da700","gasPayerSig":"0x0edb211e684bfda13969aa9115c292a485bdb43061b54148b140b97cd0322b3d7d973004d8caf0c4de3975d0d553baa6d0d7d41a6ce0d14c0b754cecb4b020a900"}
 ```
 
 ---
@@ -1297,9 +1525,8 @@ lemo.tx.send(txConfig, waitConfirm)
 
 1. `object|string` - 签名后的[交易](#data-structure-transaction)信息，可以是对象形式也可以是[`lemo.tx.sign`](#submodule-tx-sign)返回的字符串形式  
    相对于[`lemo.tx.sendTx`](#submodule-tx-sendTx)中的交易信息少了`type`、`version`字段，并多出了以下字段
-    - `r` - (Buffer|string) 交易签名字段
-    - `s` - (Buffer|string) 交易签名字段
-    - `v` - (Buffer|string) `type`、`version`、交易签名字段、`chainID`这 4 个字段组合而成的数据
+    - `sig` - (string) 交易签名字段
+    - `gasPayerSig` - (string) 代付gas交易签名字段
 2. `boolean` - (选填)等待[交易](#data-structure-transaction)共识，默认为`true`
 
 ##### Returns
@@ -1316,7 +1543,7 @@ lemo.tx
         return lemo.tx.send(signedTx)
     })
     .then(function(txHash) {
-        console.log(txHash)
+        console.log(txHash) // "0xe116a56b301f3bede1ad10c1496d57d6cb89454b4d6efbc20ca39132a4bc2b96"
     })
 ```
 
@@ -1551,6 +1778,27 @@ lemo.tool.lemoToMo(ether)
 ```js
 const result = lemo.tool.lemoToMo('0.1')
 console.log(result.toString(10)) // '100000000000000000'
+```
+
+---
+
+<a name="submodule-tool-toBuffer"></a>
+#### lemo.tool.toBuffer
+```
+lemo.tool.toBuffer(data)
+```
+将数据转换为Buffer类型
+
+##### Parameters
+1. `number|string|BigNumber|Buffer|null` - 要转换的数据
+
+##### Returns
+`Buffer` - 返回一个Buffer类型的对象，如果传入了不支持的类型，则会抛出一个异常
+
+##### Example
+```js
+const result = lemo.tool.toBuffer('{"value": 100}')
+console.log(result.toString('hex')) // '100000000000000000'
 ```
 
 ---
