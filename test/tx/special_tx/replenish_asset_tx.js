@@ -1,6 +1,7 @@
 import {assert} from 'chai'
 import {chainID} from '../../datas'
 import {TX_ASSET_ID_LENGTH, TxType} from '../../../lib/const'
+import {decodeUtf8Hex} from '../../../lib/utils'
 import errors from '../../../lib/errors'
 import ReplenishAssetTX from '../../../lib/tx/special_tx/replenish_asset_tx'
 
@@ -8,7 +9,8 @@ describe('replenish-Asset', () => {
     // normal situation
     it('replenish_normal', () => {
         const ReplenishAssetInfo = {
-            assetId: '0xd0befd3850c574b7f6ad6f7943fe19b212affb90162978adc2193a035ced8884',
+            assetCode: '0xd0befd3850c574b7f6ad6f7943fe19b212affb90162978adc2193a035ced8884',
+            assetId: '0x34b04e018488f37f449193af2f24feb3b034c994cde95d30e3181403ac76528a',
             replenishAmount: '100000',
         }
         const tx = new ReplenishAssetTX(
@@ -22,19 +24,43 @@ describe('replenish-Asset', () => {
             ReplenishAssetInfo,
         )
         assert.equal(tx.type, TxType.REPLENISH_ASSET)
+        assert.equal(JSON.parse(decodeUtf8Hex(tx.data)).replenishAmount, ReplenishAssetInfo.replenishAmount)
     })
     // no assetId
     it('replenish_noassetId', () => {
         const replenishAssetInfo = {
+            assetCode: '0xd0befd3850c574b7f6ad6f7943fe19b212affb90162978adc2193a035ced8884',
             replenishAmount: '100000',
         }
         assert.throws(() => {
             new ReplenishAssetTX({chainID, to: 'lemobw', toName: 'alice'}, replenishAssetInfo)
         }, errors.TXInvalidType('assetId', undefined, ['string']))
     })
+    // no assetCode
+    it('replenish_noassetCode', () => {
+        const replenishAssetInfo = {
+            assetId: '0x34b04e018488f37f449193af2f24feb3b034c994cde95d30e3181403ac76528a',
+            replenishAmount: '100000',
+        }
+        assert.throws(() => {
+            new ReplenishAssetTX({chainID, to: 'lemobw', toName: 'alice'}, replenishAssetInfo)
+        }, errors.TXInvalidType('assetCode', undefined, ['string']))
+    })
+    // error assetCode
+    it('assetCode_length_error', () => {
+        const replenishAssetInfo = {
+            assetCode: '0xd0befd3850c574b7f6ad6f7943fe19b212affb901625ced8884',
+            assetId: '0x34b04e018488f37f449193af2f24feb3b034c994cde95d30e3181403ac76528a',
+            replenishAmount: '100000',
+        }
+        assert.throws(() => {
+            new ReplenishAssetTX({chainID, type: 5, to: '0x1110000000001'}, replenishAssetInfo)
+        }, errors.TXInvalidLength('assetCode', replenishAssetInfo.assetCode, TX_ASSET_ID_LENGTH))
+    })
     // error assetId
     it('assetId_length_error', () => {
         const replenishAssetInfo = {
+            assetCode: '0xd0befd3850c574b7f6ad6f7943fe19b212affb90162978adc2193a035ced8884',
             assetId: '0xd0befd3850c574b7f6ad6f7943fe19b212affb90162978adc2193a',
             replenishAmount: '100000',
         }
@@ -45,6 +71,7 @@ describe('replenish-Asset', () => {
     // no replenishAmount
     it('replenish_noreplenishAmount', () => {
         const replenishAssetInfo = {
+            assetCode: '0xd0befd3850c574b7f6ad6f7943fe19b212affb90162978adc2193a035ced8884',
             assetId: '0xd0befd3850c574b7f6ad6f7943fe19b212affb90162978adc2193a035ced8884',
         }
         assert.throws(() => {
@@ -64,6 +91,7 @@ describe('replenishAmount', () => {
     tests.forEach(test => {
         it(`replenishAmount test is ${test.configData}`, () => {
             const replenishAssetInfo = {
+                assetCode: '0xd0befd3850c574b7f6ad6f7943fe19b212affb90162978adc2193a035ced8884',
                 assetId: '0xd0befd3850c574b7f6ad6f7943fe19b212affb90162978adc2193a035ced8884',
                 [test.field]: test.configData,
             }
@@ -73,7 +101,7 @@ describe('replenishAmount', () => {
                 }, test.error)
             } else {
                 const tx = new ReplenishAssetTX({chainID, to: 'lemobw', toName: 'alice'}, replenishAssetInfo)
-                const targetField = test.profile ? JSON.parse(tx.data.toString()).profile[test.field] : JSON.parse(tx.data.toString())[test.field]
+                const targetField = JSON.parse(decodeUtf8Hex(tx.data))[test.field]
                 assert.strictEqual(targetField, test.configData)
             }
         });

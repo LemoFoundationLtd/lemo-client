@@ -1,8 +1,13 @@
 import {assert} from 'chai'
 import {chainID} from '../../datas'
 import {TX_ASSET_CODE_LENGTH, TxType} from '../../../lib/const'
+import {decodeUtf8Hex} from '../../../lib/utils'
 import errors from '../../../lib/errors'
 import ModifyAssetTx from '../../../lib/tx/special_tx/modify_asset_tx'
+
+function parseHexObject(hex) {
+    return JSON.parse(decodeUtf8Hex(hex))
+}
 
 describe('Modify-Asset', () => {
     const modifyAssetInfo = {
@@ -18,7 +23,7 @@ describe('Modify-Asset', () => {
     it('modify_normal', () => {
         const tx = new ModifyAssetTx({chainID}, modifyAssetInfo)
         assert.equal(tx.type, TxType.MODIFY_ASSET)
-        assert.equal(JSON.parse(tx.data).info.name, modifyAssetInfo.info.name)
+        assert.equal(parseHexObject(tx.data).info.name, modifyAssetInfo.info.name)
     })
     // no assetCode
     it('modify_noassetCode', () => {
@@ -56,8 +61,8 @@ describe('Modify-Asset', () => {
                 name: 'alice',
             },
         }
-        const result = new ModifyAssetTx({chainID}, modifyInfo)
-        assert.equal(JSON.parse(result.data.toString()).info.name, modifyInfo.info.name)
+        const tx = new ModifyAssetTx({chainID}, modifyInfo)
+        assert.equal(parseHexObject(tx.data).info.name, modifyInfo.info.name)
     })
     // symbol is lower case
     it('modify_lower_case_symbol', () => {
@@ -68,31 +73,31 @@ describe('Modify-Asset', () => {
                 symbol: 'lemochain',
             },
         }
-        const result = new ModifyAssetTx({chainID}, modifyInfo)
-        assert.equal(JSON.parse(result.data.toString()).info.symbol, 'LEMOCHAIN')
+        const tx = new ModifyAssetTx({chainID}, modifyInfo)
+        assert.equal(parseHexObject(tx.data).info.symbol, 'LEMOCHAIN')
     })
 })
 
 describe('info_test', () => {
     // test about stop
     const tests = [
-        {field: 'stop', configData: 'true'},
-        {field: 'stop', configData: 'false'},
-        {field: 'stop', configData: false},
-        {field: 'stop', configData: true},
-        {field: 'stop', configData: '2311222', error: errors.TxInvalidSymbol('stop')},
-        {field: 'stop', configData: 'sandlfa', error: errors.TxInvalidSymbol('stop')},
-        {field: 'stop', configData: 12314, error: errors.TXInvalidType('stop', 1234, ['boolean', 'string'])},
+        {field: 'freeze', configData: 'true'},
+        {field: 'freeze', configData: 'false'},
+        {field: 'freeze', configData: false},
+        {field: 'freeze', configData: true},
+        {field: 'freeze', configData: '2311222', error: errors.TxInvalidSymbol('freeze')},
+        {field: 'freeze', configData: 'sandlfa', error: errors.TxInvalidSymbol('freeze')},
+        {field: 'freeze', configData: 12314, error: errors.TXInvalidType('freeze', 1234, ['boolean', 'string'])},
     ]
     tests.forEach(test => {
-        it('info_stop', () => {
+        it(`info_${test.freeze},${test.configData}`, () => {
             const modifyInfo = {
                 assetCode: '0xd0befd3850c574b7f6ad6f7943fe19b212affb90162978adc2193a035ced8884',
                 info: {
                     name: 'test',
                     symbol: 'DT',
                     suggestedGasLimit: '60000',
-                    stop: test.configData,
+                    freeze: test.configData,
                 },
             }
             if (test.error) {
@@ -101,8 +106,8 @@ describe('info_test', () => {
                 }, test.error)
             } else {
                 const tx = new ModifyAssetTx({chainID}, modifyInfo)
-                const result = JSON.parse(tx.data.toString()).info
-                assert.strictEqual(result.stop, test.configData)
+                const result = parseHexObject(tx.data).info
+                assert.strictEqual(result.freeze, test.configData)
             }
         })
     })
