@@ -234,7 +234,7 @@ const mockInfos = [
 
 function startMock() {
     nock('http://127.0.0.1:8001')
-        // .log(console.log)
+    // .log(console.log)
         .post('/', body => {
             const mockInfo = mockInfos.find(info => info.method === body.method)
             return (
