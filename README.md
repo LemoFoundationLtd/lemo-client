@@ -1,6 +1,6 @@
 ![Logo of the project](./logo.png)
 
-# LemoChain JavaScript SDK
+# LemoChain Distribution SDK
 
 [![npm](https://img.shields.io/npm/v/lemo-client.svg?style=flat-square)](https://www.npmjs.com/package/lemo-client)
 [![Build Status](https://img.shields.io/travis/lemo-client/lemo-client.svg?style=flat-square)](https://travis-ci.org/lemo-client/lemo-client)
@@ -21,7 +21,7 @@
 ### 使用 Yarn
 
 ```bash 
-yarn add lemo-client
+yarn add lemo-distribution-sdk
 ```
 
 ### 在浏览器中引入
@@ -60,6 +60,7 @@ lemo.chain.getBlockByNumber(0).then(function(block) {
 | [lemo.getCandidateList()](#submodule-chain-getCandidateList)               | 分页获取候选节点列表            | ✓    | ✓          |
 | [lemo.getCandidateTop30()](#submodule-chain-getCandidateTop30)             | 获取排名前30的候选节点列表       | ✓    | ✓          |
 | [lemo.getDeputyNodeList()](#submodule-chain-getDeputyNodeList)             | 获取当前所有共识节点的地址列表    | ✓    | ✓          |
+| [lemo.getDistributionVersion()](#submodule-chain-getDistributionVersion)             | 获取distribution的版本号    | ✓    | ✓          |
 | [lemo.watchBlock(withBody, callback)](#submodule-chain-watchBlock)         | 监听新的区块                   | ✖    | ✓          |
 | [lemo.stopWatchBlock(subscribeId)](#submodule-chain-stopWatchBlock)            | 停止监听区块                   | ✖    | ✓          |
 | [lemo.account.newKeyPair()](#submodule-account-newKeyPair)                 | 创新账户公私钥                 | ✓    | ✓          |
@@ -791,6 +792,34 @@ lemo.getDeputyNodeList().then(function(nodeList) {
     console.log(nodeList.length) // 1
     console.log(nodeList[0]) // "5e3600755f9b512a65603b38e30885c98cbac70259c3235c9b3f42ee563b480edea351ba0ff5748a638fe0aeff5d845bf37a3b437831871b48fd32f33cd9a3c0@149.28.68.93:7003"
     lemo.net.connect(nodeList[0])
+})
+```
+
+---
+
+<a name="submodule-chain-getDistributionVersion"></a>
+
+#### lemo.getDistributionVersion
+
+```
+lemo.getDistributionVersion()
+```
+
+获取 LemoChain Distribution 的版本号
+
+##### Parameters
+
+无
+
+##### Returns
+
+`Promise` - 通过`then`可以获取到 LemoChain 节点版本号
+
+##### Example
+
+```js
+lemo.getDistributionVersion().then(function(version) {
+    console.log(version) // "0.10.0"
 })
 ```
 

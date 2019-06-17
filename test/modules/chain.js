@@ -10,6 +10,7 @@ import {
     currentHeight,
     formattedCandidateListRes,
     deputyNodes,
+    nodeVersion,
 } from '../datas'
 import '../mock'
 import {DEFAULT_POLL_DURATION} from '../../lib/config'
@@ -97,6 +98,13 @@ describe('module_chain_getGasPriceAdvice', () => {
         assert.strictEqual(result instanceof BigNumber, true)
         assert.exists(result.toMoney)
         assert.strictEqual(result.toMoney(), '100M mo')
+    })
+})
+describe('module_chain_getDistributionVersion', () => {
+    it('getNodeVersion', async () => {
+        const lemo = new LemoClient()
+        const result = await lemo.getDistributionVersion()
+        assert.equal(result, nodeVersion)
     })
 })
 
