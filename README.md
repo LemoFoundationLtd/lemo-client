@@ -9,7 +9,7 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 [![GitHub license](https://img.shields.io/badge/license-LGPL3.0-blue.svg?style=flat-square)](https://github.com/LemoFoundationLtd/lemo-client/blob/master/LICENSE)
 
-通过 JSON RPC 协议访问 LemoChain 上的数据
+通过 JSON RPC 协议访问 LemoChain 分发节点上的数据
 
 > 需要先在本地通过`--rpc`参数启动一个[LemoChain 分发节点](https://github.com/LemoFoundationLtd/lemochain-go)，或远程连接到一个已存在的 LemoChain 分发节点，才能运行本项目
 
