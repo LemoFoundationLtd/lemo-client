@@ -11,17 +11,14 @@
 
 通过 JSON RPC 协议访问 LemoChain 上的数据
 
-> 需要先在本地通过`--rpc`参数启动一个[LemoChain 节点](https://github.com/LemoFoundationLtd/lemochain-go)，或远程连接到一个已存在的 LemoChain 节点，才能运行本项目
-
-[中文版](https://github.com/LemoFoundationLtd/lemo-client/blob/master/README_zh.md)  
-[English](https://github.com/LemoFoundationLtd/lemo-client/blob/master/README.md)
+> 需要先在本地通过`--rpc`参数启动一个[LemoChain 分发节点](https://github.com/LemoFoundationLtd/lemochain-go)，或远程连接到一个已存在的 LemoChain 分发节点，才能运行本项目
 
 ## 安装
 
 ### 使用 Yarn
 
 ```bash 
-yarn add lemo-distribution-sdk
+yarn add lemo-client
 ```
 
 ### 在浏览器中引入
@@ -45,7 +42,7 @@ lemo.chain.getBlockByNumber(0).then(function(block) {
 ## LemoChain API
 
 > 所有异步接口都返回 Promise 对象  
-> 所有接口都可在 LemoChain 节点的控制台中使用，但通过远程连接（如 http、websocket）到节点时，只能使用部分接口
+> 所有接口都可在 LemoChain 分发节点的控制台中使用，但通过远程连接（如 http、websocket）到节点时，只能使用部分接口
 
 | API                                                                        | 功能                           | 异步 | 可远程使用 |
 | -------------------------------------------------------------------------- | ------------------------------ | ----- | ---------- |
