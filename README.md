@@ -83,9 +83,10 @@ lemo.chain.getBlockByNumber(0).then(function(block) {
 | [lemo.tx.signTransferAsset(privateKey, txConfig, transferAssetInfo)](#submodule-tx-signTransferAsset)   | 签名交易资产交易   | ✖    | ✓          |
 | [lemo.tx.signNoGas(privateKey, txConfig, gasPayer)](#submodule-tx-signNoGas)   | 签名免Gas费用交易   | ✖    | ✓         |
 | [lemo.tx.signReimbursement(privateKey, noGasTxStr, gasPrice, gasLimit)](#submodule-tx-signReimbursement)   | 签名代付Gas交易   | ✖    | ✓         |
-| [lemo.tx.signCreateTempAddress(privateKey, txConfig, userId)](#submodule-tx-signCreateTempAddress)   | 签名创建账户的交易   | ✖    | ✓         |
+| [lemo.tx.signCreateTempAddress(privateKey, txConfig, userId)](#submodule-tx-signCreateTempAddress)   | 签名创建临时账户的交易   | ✖    | ✓         |
 | [lemo.tx.signBoxTx(privateKey, txConfig, subTxList)](#submodule-tx-signBoxTx)   | 签名箱子交易   | ✖    | ✓         |
 | [lemo.tx.signContractCreation(privateKey, txConfig, code, constructorArgs)](#submodule-tx-signContractCreation)   | 签名合约交易   | ✖    | ✓         |
+| [lemo.tx.signModifySigners(privateKey, txConfig, signers)](#submodule-tx-signModifySigners)   | 签名修改多重签名的交易   | ✖    | ✓         |
 | [lemo.tx.send(signedTxInfo)](#submodule-tx-send)                           | 发送已签名的交易               | ✓    | ✓          |
 | [lemo.tx.watchTx(filterTxConfig, callback)](#submodule-tx-watchTx)         | 监听过滤区块的交易            | ✖    | ✓          |
 | [lemo.tx.stopWatchTx(subscribeId)](#submodule-tx-stopWatchTx)                | 停止指定交易            | ✖    | ✓          |
@@ -1728,6 +1729,45 @@ const constructorArgs = '0xdaaod10000001111'
 const result = lemo.tx.signContractCreation(testPrivate, txInfo.txConfig, code, constructorArgs)
 console.log(result)
 // {"type":"1","version":"1","chainID":"200","gasPrice":"2","gasLimit":"100","amount":"1","expirationTime":"1544584596","from":"Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D","to":"Lemo8888888888888888888888888888888888BW","toName":"aa","data":"0x000000100000100daaod10000001111","message":"aaa","sigs":["0x6ea18d3d4bc70e5474bcb6f7158b2a020ed7ae91711659bfce4cb110f2703a783dbbc3765ee19fb54dddbcb95776477dd3bf7266d939762fa1b422abf8185a7800"],"gasPayerSigs":[]}
+```
+
+---
+
+<a name="submodule-tx-signModifySigners"></a>
+
+#### lemo.tx.signModifySigners
+
+```
+lemo.tx.signModifySigners(privateKey, txConfig, signers)
+```
+
+对多签账户中签名者的交易进行签名，并返回签名后的交易信息字符串
+与[`lemo.tx.sign`](#submodule-tx-sign)用法相同，只是在交易中填充了特殊的数据  
+
+##### Parameters
+
+1. `string` - 账户私钥
+2. `object` - 签名前的交易信息，细节参考[`lemo.tx.sendTx`](#submodule-tx-sendTx)
+3. `array` - 修改的多重签名列表，包含`address` 和 `weight`两个字段
+
+##### Returns
+
+`string` - 签名后的[交易](#data-structure-transaction)信息字符串
+
+##### Example
+
+```js
+const signers = [{
+            address: 'Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D',
+            weight: 50,
+        }, {
+            address: 'Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG',
+            weight: 50,
+        }]
+const txInfo = {chianID: 1, from: 'Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D'}
+const result = lemo.tx.signModifySigners('0x432a86ab8765d82415a803e29864dcfc1ed93dac949abf6f95a583179f27e4bb', txInfo, signers)
+console.log(result)
+// {"type":"9","version":"1","chainID":"200","from":"Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D","gasPrice":"3000000000","gasLimit":"2000000","amount":"0","expirationTime":"1561549968","data":"0x7b227369676e657273223a5b7b2261646472657373223a224c656d6f38333642514b43425a385a3742374e3447344e34534e47425432345a5a534a5144323444222c22776569676874223a35307d2c7b2261646472657373223a224c656d6f3833474e3732475948324e5a3842413732395a39544354374b5135464333435236444a47222c22776569676874223a35307d5d7d","sigs":["0x13ae8791ed6541bbd9583cf473195e80a54561ce29b0f0812e831a6d62704d965b7e257f3b2963b27854b3d0b5ac4b2e9473e4dcf8c6a7845ce8179a681b06f501"],"gasPayerSigs":[]}
 ```
 
 ---
