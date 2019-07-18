@@ -847,11 +847,9 @@ lemo.account.newKeyPair()
 ##### Example
 
 ```js
-lemo.account.newKeyPair().then(function(accountKey) {
-    console.log(accountKey.private) // "0xfdbd9978910ce9e1ed276a75132aacb0a12e6c517d9bd0311a736c57a228ee52"
-    console.log(accountKey.public) // "0x0b3eebecd39c972767ad39e2df2db4c8af91b9f50a038e18f1e20335630d11624a794c5e0e4d6a0547f30bf21ca1d6cf87f6390676f42c2201b15fdc88d5f6f7"
-    console.log(accountKey.address) // "Lemo83BYKZJ4RN4TKC9C78RFW7YHW6S87TPRSH34"
-})
+const result = lemo.account.newKeyPair()
+console.log(result.privateKey)  //"0xfdbd9978910ce9e1ed276a75132aacb0a12e6c517d9bd0311a736c57a228ee52"
+console.log(result.address) // "Lemo83BYKZJ4RN4TKC9C78RFW7YHW6S87TPRSH34"
 ```
 
 ---
@@ -1320,7 +1318,7 @@ lemo.tx.signCreateAsset(privateKey, txConfig, createAssetInfo)
 ```js
 const txInfo = {chainID: '1', from: 'Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D'}
 const createAssetInfo = {
-    category: '1',
+    category: 1,
     decimal: 18,
     isReplenishable: true,
     isDivisible: true,

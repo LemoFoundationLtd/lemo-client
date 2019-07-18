@@ -7,16 +7,14 @@
 <p>LemoClient Demo</p>
 <script src="../dist/lemo-client.min.js"></script>
 <script>
-    var lemo = new LemoClient({host: 'http://127.0.0.1:8001'})
 
-    lemo.getNewestBlock()
-        .then(d => console.log(d))
-    lemo.tx.sendTx('0x432a86ab8765d82415a803e29864dcfc1ed93dac949abf6f95a583179f27e4bb',{to:'0x01', expirationTime: 1544584596})
-        .then(d => console.log(d))
-    var watchId = lemo.watchBlock(false, newBlock => console.log(newBlock))
-    setTimeout(() => {
-        lemo.stopWatch(watchId)
-    }, 10000)
+    //Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG
+    var lemo = new LemoClient({host: 'https://distribution.lemolabs.com'})
+    lemo.getNewestHeight().then(function(height) {
+        console.log(height) // "100"
+    })
+
+
 </script>
 </body>
 </html>
