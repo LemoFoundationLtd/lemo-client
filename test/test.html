@@ -10,6 +10,33 @@
  //0x7A74FC4c20CcE68B589A86D64c0F20C4428F6337
     //Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG
     var lemo = new LemoClient({host: 'https://distribution.lemolabs.com'})
+ //
+ // const txInfo = {from:'Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG',to: 'Lemo83BYKZJ4RN4TKC9C78RFW7YHW6S87TPRSH34', chainID:100,amount: 100}
+ // lemo.tx
+ //     .sign('0xfdbd9978910ce9e1ed276a75132aacb0a12e6c517d9bd0311a736c57a228ee52', txInfo)
+ //     .then(function(signedTx) {
+ //         return lemo.tx.send(signedTx)
+ //     })
+ //     .then(function(txHash) {
+ //         console.log(txHash) // "0xe116a56b301f3bede1ad10c1496d57d6cb89454b4d6efbc20ca39132a4bc2b96"
+ //     })
+
+ const txInfo = {chainID: '1', from: 'Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D'}
+ const createAssetInfo = {
+     category: 1,
+     decimal: 18,
+     isReplenishable: true,
+     isDivisible: true,
+     profile: {
+         name: 'Demo Asset',
+         symbol: 'DT',
+         description: 'demo asset',
+         suggestedGasLimit: '60000',
+     },
+ }
+ const signCreateAsset = lemo.tx.signCreateAsset('0x432a86ab8765d82415a803e29864dcfc1ed93dac949abf6f95a583179f27e4bb', txInfo, createAssetInfo)
+ console.log(signCreateAsset)
+
 
 </script>
 </body>
