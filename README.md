@@ -599,7 +599,7 @@ lemo.getGenesis()
 ##### Example
 
 ```js
-lemo.getGenesis().then(function(height) {
+lemo.getGenesis().then(function(block) {
     console.log(block.header.parentHash) // "0x0000000000000000000000000000000000000000000000000000000000000000"
 })
 ```
@@ -875,7 +875,7 @@ lemo.account.getBalance(address)
 ##### Example
 
 ```js
-lemo.account.getBalance('Lemo83BYKZJ4RN4TKC9C78RFW7YHW6S87TPRSH34').then(function(balance) {
+lemo.account.getBalance('Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG').then(function(balance) {
     console.log(balance.toString(10)) // "1600000000000000000000000000"
 })
 ```
@@ -950,9 +950,9 @@ lemo.account.getAllAssets(address, index, limit)
 
 ##### Example
 ```js
-lemo.account.getAllAssets('Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D', 0, 10).then(function(result) {
-    console.log(result.equities[0].assetId) // 0x34b04e018488f37f449193af2f24feb3b034c994cde95d30e3181403ac76528a
-})
+lemo.account.getAllAssets('Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG', 0, 10).then(function(result) {
+     console.log(result.equities[0].assetId) // 0xdb1e51e71fde226556ce8eb0d16b616b3213fc5d8906926889745a6c9c66a315
+ })
 ```
 
 ---
@@ -1095,7 +1095,7 @@ lemo.tx.getTx(txHash)
 ##### Example
 
 ```js
-lemo.tx.getTx('0x94ad0a9869cb6418f6a67df76d1293b557adb567ca3d29bfc8d8ff0d5f4ac2de').then(function(tx) {
+lemo.tx.getTx('0xdb1e51e71fde226556ce8eb0d16b616b3213fc5d8906926889745a6c9c66a315').then(function(tx) {
     console.log(tx.from) // "Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG"
     console.log(tx.to) // "Lemo83JW7TBPA7P2P6AR9ZC2WCQJYRNHZ4NJD4CY"
     console.log(tx.amount) // "100"
@@ -1664,10 +1664,11 @@ lemo.tx.signContractCreation(privateKey, txConfig, code, constructorArgs)
 ##### Example
 
 ```js
-const code = '0x000000100000100'
-const constructorArgs = '0xdaaod10000001111'
-const result = lemo.tx.signContractCreation(testPrivate, txInfo.txConfig, code, constructorArgs)
-console.log(result)
+const txInfo = {from: 'Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D', to: 'Lemo83BYKZJ4RN4TKC9C78RFW7YHW6S87TPRSH34', amount: 100}
+    const code = '0x000000100000100'
+    const constructorArgs = '213313'
+    const result = lemo.tx.signContractCreation('0x432a86ab8765d82415a803e29864dcfc1ed93dac949abf6f95a583179f27e4bb', txInfo, code, constructorArgs)
+    console.log(result)
 // {"type":"1","version":"1","chainID":"200","gasPrice":"2","gasLimit":"100","amount":"1","expirationTime":"1544584596","from":"Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D","to":"Lemo8888888888888888888888888888888888BW","toName":"aa","data":"0x000000100000100daaod10000001111","message":"aaa","sigs":["0x6ea18d3d4bc70e5474bcb6f7158b2a020ed7ae91711659bfce4cb110f2703a783dbbc3765ee19fb54dddbcb95776477dd3bf7266d939762fa1b422abf8185a7800"],"gasPayerSigs":[]}
 ```
 
