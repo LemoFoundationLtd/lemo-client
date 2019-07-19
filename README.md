@@ -599,7 +599,7 @@ lemo.getGenesis()
 ##### Example
 
 ```js
-lemo.getGenesis().then(function(height) {
+lemo.getGenesis().then(function(block) {
     console.log(block.header.parentHash) // "0x0000000000000000000000000000000000000000000000000000000000000000"
 })
 ```
@@ -847,11 +847,9 @@ lemo.account.newKeyPair()
 ##### Example
 
 ```js
-lemo.account.newKeyPair().then(function(accountKey) {
-    console.log(accountKey.private) // "0xfdbd9978910ce9e1ed276a75132aacb0a12e6c517d9bd0311a736c57a228ee52"
-    console.log(accountKey.public) // "0x0b3eebecd39c972767ad39e2df2db4c8af91b9f50a038e18f1e20335630d11624a794c5e0e4d6a0547f30bf21ca1d6cf87f6390676f42c2201b15fdc88d5f6f7"
-    console.log(accountKey.address) // "Lemo83BYKZJ4RN4TKC9C78RFW7YHW6S87TPRSH34"
-})
+const result = lemo.account.newKeyPair()
+console.log(result.privateKey)  //"0xfdbd9978910ce9e1ed276a75132aacb0a12e6c517d9bd0311a736c57a228ee52"
+console.log(result.address) // "Lemo83BYKZJ4RN4TKC9C78RFW7YHW6S87TPRSH34"
 ```
 
 ---
@@ -877,7 +875,7 @@ lemo.account.getBalance(address)
 ##### Example
 
 ```js
-lemo.account.getBalance('Lemo83BYKZJ4RN4TKC9C78RFW7YHW6S87TPRSH34').then(function(balance) {
+lemo.account.getBalance('Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG').then(function(balance) {
     console.log(balance.toString(10)) // "1600000000000000000000000000"
 })
 ```
@@ -952,9 +950,9 @@ lemo.account.getAllAssets(address, index, limit)
 
 ##### Example
 ```js
-lemo.account.getAllAssets('Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D', 0, 10).then(function(result) {
-    console.log(result.equities[0].assetId) // 0x34b04e018488f37f449193af2f24feb3b034c994cde95d30e3181403ac76528a
-})
+lemo.account.getAllAssets('Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG', 0, 10).then(function(result) {
+     console.log(result.equities[0].assetId) // 0xdb1e51e71fde226556ce8eb0d16b616b3213fc5d8906926889745a6c9c66a315
+ })
 ```
 
 ---
@@ -1097,7 +1095,7 @@ lemo.tx.getTx(txHash)
 ##### Example
 
 ```js
-lemo.tx.getTx('0x94ad0a9869cb6418f6a67df76d1293b557adb567ca3d29bfc8d8ff0d5f4ac2de').then(function(tx) {
+lemo.tx.getTx('0xdb1e51e71fde226556ce8eb0d16b616b3213fc5d8906926889745a6c9c66a315').then(function(tx) {
     console.log(tx.from) // "Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG"
     console.log(tx.to) // "Lemo83JW7TBPA7P2P6AR9ZC2WCQJYRNHZ4NJD4CY"
     console.log(tx.amount) // "100"
@@ -1141,7 +1139,7 @@ lemo.tx.getTxListByAddress(address, index, limit)
 lemo.tx.getTxListByAddress('Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D', 0, 10).then(function(result) {
     console.log(result.total) // 3
     console.log(result.txList[0].minedTime) // 1541649535
-    console.log(JSON.stringify(result.txList)) // [{"chainID":200,"expirationTime":1544584596,"from":"Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D","version":1,"type":0,"toName":"","gasPrice":"3000000000","gasLimit":2000000,"amount":"0","data":"0x","message":"","sigs":["0xf642fbc4588fbab945a6db57381fb756221607c96f5519c5f5092ca212b454e7529b1c78da1927bc99d07f0b0f3e18442b6d911ce71a45a6f0da101e84b88e3c01"],"typeText":"UnknonwType(0)","minedTime":1541649535},{"chainID":200,"version":1,"type":0,"to":"0x1000000000000000000000000000000000000000","toName":"888888888888888888888888888888888888888888888888888888888888","gasPrice":"1.17789804318558955305553166716194567721832259791707930541440413419507985e+71","gasLimit":100,"amount":"1.17789804318558955305553166716194567721832259791707930541440413419507985e+71","data":"0x4949494949494949","expirationTime":1544584596,"message":"888888888888888888888888888888888888888888888888888888888888","from":"Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D","sigs":["0xacba6ce994874d7b856d663a7f1d04bc7bf65278d33afb0a7fd8da69f626292a01e6badf976c360673b71c54ff363bbcb521ae545fec47cb0bf83eb4c83332b601"],"typeText":"UnknonwType(0)","minedTime":1541649536}]
+    console.log(JSON.stringify(result.txList)) // [{"chainID":"1","expirationTime":1544584596,"from":"Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D","version":1,"type":0,"toName":"","gasPrice":"3000000000","gasLimit":2000000,"amount":"0","data":"0x","message":"","sigs":["0xf642fbc4588fbab945a6db57381fb756221607c96f5519c5f5092ca212b454e7529b1c78da1927bc99d07f0b0f3e18442b6d911ce71a45a6f0da101e84b88e3c01"],"typeText":"UnknonwType(0)","minedTime":1541649535},{"chainID":200,"version":1,"type":0,"to":"0x1000000000000000000000000000000000000000","toName":"888888888888888888888888888888888888888888888888888888888888","gasPrice":"1.17789804318558955305553166716194567721832259791707930541440413419507985e+71","gasLimit":100,"amount":"1.17789804318558955305553166716194567721832259791707930541440413419507985e+71","data":"0x4949494949494949","expirationTime":1544584596,"message":"888888888888888888888888888888888888888888888888888888888888","from":"Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D","sigs":["0xacba6ce994874d7b856d663a7f1d04bc7bf65278d33afb0a7fd8da69f626292a01e6badf976c360673b71c54ff363bbcb521ae545fec47cb0bf83eb4c83332b601"],"typeText":"UnknonwType(0)","minedTime":1541649536}]
 })
 ```
 
@@ -1181,10 +1179,11 @@ lemo.tx.sendTx(privateKey, txconfig, waitConfirm)
 ##### Example
 
 ```js
-const txInfo = {to: 'Lemo83BYKZJ4RN4TKC9C78RFW7YHW6S87TPRSH34', amount: 100}
+const txInfo = {from:'Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG',to: 'Lemo83BYKZJ4RN4TKC9C78RFW7YHW6S87TPRSH34',chainID:1, amount: 100}
 lemo.tx.sendTx('0xfdbd9978910ce9e1ed276a75132aacb0a12e6c517d9bd0311a736c57a228ee52', txInfo).then(function(txHash) {
     console.log(txHash)
 })
+//0xa42c2db9592e9efafb80760d1ed73f40dd9ca52577d73304a623edb5354c6570
 ```
 
 ---
@@ -1320,7 +1319,7 @@ lemo.tx.signCreateAsset(privateKey, txConfig, createAssetInfo)
 ```js
 const txInfo = {chainID: '1', from: 'Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D'}
 const createAssetInfo = {
-    category: '1',
+    category: 1,
     decimal: 18,
     isReplenishable: true,
     isDivisible: true,
@@ -1333,7 +1332,7 @@ const createAssetInfo = {
 }
 const signCreateAsset = lemo.tx.signCreateAsset('0x432a86ab8765d82415a803e29864dcfc1ed93dac949abf6f95a583179f27e4bb', txInfo, createAssetInfo)
 console.log(signCreateAsset)
-// {"type":"4","version":"1","chainID":"1","gasPrice":"3000000000","gasLimit":"2000000","amount":"0","expirationTime":"1560245285","from":"Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D","data":"0x7b2263617465676f7279223a312c22646563696d616c223a31382c2269735265706c656e69736861626c65223a747275652c226973446976697369626c65223a747275652c2270726f66696c65223a7b226e616d65223a2244656d6f204173736574222c2273796d626f6c223a224454222c226465736372697074696f6e223a2264656d6f206173736574222c227375676765737465644761734c696d6974223a223630303030222c22667265657a65223a2266616c7365227d7d","sigs":["0x60fa169322999ebf3c40d6165faa527f9570eaaa7d31dd881d7075af94c3efa42a330e2fa35053960d954853ea118cac7e4fad9c29c252212727c782368fbce300"],"gasPayerSigs":[]}
+// {"type":"4","version":"1","chainID":"1","from":"Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D","gasPrice":"3000000000","gasLimit":"2000000","amount":"0","expirationTime":"1563529024","data":"0x7b2263617465676f7279223a312c22646563696d616c223a31382c2269735265706c656e69736861626c65223a747275652c226973446976697369626c65223a747275652c2270726f66696c65223a7b226e616d65223a2244656d6f204173736574222c2273796d626f6c223a224454222c226465736372697074696f6e223a2264656d6f206173736574222c227375676765737465644761734c696d6974223a223630303030222c22667265657a65223a2266616c7365227d7d","sigs":["0x2843424420e57a31471ef6cd3122bff58652e3fd767031935b1262f71e64492978a46c6f0a7333529a3e89a6d19e27472a8fbd16fae83be74b1d9bda2112957801"],"gasPayerSigs":[]}
 ```
 
 ---
@@ -1666,11 +1665,12 @@ lemo.tx.signContractCreation(privateKey, txConfig, code, constructorArgs)
 ##### Example
 
 ```js
+const txInfo = {from: 'Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D', to: 'Lemo83BYKZJ4RN4TKC9C78RFW7YHW6S87TPRSH34', amount: 100}
 const code = '0x000000100000100'
-const constructorArgs = '0xdaaod10000001111'
-const result = lemo.tx.signContractCreation(testPrivate, txInfo.txConfig, code, constructorArgs)
+const constructorArgs = '0xdaad10000001111'
+const result = lemo.tx.signContractCreation('0x432a86ab8765d82415a803e29864dcfc1ed93dac949abf6f95a583179f27e4bb', txInfo, code, constructorArgs)
 console.log(result)
-// {"type":"1","version":"1","chainID":"200","gasPrice":"2","gasLimit":"100","amount":"1","expirationTime":"1544584596","from":"Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D","to":"Lemo8888888888888888888888888888888888BW","toName":"aa","data":"0x000000100000100daaod10000001111","message":"aaa","sigs":["0x6ea18d3d4bc70e5474bcb6f7158b2a020ed7ae91711659bfce4cb110f2703a783dbbc3765ee19fb54dddbcb95776477dd3bf7266d939762fa1b422abf8185a7800"],"gasPayerSigs":[]}
+// {"type":"1","version":"1","chainID":"1","from":"Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D","gasPrice":"3000000000","gasLimit":"2000000","amount":"100","expirationTime":"1563525959","to":"Lemo83BYKZJ4RN4TKC9C78RFW7YHW6S87TPRSH34","data":"0x000000100000100daad10000001111","sigs":["0x67090b585597eaa7e4e5ea562f8a4359289f12deb4c8cbd9dda6f57a1040fc1d2664864fd5f8a526d5808f401fb2da1ca48cfaeac248f6fbf194dc943fe59f8600"],"gasPayerSigs":[]}
 ```
 
 ---
