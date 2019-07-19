@@ -656,7 +656,7 @@ lemo.getGasPriceAdvice()
 
 ```js
 lemo.getGasPriceAdvice().then(function(gasPrice) {
-    console.log(gasPrice) // "2000000000"
+    console.log(gasPrice.toMoney()) // "2000000000"
 })
 ```
 
@@ -1739,15 +1739,11 @@ lemo.tx.send(txConfig, waitConfirm)
 ##### Example
 
 ```js
-const txInfo = {to: 'Lemo83BYKZJ4RN4TKC9C78RFW7YHW6S87TPRSH34', amount: 100}
-lemo.tx
-    .sign('0xfdbd9978910ce9e1ed276a75132aacb0a12e6c517d9bd0311a736c57a228ee52', txInfo)
-    .then(function(signedTx) {
-        return lemo.tx.send(signedTx)
-    })
-    .then(function(txHash) {
-        console.log(txHash) // "0xe116a56b301f3bede1ad10c1496d57d6cb89454b4d6efbc20ca39132a4bc2b96"
-    })
+const txInfo = {from: 'Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG', to: 'Lemo83BYKZJ4RN4TKC9C78RFW7YHW6S87TPRSH34', amount: 100}
+const signedTx = lemo.tx.sign('0xc21b6b2fbf230f665b936194d14da67187732bf9d28768aef1a3cbb26608f8aa', txInfo)
+lemo.tx.send(signedTx).then(function(txHash) {
+    console.log(txHash) //0x03fea27a8d140574dc648e1cb1a198f5ade450a347095cff7f3d961a11dac505
+})
 ```
 
 ---
