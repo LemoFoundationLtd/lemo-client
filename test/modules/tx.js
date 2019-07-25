@@ -148,6 +148,7 @@ describe('module_tx_candidate', () => {
                         '5e3600755f9b512a65603b38e30885c98cbac70259c3235c9b3f42ee563b480edea351ba0ff5748a638fe0aeff5d845bf37a3b437831871b48fd32f33cd9a3c0',
                     host: '127.0.0.1',
                     port: '7001',
+                    pledgeAmount: '200',
                 }
                 let json = lemo.tx.signCandidate(testPrivate, test.txConfig, candidateInfo)
                 json = JSON.parse(json)
@@ -156,7 +157,6 @@ describe('module_tx_candidate', () => {
                 assert.equal(toBuffer(json.data).toString(), result, `index=${i}`)
                 assert.equal(json.to, undefined, `index=${i}`)
                 assert.equal(json.toName, undefined, `index=${i}`)
-                assert.equal(json.amount, 0, `index=${i}`)
             }),
         )
     })
@@ -186,7 +186,6 @@ describe('module_tx_create_asset', () => {
                 assert.equal(toBuffer(json.data).toString(), result, `index=${i}`)
                 assert.equal(json.to, undefined, `index=${i}`)
                 assert.equal(json.toName, undefined, `index=${i}`)
-                assert.equal(json.amount, 0, `index=${i}`)
             }),
         )
     })
