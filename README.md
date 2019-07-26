@@ -86,6 +86,7 @@ lemo.chain.getBlockByNumber(0).then(function(block) {
 | [lemo.tx.signContractCreation(privateKey, txConfig, code, constructorArgs)](#submodule-tx-signContractCreation)   | 签名合约交易   | ✖    | ✓         |
 | [lemo.tx.signModifySigners(privateKey, txConfig, signers)](#submodule-tx-signModifySigners)   | 签名修改多重签名的交易   | ✖    | ✓         |
 | [lemo.tx.send(signedTxInfo)](#submodule-tx-send)                           | 发送已签名的交易               | ✓    | ✓          |
+| [lemo.tx.waitConfirm(txHash)](#submodule-tx-waitConfirm)                           | 等待交易上链               | ✓    | ✓          |
 | [lemo.tx.watchTx(filterTxConfig, callback)](#submodule-tx-watchTx)         | 监听过滤区块的交易            | ✖    | ✓          |
 | [lemo.tx.stopWatchTx(subscribeId)](#submodule-tx-stopWatchTx)                | 停止指定交易            | ✖    | ✓          |
 | [lemo.tx.watchPendingTx(callback)](#submodule-tx-watchPendingTx)           | 监听新的 pending 交易          | ✖    | ✖          |
@@ -1746,6 +1747,28 @@ lemo.tx.send(signedTx).then(function(txHash) {
     console.log(txHash) //0x03fea27a8d140574dc648e1cb1a198f5ade450a347095cff7f3d961a11dac505
 })
 ```
+
+---
+
+<a name="submodule-tx-waitConfirm"></a>
+
+#### lemo.tx.waitConfirm
+
+```
+lemo.tx.waitConfirm(txHash)
+```
+
+等待交易上链
+
+##### Parameters
+
+1. `string` - 交易hash
+
+##### Returns
+
+`Promise` - 通过`then`可以获取到交易信息
+
+
 
 ---
 

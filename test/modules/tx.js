@@ -62,15 +62,6 @@ describe('module_tx_getTxListByAddress', () => {
 })
 
 describe('module_tx_sendTx', () => {
-    it('sendTx_with_hex_address_without_waitConfirm', () => {
-        return Promise.all(
-            txInfos.map(async (test, i) => {
-                const lemo = new LemoClient({chainID})
-                const result = await lemo.tx.sendTx(testPrivate, test.txConfig)
-                return assert.equal(result, test.hashAfterSign, `index=${i}`)
-            }),
-        )
-    })
     it('sendTx_with_hex_address_waitConfirm', () => {
         return Promise.all(
             txInfos.map(async (test, i) => {
