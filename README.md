@@ -86,6 +86,7 @@ lemo.chain.getBlockByNumber(0).then(function(block) {
 | [lemo.tx.signContractCreation(privateKey, txConfig, code, constructorArgs)](#submodule-tx-signContractCreation)   | 签名合约交易   | ✖    | ✓         |
 | [lemo.tx.signModifySigners(privateKey, txConfig, signers)](#submodule-tx-signModifySigners)   | 签名修改多重签名的交易   | ✖    | ✓         |
 | [lemo.tx.send(signedTxInfo)](#submodule-tx-send)                           | 发送已签名的交易               | ✓    | ✓          |
+| [lemo.tx.waitConfirm(txHash)](#submodule-tx-waitConfirm)                           | 等待交易上链               | ✓    | ✓          |
 | [lemo.tx.watchTx(filterTxConfig, callback)](#submodule-tx-watchTx)         | 监听过滤区块的交易            | ✖    | ✓          |
 | [lemo.tx.stopWatchTx(subscribeId)](#submodule-tx-stopWatchTx)                | 停止指定交易            | ✖    | ✓          |
 | [lemo.tx.watchPendingTx(callback)](#submodule-tx-watchPendingTx)           | 监听新的 pending 交易          | ✖    | ✖          |
@@ -1276,7 +1277,7 @@ lemo.tx.signCandidate(privateKey, txInfo, candidateInfo)
 `string` - 签名后的[交易](#data-structure-transaction)信息字符串
 
 ##### Example
-
+ 
 ```js
 const txInfo = {chainID: '1', from: 'Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D'}
 const candidateInfo = {
@@ -1285,10 +1286,11 @@ const candidateInfo = {
     nodeID: '5e3600755f9b512a65603b38e30885c98cbac70259c3235c9b3f42ee563b480edea351ba0ff5748a638fe0aeff5d845bf37a3b437831871b48fd32f33cd9a3c0',
     host: '127.0.0.1',
     port: '7001',
+    introduction: 'this is a demo',
 }
 const signedTxStr = lemo.tx.signCandidate('0xfdbd9978910ce9e1ed276a75132aacb0a12e6c517d9bd0311a736c57a228ee52', txInfo, candidateInfo)
 console.log(signedTxStr)
-// {"type":"3","version":"1","chainID":"1","gasPrice":"3000000000","gasLimit":"2000000","amount":"0","expirationTime":"1560245128","from":"Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D","data":"0x7b22697343616e646964617465223a2274727565222c226d696e657241646472657373223a224c656d6f3833474e3732475948324e5a3842413732395a39544354374b5135464333435236444a47222c226e6f64654944223a223565333630303735356639623531326136353630336233386533303838356339386362616337303235396333323335633962336634326565353633623438306564656133353162613066663537343861363338666530616566663564383435626633376133623433373833313837316234386664333266333363643961336330222c22686f7374223a223132372e302e302e31222c22706f7274223a2237303031227d","sigs":["0x90cb4d6d6699da110d401dd452ca2a93318312845ba1f5dcb7a07aab621acc7e408e7dc53ab2c9d4dbd2c6b1db54ff4d0128f215a2380337a8b0ce9da5557f3701"],"gasPayerSigs":[]}
+// {"type":"3","version":"1","chainID":"1","from":"Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D","gasPrice":"3000000000","gasLimit":"2000000","amount":"0","expirationTime":"1564125868","data":"0x7b22697343616e646964617465223a2274727565222c226d696e657241646472657373223a224c656d6f3833474e3732475948324e5a3842413732395a39544354374b5135464333435236444a47222c226e6f64654944223a223565333630303735356639623531326136353630336233386533303838356339386362616337303235396333323335633962336634326565353633623438306564656133353162613066663537343861363338666530616566663564383435626633376133623433373833313837316234386664333266333363643961336330222c22686f7374223a223132372e302e302e31222c22706f7274223a2237303031222c22696e74726f64756374696f6e223a227468697320697320612064656d6f227d","sigs":["0xd76e29e792ff98c0ab6618e394d979036d32f37015613709e1bc49909304972d1f13fbfa109f971c2cd279209e1dad3ad2b1f411a50ce1451189d07eaa2382d400"],"gasPayerSigs":[]}
 ```
 
 ---
@@ -1745,6 +1747,28 @@ lemo.tx.send(signedTx).then(function(txHash) {
     console.log(txHash) //0x03fea27a8d140574dc648e1cb1a198f5ade450a347095cff7f3d961a11dac505
 })
 ```
+
+---
+
+<a name="submodule-tx-waitConfirm"></a>
+
+#### lemo.tx.waitConfirm
+
+```
+lemo.tx.waitConfirm(txHash)
+```
+
+等待交易上链
+
+##### Parameters
+
+1. `string` - 交易hash
+
+##### Returns
+
+`Promise` - 通过`then`可以获取到交易信息
+
+
 
 ---
 
