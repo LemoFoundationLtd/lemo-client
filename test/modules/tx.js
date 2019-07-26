@@ -66,7 +66,7 @@ describe('module_tx_sendTx', () => {
         return Promise.all(
             txInfos.map(async (test, i) => {
                 const lemo = new LemoClient({chainID})
-                const result = await lemo.tx.sendTx(testPrivate, test.txConfig, false)
+                const result = await lemo.tx.sendTx(testPrivate, test.txConfig)
                 return assert.equal(result, test.hashAfterSign, `index=${i}`)
             }),
         )
@@ -75,7 +75,7 @@ describe('module_tx_sendTx', () => {
         return Promise.all(
             txInfos.map(async (test, i) => {
                 const lemo = new LemoClient({chainID})
-                const result = await lemo.tx.sendTx(testPrivate, test.txConfig, true)
+                const result = await lemo.tx.sendTx(testPrivate, test.txConfig)
                 return assert.equal(result, test.hashAfterSign, `index=${i}`)
             }),
         )
@@ -88,7 +88,7 @@ describe('module_tx_sendTx', () => {
     })
     it('sendTx_with_lemo_address_without_waitConfirm', async () => {
         const lemo = new LemoClient({chainID})
-        const result = await lemo.tx.sendTx(testPrivate, bigTxInfoWithLemoAddr.txConfig, false)
+        const result = await lemo.tx.sendTx(testPrivate, bigTxInfoWithLemoAddr.txConfig)
         assert.equal(result, bigTxInfoWithLemoAddr.hashAfterSign)
     })
 })
@@ -148,7 +148,7 @@ describe('module_tx_candidate', () => {
                         '5e3600755f9b512a65603b38e30885c98cbac70259c3235c9b3f42ee563b480edea351ba0ff5748a638fe0aeff5d845bf37a3b437831871b48fd32f33cd9a3c0',
                     host: '127.0.0.1',
                     port: '7001',
-                    pledgeAmount: '200',
+                    introduction: 'abcde',
                 }
                 let json = lemo.tx.signCandidate(testPrivate, test.txConfig, candidateInfo)
                 json = JSON.parse(json)
