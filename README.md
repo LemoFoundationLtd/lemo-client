@@ -102,6 +102,7 @@ lemo.chain.getBlockByNumber(0).then(function(block) {
 | [LemoClient.moToLemo(mo)](#submodule-tool-moToLemo)             | 将单位从mo转换为LEMO             |
 | [LemoClient.lemoToMo(ether)](#submodule-tool-lemoToMo)             | 将单位从LEMO转换为mo             |
 | [LemoClient.toBuffer(data)](#submodule-tool-toBuffer)             | 将数据转换为Buffer类型             |
+| [LemoClient.signTx(privateKey, txConfig)](#submodule-tool-signTx)             | 签名交易            |
 
 ---
 
@@ -2007,7 +2008,7 @@ console.log(result.toString(10)) // '100000000000000000'
 <a name="submodule-tool-toBuffer"></a>
 #### LemoClient.toBuffer
 ```
-LemoClient.toBuffer(data)
+LemoClient.toBuffer(privateKey, txConfig)
 ```
 将数据转换为Buffer类型
 
@@ -2021,6 +2022,37 @@ LemoClient.toBuffer(data)
 ```js
 const result = LemoClient.toBuffer('{"value": 100}')
 console.log(result.toString('hex')) // '100000000000000000'
+```
+
+---
+
+<a name="submodule-tool-signTx"></a>
+#### LemoClient.signTx
+```
+LemoClient.signTx(privateKey, txConfig)
+```
+签名交易并返回签名后的交易信息字符串  
+该方法用于实现安全的离线交易
+
+1. 在离线电脑上签名
+2. 将签名后的数据拷贝到联网电脑上
+3. 通过[`lemo.tx.send`](#submodule-tx-send)方法发送到 LemoChain
+
+##### Parameters
+
+1. `string` - 账户私钥
+2. `object` - 签名前的交易信息，细节参考[`lemo.tx.sendTx`](#submodule-tx-sendTx)
+
+##### Returns
+
+`string` - 签名后的[交易](#data-structure-transaction)信息字符串
+
+##### Example
+```js
+const txInfo = {from: 'Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D', to: 'Lemo83BYKZJ4RN4TKC9C78RFW7YHW6S87TPRSH34', amount: 100}
+const signedTxStr = LemoClient.signTx('0xfdbd9978910ce9e1ed276a75132aacb0a12e6c517d9bd0311a736c57a228ee52', txInfo)
+console.log(signedTxStr)
+// {"type":"1","version":"1","chainID":"1","gasPrice":"3000000000","gasLimit":"2000000","amount":"100","expirationTime":"1560244840","from":"Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D","to":"Lemo83BYKZJ4RN4TKC9C78RFW7YHW6S87TPRSH34","sigs":["0x55fe70309bb74aaad62a7fe4ab4085dd8c8bd450ce9eab8dd7906cc5453cbaab500f50e1d05ff746248bc806f4738be2fcaafc78a557edf1e34c976a21d6f0c200"],"gasPayerSigs":[]}
 ```
 
 ---
