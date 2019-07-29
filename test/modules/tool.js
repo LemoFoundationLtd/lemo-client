@@ -27,9 +27,9 @@ describe('module_tool_verifyAddress', () => {
     ]
 
     tests.forEach(({input, output}, i) => {
-        const lemo = new LemoClient({chainID})
-        it(`address ${JSON.stringify(input)}`, async () => {
-            const errMsg = await lemo.tool.verifyAddress(input)
+        new LemoClient({chainID})
+        it(`address ${JSON.stringify(input)}`, () => {
+            const errMsg = LemoClient.verifyAddress(input)
             return assert.equal(errMsg, output, `index=${i}`)
         })
     })
@@ -46,13 +46,13 @@ describe('module_tool_moToLemo', () => {
     ]
     tests.forEach(test => {
         it(`when input is ${test.input}`, () => {
-            const lemo = new LemoClient({chainID})
+            new LemoClient({chainID})
             if (test.error) {
                 assert.throws(() => {
-                    lemo.tool.moToLemo(test.input)
+                    LemoClient.moToLemo(test.input)
                 }, test.error)
             } else {
-                assert.equal(lemo.tool.moToLemo(test.input).toString(10), test.output)
+                assert.equal(LemoClient.moToLemo(test.input).toString(10), test.output)
             }
         })
     })
@@ -70,13 +70,13 @@ describe('module_tool_lemoToMo', () => {
     ]
     tests.forEach(test => {
         it(`when input is ${test.input}`, () => {
-            const lemo = new LemoClient({chainID})
+            new LemoClient({chainID})
             if (test.error) {
                 assert.throws(() => {
-                    lemo.tool.lemoToMo(test.input)
+                    LemoClient.lemoToMo(test.input)
                 }, test.error)
             } else {
-                assert.equal(lemo.tool.lemoToMo(test.input).toString(10), test.output)
+                assert.equal(LemoClient.lemoToMo(test.input).toString(10), test.output)
             }
         })
     })
@@ -99,13 +99,13 @@ describe('module_tool_toBuffer', () => {
     ]
     tests.forEach(test => {
         it(`when input is ${test.input}`, () => {
-            const lemo = new LemoClient({chainID})
+            new LemoClient({chainID})
             if (test.error) {
                 assert.throws(() => {
-                    lemo.tool.toBuffer(test.input)
+                    LemoClient.toBuffer(test.input)
                 }, test.error)
             } else {
-                assert.equal(lemo.tool.toBuffer(test.input).toString('hex'), test.output)
+                assert.equal(LemoClient.toBuffer(test.input).toString('hex'), test.output)
             }
         })
     })
