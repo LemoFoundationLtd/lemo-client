@@ -2,7 +2,7 @@ import {assert} from 'chai'
 import {Buffer} from 'safe-buffer'
 import BigNumber from 'bignumber.js'
 import LemoClient from '../../lib/index'
-import {chainID, testPrivate, txInfos} from '../datas'
+import {bigTxInfoWithLemoAddr, chainID, testPrivate} from '../datas'
 import errors from '../../lib/errors'
 
 describe('module_tool_verifyAddress', () => {
@@ -112,12 +112,8 @@ describe('module_tool_toBuffer', () => {
 })
 describe('module_tool_signTX', () => {
     it('signTx_normal', () => {
-        return Promise.all(
-            txInfos.map((test, i) => {
-                let result = LemoClient.signTx(testPrivate, test.txConfig)
-                result = JSON.parse(result)
-                assert.equal(result.from, test.txConfig.from, `index=${i}`)
-            }),
-        )
+        let result = LemoClient.signTx(testPrivate, bigTxInfoWithLemoAddr.txConfig)
+        result = JSON.parse(result)
+        assert.equal(result.from, bigTxInfoWithLemoAddr.txConfig.from)
     })
 })
