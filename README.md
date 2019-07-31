@@ -2008,7 +2008,7 @@ console.log(result.toString(10)) // '100000000000000000'
 <a name="submodule-tool-toBuffer"></a>
 #### LemoClient.toBuffer
 ```
-LemoClient.toBuffer(privateKey, txConfig)
+LemoClient.toBuffer(data)
 ```
 将数据转换为Buffer类型
 
@@ -2032,7 +2032,7 @@ console.log(result.toString('hex')) // '100000000000000000'
 LemoClient.signTx(privateKey, txConfig)
 ```
 签名交易并返回签名后的交易信息字符串  
-该方法用于实现安全的离线交易
+该方法用于实现安全的离线交易,相较于[`lemo.tx.sign`](#submodule-tx-sign)方法没有校验chainID
 
 1. 在离线电脑上签名
 2. 将签名后的数据拷贝到联网电脑上
