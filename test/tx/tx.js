@@ -42,7 +42,6 @@ describe('Tx_new', () => {
             toName: '103',
             gasPrice: 104,
             gasLimit: 105,
-            gasUsed: 10,
             amount: 106,
             data: '107',
             expirationTime: 108,
@@ -58,7 +57,6 @@ describe('Tx_new', () => {
         assert.equal(tx.toName, config.toName)
         assert.equal(tx.gasPrice, config.gasPrice)
         assert.equal(tx.gasLimit, config.gasLimit)
-        assert.equal(tx.gasUsed, config.gasUsed)
         assert.equal(tx.amount, config.amount)
         assert.equal(tx.data, `0x${config.data}`)
         assert.equal(tx.expirationTime, config.expirationTime)

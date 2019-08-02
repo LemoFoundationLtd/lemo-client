@@ -260,6 +260,7 @@ export const block1 = {
             toName: '',
             gasPrice: '3000000000',
             gasLimit: '2000000',
+            gasUsed: 0,
             amount: '100',
             data: '0x',
             expirationTime: '1541649535',
