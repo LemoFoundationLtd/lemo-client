@@ -12,6 +12,8 @@ import {
     testAddr,
     emptyTxInfo,
     bigTxInfo,
+    txList,
+    formattedAssetTxListRes,
 } from '../datas'
 import '../mock'
 import {decodeUtf8Hex, toBuffer} from '../../lib/utils'
@@ -57,6 +59,33 @@ describe('module_tx_getTxListByAddress', () => {
     it('get from empty account', async () => {
         const lemo = new LemoClient({chainID})
         const result = await lemo.tx.getTxListByAddress('Lemobw', 0, 10)
+        assert.equal(result.txList.length, 0)
+    })
+})
+describe('module_tx_getAssetTxList', () => {
+    it('get_two_asset_tx_list', async () => {
+        const lemo = new LemoClient({chainID})
+        const assetId = txList[0].assetId
+        const result = await lemo.tx.getAssetTxList(testAddr, assetId, 0, 10)
+        assert.equal(result.txList[0].assetId, formattedAssetTxListRes.txList[0].assetId)
+        assert.equal(result.txList.length, 2)
+    })
+    it('get from empty assetId', async () => {
+        const lemo = new LemoClient({chainID})
+        const assetId = '0x6c0b14755a4caba0f42cef903db72bbeae7dd8ef2d8c6c71c79136d8c6d8046f'
+        const result = await lemo.tx.getAssetTxList(testAddr, assetId, 0, 10)
+        assert.equal(result.txList.length, 0)
+    })
+    it('got 0 tx', async () => {
+        const lemo = new LemoClient({chainID})
+        const assetId = txList[0].assetId
+        const result = await lemo.tx.getAssetTxList(testAddr, assetId, 0, 0)
+        assert.equal(result.txList.length, 0)
+    })
+    it('account is empty', async () => {
+        const lemo = new LemoClient({chainID})
+        const assetId = txList[0].assetId
+        const result = await lemo.tx.getAssetTxList('Lemo123', assetId, 0, 10)
         assert.equal(result.txList.length, 0)
     })
 })

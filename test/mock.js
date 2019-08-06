@@ -224,6 +224,17 @@ const mockInfos = [
         },
     },
     {
+        method: 'tx_getAssetTxList',
+        paramsCount: 4,
+        reply([address, assetId, index, limit]) {
+            let list = []
+            if (address === 'Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D') {
+                list = txList.filter(item => item.assetId === assetId).slice(index, index + limit)
+            }
+            return {txList: list, total: String(list.length)}
+        },
+    },
+    {
         method: 'tx_sendTx',
         paramsCount: 1,
         reply([txConfig]) {

@@ -569,35 +569,67 @@ export const txList = [
         tx: tx1,
         time: '1541649535',
         pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        assetId: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
+        assetCode: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
     },
     {
         tx: tx2,
         time: '1541649536',
         pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        assetId: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
+        assetCode: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
     },
     {
         tx: tx3,
         time: '1541649536',
         pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        assetId: '0x8dd85a833c482b4cb24f261e2d5378c14507eb01a92d89eb4a8278302f70cff5',
+        assetCode: '0x8dd85a833c482b4cb24f261e2d5378c14507eb01a92d89eb4a8278302f70cff5',
     },
 ]
 
+
+export const formattedAssetTxListRes = {
+    txList: [
+        {
+            ...formattedTx1,
+            minedTime: 1541649535,
+            pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
+            assetId: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
+            assetCode: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
+        },
+        {
+            ...formattedTx2,
+            minedTime: 1541649536,
+            pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
+            assetId: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
+            assetCode: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
+        },
+    ],
+    total: 2,
+}
 export const formattedTxListRes = {
     txList: [
         {
             ...formattedTx1,
             minedTime: 1541649535,
             pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
+            assetId: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
+            assetCode: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
         },
         {
             ...formattedTx2,
             minedTime: 1541649536,
             pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
+            assetId: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
+            assetCode: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
         },
         {
             ...formattedTx3,
             minedTime: 1541649536,
             pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
+            assetId: '0x8dd85a833c482b4cb24f261e2d5378c14507eb01a92d89eb4a8278302f70cff5',
+            assetCode: '0x8dd85a833c482b4cb24f261e2d5378c14507eb01a92d89eb4a8278302f70cff5',
         },
     ],
     total: 3,
