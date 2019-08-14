@@ -117,3 +117,14 @@ describe('module_tool_signTX', () => {
         assert.equal(result.from, bigTxInfoWithLemoAddr.txConfig.from)
     })
 })
+describe('module_tool_signAssetTX', () => {
+    it('signAssetTX_normal', () => {
+        const transferAsset = {
+            assetId: '0xd0befd3850c574b7f6ad6f7943fe19b212affb90162978adc2193a035ced8884',
+            transferAmount: '110000',
+        }
+        let result = LemoClient.signAssetTx(testPrivate, bigTxInfoWithLemoAddr.txConfig, transferAsset)
+        result = JSON.parse(result)
+        assert.equal(result.from, bigTxInfoWithLemoAddr.txConfig.from)
+    })
+})

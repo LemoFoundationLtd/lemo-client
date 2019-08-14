@@ -70,6 +70,7 @@ lemo.chain.getBlockByNumber(0).then(function(block) {
 | [lemo.account.isContractAddress(address)](#submodule-account-isContractAddress) | 是否是合约账户账户                 | ✖    | ✓          |
 | [lemo.tx.getTx(txHash)](#submodule-tx-getTx)                               | 根据交易hash获取交易            | ✓    | ✓          |
 | [lemo.tx.getTxListByAddress(address, index, limit)](#submodule-tx-getTxListByAddress)     | 根据账户地址分页拉取交易列表      | ✓    | ✓          |
+| [lemo.tx.getAssetTxList(address, assetId, index, limit)](#submodule-tx-getAssetTxList)     | 根据账户地址和assetID分页拉取资产交易列表      | ✓    | ✓          |
 | [lemo.tx.sendTx(privateKey, txInfo)](#submodule-tx-sendTx)                 | 签名并发送交易                 | ✓    | ✓          |
 | [lemo.tx.sign(privateKey, txInfo)](#submodule-tx-sign)                     | 签名交易                       | ✖    | ✓          |
 | [lemo.tx.signVote(privateKey, txInfo)](#submodule-tx-signVote)             | 签名投票的特殊交易              | ✖    | ✓          |
@@ -1133,7 +1134,11 @@ lemo.tx.getTxListByAddress(address, index, limit)
 ##### Returns
 
 `Promise` - 通过`then`可以获取到一个`{txList:Array, total:number}`对象。其中  
-    - `txList` [交易](#data-structure-transaction)的数组，其中增加了`minedTime`属性，表示所在区块的出块时间  
+    - `txList` [交易](#data-structure-transaction)的数组，其中增加了以下属性: 
+        - `minedTime` 所在区块的出块时间    
+        - `pHash` 如果是箱子交易的子交易则为箱子交易的交易hash    
+        - `assetCode` 创建资产时得到的资产码 
+        - `assetId` 发行资产得到的id 
     - `total` 该账户下的交易总数  
 
 ##### Example
@@ -1143,6 +1148,47 @@ lemo.tx.getTxListByAddress('Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D', 0, 10).th
     console.log(result.total) // 3
     console.log(result.txList[0].minedTime) // 1541649535
     console.log(JSON.stringify(result.txList)) // [{"chainID":"1","expirationTime":1544584596,"from":"Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D","version":1,"type":0,"toName":"","gasPrice":"3000000000","gasLimit":2000000,"amount":"0","data":"0x","message":"","sigs":["0xf642fbc4588fbab945a6db57381fb756221607c96f5519c5f5092ca212b454e7529b1c78da1927bc99d07f0b0f3e18442b6d911ce71a45a6f0da101e84b88e3c01"],"typeText":"UnknonwType(0)","minedTime":1541649535},{"chainID":200,"version":1,"type":0,"to":"0x1000000000000000000000000000000000000000","toName":"888888888888888888888888888888888888888888888888888888888888","gasPrice":"1.17789804318558955305553166716194567721832259791707930541440413419507985e+71","gasLimit":100,"amount":"1.17789804318558955305553166716194567721832259791707930541440413419507985e+71","data":"0x4949494949494949","expirationTime":1544584596,"message":"888888888888888888888888888888888888888888888888888888888888","from":"Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D","sigs":["0xacba6ce994874d7b856d663a7f1d04bc7bf65278d33afb0a7fd8da69f626292a01e6badf976c360673b71c54ff363bbcb521ae545fec47cb0bf83eb4c83332b601"],"typeText":"UnknonwType(0)","minedTime":1541649536}]
+})
+```
+
+---
+
+<a name="submodule-tx-getAssetTxList"></a>
+
+#### lemo.tx.getAssetTxList
+
+```
+lemo.tx.getAssetTxList(address, assetId, index, limit)
+```
+
+根据账户地址和assetID分页拉取资产交易列表, 也可以根据账户地址和assetCode来拉取资产交易列表
+资产类型为1, assetCode和assetID相同，可以拉取相同的资产列表，资产类型为2或者3，则不相同，需要分别拉取资产交易列表
+
+##### Parameters
+
+1. `string` - 账户地址
+2. `string` - 资产的资产码assetCode或assetId
+3. `number` - 要获取的第一条交易的序号
+4. `number` - 获取交易的最大条数
+
+##### Returns
+
+`Promise` - 通过`then`可以获取到一个`{txList:Array, total:number}`对象。其中  
+    - `txList` [交易](#data-structure-transaction)的数组，其中增加了以下属性:
+        - `minedTime` 所在区块的出块时间    
+        - `pHash` 判断交易是否为箱子交易的子交易，如果是箱子交易子交易则为箱子交易的交易hash  
+        - `assetCode` 创建资产时得到的资产码  
+        - `assetId` 发行资产得到的id 
+    - `total` 该账户下的资产交易总数  
+
+##### Example
+
+```js
+lemo.tx.getAssetTxList('Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D','0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446', 0, 10).then(function(result) {
+    console.log(result.total) // 3
+    console.log(result.txList[0].minedTime) // 1541649535
+    console.log(result.txList[0].assetCode) // "0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446"
+    console.log(JSON.stringify(result.txList)) // [{"chainID":200,"expirationTime":1544584596,"from":"Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D","version":1,"type":0,"toName":"","gasPrice":"3000000000","gasLimit":2000000,"gasUsed":0,"amount":"0","data":"0x","message":"","sigs":["0xf642fbc4588fbab945a6db57381fb756221607c96f5519c5f5092ca212b454e7529b1c78da1927bc99d07f0b0f3e18442b6d911ce71a45a6f0da101e84b88e3c01"],"typeText":"ORDINARY","minedTime":1541649535,"pHash":"0x0000000000000000000000000000000000000000000000000000000000000000","assetId":"0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446","assetCode":"0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446"},{"chainID":200,"version":1,"type":0,"to":"0x0000000000000000000000000000000000000001","toName":"aa","gasPrice":"2","gasLimit":100,"amount":"1","data":"0x0c","expirationTime":1544584596,"message":"aaa","from":"Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D","gasUsed":0,"sigs":["0x8c0499083cb3d27bead4f21994aeebf8e75fa11df6bfe01c71cad583fc9a3c70778a437607d072540719a866adb630001fabbfb6b032d1a8dfbffac7daed8f0201"],"typeText":"ORDINARY","minedTime":1541649536,"pHash":"0x0000000000000000000000000000000000000000000000000000000000000000","assetId":"0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446","assetCode":"0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446"}]
 })
 ```
 
