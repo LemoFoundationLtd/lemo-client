@@ -413,11 +413,11 @@ describe('module_tx_boxTx', () => {
         }
         const modifyAsset = lemo.tx.signModifyAsset(testPrivate, bigTxInfo.txConfig, ModifyAssetInfo)
         // subTxInfo: one is string and the other is a object. Same expirationTime
-        const subTxList = [createAsset, JSON.parse(modifyAsset)]
+        const subTxList = [createAsset, modifyAsset]
         const result = await lemo.tx.signBoxTx(testPrivate, txInfo.txConfig, subTxList)
         assert.deepEqual(JSON.parse(result).to, undefined)
-        assert.deepEqual(parseHexObject(JSON.parse(result).data).subTxList[1], subTxList[1])
-        assert.deepEqual(JSON.parse(result).expirationTime, subTxList[1].expirationTime)
+        assert.deepEqual(parseHexObject(JSON.parse(result).data).subTxList[0], JSON.parse(subTxList[0]))
+        assert.deepEqual(JSON.parse(result).expirationTime, JSON.parse(subTxList[1]).expirationTime)
     })
     it('boxTx_time_different', async () => {
         const lemo = new LemoClient({chainID})
