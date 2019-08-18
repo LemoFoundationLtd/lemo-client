@@ -2,13 +2,14 @@ import {assert} from 'chai'
 import LemoClient from '../lib/index'
 import HttpConn from '../lib/network/conn/http_conn'
 import errors from '../lib/errors'
-import staticProperties from '../lib/modules/static_properties'
 
 describe('LemoClient_static', () => {
-    const props = ['BigNumber', ...Object.keys(staticProperties)]
+    const props = ['SDK_VERSION', 'BigNumber']
+    const lemo = new LemoClient()
     props.forEach(prop => {
         it(prop, () => {
             assert.exists(LemoClient[prop])
+            assert.exists(lemo[prop])
         })
     })
 })
@@ -115,7 +116,8 @@ describe('LemoClient_new', () => {
 
 describe('LemoClient_createAPI', () => {
     const testConn = {
-        send: () => {},
+        send: () => {
+        },
     }
 
     it('lemo.test.setData', () => {

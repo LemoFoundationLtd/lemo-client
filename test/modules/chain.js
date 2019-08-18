@@ -13,7 +13,7 @@ import {
     nodeVersion,
 } from '../datas'
 import '../mock'
-import {DEFAULT_POLL_DURATION} from '../../lib/config'
+import {DEFAULT_POLL_DURATION} from '../../lib/const'
 
 
 describe('module_chain_getNewestBlock', () => {
@@ -100,6 +100,7 @@ describe('module_chain_getGasPriceAdvice', () => {
         assert.strictEqual(result.toMoney(), '100M mo')
     })
 })
+
 describe('module_chain_getDistributionVersion', () => {
     it('getNodeVersion', async () => {
         const lemo = new LemoClient()
@@ -112,7 +113,7 @@ describe('module_chain_watchBlock', () => {
     it('watchBlock without body', function itFunc(done) {
         this.timeout(DEFAULT_POLL_DURATION + 50)
         const lemo = new LemoClient()
-        const watchId =  lemo.watchBlock(false, block => {
+        const watchId = lemo.watchBlock(false, block => {
             try {
                 assert.deepEqual(block, {header: formattedCurrentBlock.header})
                 done()
@@ -139,8 +140,7 @@ describe('module_chain_watchBlock', () => {
         this.timeout(DEFAULT_POLL_DURATION + 50)
         const lemo = new LemoClient()
         const watchId1 = lemo.watchBlock(true, () => {
-            const e =  new Error('make multiple requests at once')
-            done(e)
+            done(new Error('make multiple requests at once'))
         })
         const watchId2 = lemo.watchBlock(true, () => {
             lemo.stopWatchBlock(watchId2)
