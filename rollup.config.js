@@ -5,7 +5,7 @@ import pkg from './package.json'
 export default [
     {
         input: 'lib/index.js',
-        external: ['axios', 'bignumber.js', 'lemo-tx'],
+        external: ['axios', 'bignumber.js', 'lemo-tx', 'lemo-utils'],
         output: [
             {file: pkg.main, format: 'cjs'}, // CommonJS (for Node) build
         ],
@@ -13,7 +13,7 @@ export default [
     },
     {
         input: 'lib/index.js',
-        external: ['axios', 'bignumber.js', 'lemo-tx'],
+        external: ['axios', 'bignumber.js', 'lemo-tx', 'lemo-utils'],
         output: [
             {file: pkg.module, format: 'esm'}, // ES module (for Rollup and webpack) build
         ],
