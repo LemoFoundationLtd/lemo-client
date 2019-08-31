@@ -2382,10 +2382,10 @@ lcov-parse@^0.0.10:
   resolved "https://registry.yarnpkg.com/lcov-parse/-/lcov-parse-0.0.10.tgz#1b0b8ff9ac9c7889250582b70b71315d9da6d9a3"
   integrity sha1-GwuP+ayceIklBYK3C3ExXZ2m2aM=
 
-lemo-tx@^1.1.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/lemo-tx/-/lemo-tx-1.1.3.tgz#953e956c7fc0d85aca522800571c054db963cb69"
-  integrity sha512-i9HDO5D9KoJErGUMl+J2qh3KgI294T59k9BsAijzKQfAHTGUXHID+nSgqzq+r2e88lHAk7266JWOjmiYvMU1gA==
+lemo-tx@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/lemo-tx/-/lemo-tx-1.1.4.tgz#d64da9bbf5f7de2d3e3c772dd9f121dad37c35bb"
+  integrity sha512-cX3ZOpJXp6eqZKXkFXv//ds//EX9beRHWrs9Jm53dtnY6MYKvqBNteRpEGMUh7iWGF8gB7EjBBwAh8uKN8xW/Q==
   dependencies:
     "@babel/runtime" "7.5.5"
     base64-url "2.3.2"
