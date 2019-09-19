@@ -136,18 +136,6 @@ describe('module_chain_watchBlock', () => {
             lemo.stopWatchBlock(watchId)
         })
     })
-    it('watchBlock has height', function itFunc(done) {
-        const lemo = new LemoClient()
-        const watchId = lemo.watchBlock(true, block => {
-            try {
-                assert.deepEqual(block, formattedCurrentBlock)
-                done()
-            } catch (e) {
-                done(e)
-            }
-            lemo.stopWatchBlock(watchId)
-        }, 1)
-    });
     it('multiple_watchBlock', function itFunc(done) {
         this.timeout(DEFAULT_POLL_DURATION + 50)
         const lemo = new LemoClient()
