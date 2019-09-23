@@ -68,11 +68,10 @@ lemo.chain.getBlockByNumber(0).then(function(block) {
 | [lemo.account.isContractAddress(address)](#submodule-account-isContractAddress) | 是否是合约账户账户                 | ✖    | ✓          |
 | [lemo.tx.getTx(txHash)](#submodule-tx-getTx)                               | 根据交易hash获取交易            | ✓    | ✓          |
 | [lemo.tx.getTxListByAddress(address, index, limit)](#submodule-tx-getTxListByAddress)     | 根据账户地址分页拉取交易列表      | ✓    | ✓          |
-| [lemo.tx.send(signedTxInfo, privateKey)](#submodule-tx-send)                           | 发送交易               | ✓    | ✓          |
+| [lemo.tx.send(signedTxInfo, privateKey)](#submodule-tx-send)                           | 发送交易并返回交易hash字符串               | ✓    | ✓          |
 | [lemo.tx.waitConfirm(txHash)](#submodule-tx-waitConfirm)                           | 等待交易上链               | ✓    | ✓          |
 | [lemo.tx.watchTx(filterTxConfig, callback)](#submodule-tx-watchTx)         | 监听过滤区块的交易            | ✖    | ✓          |
 | [lemo.tx.stopWatchTx(subscribeId)](#submodule-tx-stopWatchTx)                | 停止指定交易            | ✖    | ✓          |
-| [lemo.tx.watchPendingTx(callback)](#submodule-tx-watchPendingTx)           | 监听新的 pending 交易          | ✖    | ✖          |
 | [lemo.stopWatch()](#submodule-global-stopWatch)                     | 停止所有轮询       | ✖    | ✓          |
 | [lemo.isWatching()](#submodule-global-isWatching)                          | 是否正在轮询                   | ✖    | ✓          |
 
@@ -81,11 +80,7 @@ lemo.chain.getBlockByNumber(0).then(function(block) {
 | -------------------------------------------------------------------------- | ------------------------------ |
 | [LemoClient.SDK_VERSION](#submodule-tool-SDK_VERSION)                          | js SDK 版本号                  |
 | [LemoClient.TxType](#submodule-tool-TxType)                                    | 交易类型枚举                  |
-| [LemoClient.verifyAddress(addr)](#submodule-tool-verifyAddress)             | LemoChain地址校验             |
-| [LemoClient.moToLemo(mo)](#submodule-tool-moToLemo)             | 将单位从mo转换为LEMO             |
-| [LemoClient.lemoToMo(ether)](#submodule-tool-lemoToMo)             | 将单位从LEMO转换为mo             |
-| [LemoClient.toBuffer(data)](#submodule-tool-toBuffer)             | 将数据转换为Buffer类型             |
-| [LemoClient.signTx(privateKey, txConfig)](#submodule-tool-signTx)             | 签名交易            |
+| [LemoClient.BigNumber](https://github.com/MikeMcl/bignumber.js)             | 大数处理库             |
 
 ---
 
@@ -551,7 +546,7 @@ lemo.getNewestBlock(true).then(function(block) {
 #### lemo.getNewestHeight
 
 ```
-lemo.getNewestHeight([stable])
+lemo.getNewestHeight()
 ```
 
 获取最新块高度
@@ -1149,11 +1144,12 @@ lemo.tx.getTxListByAddress('Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D', 0, 10).th
 lemo.tx.send(txConfig, privateKey)
 ```
 
-发送已签名的交易
+发送交易并返回交易hash字符串  
 
 ##### Parameters
 
-1. `object|string` - 签名后的[交易](#data-structure-transaction)信息，可以是对象形式也可以是[`lemo.tx.sign`](#submodule-tx-sign)返回的字符串形式  
+1. `object|string` - 签名前的[交易](#data-structure-transaction)信息。也可以是签名后的[LemoTx](https://github.com/LemoFoundationLtd/lemo-tx)对象或json字符串  
+2. `string` - (可选) 账户私钥，填写后可先签名再发送  
 
 ##### Returns
 
@@ -1163,9 +1159,15 @@ lemo.tx.send(txConfig, privateKey)
 
 ```js
 const txInfo = {from: 'Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG', to: 'Lemo83BYKZJ4RN4TKC9C78RFW7YHW6S87TPRSH34', amount: 100}
-const signedTx = lemo.tx.sign('0xc21b6b2fbf230f665b936194d14da67187732bf9d28768aef1a3cbb26608f8aa', txInfo)
-lemo.tx.send(signedTx).then(function(txHash) {
-    console.log(txHash) //0x03fea27a8d140574dc648e1cb1a198f5ade450a347095cff7f3d961a11dac505
+lemo.tx.send(txInfo, '0xc21b6b2fbf230f665b936194d14da67187732bf9d28768aef1a3cbb26608f8aa').then(function(txHash) {
+    console.log(txHash) // 0x03fea27a8d140574dc648e1cb1a198f5ade450a347095cff7f3d961a11dac505
+})
+```
+```js
+const tx = new LemoTx({chainID: 1, from: 'Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG', to: 'Lemo83BYKZJ4RN4TKC9C78RFW7YHW6S87TPRSH34', amount: 100})
+tx.signWith('0xc21b6b2fbf230f665b936194d14da67187732bf9d28768aef1a3cbb26608f8aa')
+lemo.tx.send(tx).then(function(txHash) {
+    console.log(txHash) // 0x03fea27a8d140574dc648e1cb1a198f5ade450a347095cff7f3d961a11dac505
 })
 ```
 
@@ -1249,72 +1251,6 @@ lemo.tx.stopWatchTx(watchTxId)
 
 ---
 
-<a name="submodule-tx-watchPendingTx"></a>
-
-#### lemo.tx.watchPendingTx
-
-```
-lemo.tx.watchPendingTx(callback)
-```
-
-监听新的交易。在调用时会直接返回当前待打包的交易。之后会等到节点接收到新的交易再回调（1.0.0 版未实现）
-
-##### Parameters
-
-1. `Function` - 每次回调会传入[交易对象](#data-structure-transaction)列表
-
-##### Returns
-
-`number` - watchId，可用于[取消监听](#submodule-stopWatch)
-
-##### Example
-
-```js
-lemo.watchPendingTx(true, function(transactions) {
-    console.log(transactions.length)
-})
-```
-
----
-
-### 其它 API
-
-<a name="submodule-tool-SDK_VERSION"></a>
-
-#### LemoClient.SDK_VERSION
-
-```
-LemoClient.SDK_VERSION
-```
-
-`string` - SDK 版本号字符串
-
-##### Example
-
-```js
-console.log(LemoClient.SDK_VERSION) // "1.0.0"
-```
-
----
-
-<a name="submodule-tool-TxType"></a>
-
-#### LemoClient.TxType
-
-```
-LemoClient.TxType
-```
-
-[交易类型](#data-transaction-type)枚举类型，其中的值都是`number`类型
-
-##### Example
-
-```js
-console.log(LemoClient.TxType.VOTE) // 1
-```
-
----
-
 <a name="submodule-global-stopWatch"></a>
 
 #### lemo.stopWatch
@@ -1367,119 +1303,40 @@ console.log(lemo.isWatching() ? 'watching' : 'not watching')
 
 ---
 
-<a name="submodule-tool-verifyAddress"></a>
-#### LemoClient.verifyAddress
-```
-LemoClient.verifyAddress(addr)
-```
-校验LemoChain地址
+### 类属性
 
-##### Parameters
-1. `string` - LemoChain地址
+<a name="submodule-tool-SDK_VERSION"></a>
 
-##### Returns
-`string` - 错误字符串。如果是合法的地址，则返回空字符串
+#### LemoClient.SDK_VERSION
+
+```
+LemoClient.SDK_VERSION
+```
+
+`string` - SDK 版本号字符串
 
 ##### Example
+
 ```js
-const errMsg = LemoClient.verifyAddress('LEMObw')
-if (errMsg) {
-    console.error(errMsg);
-}
+console.log(LemoClient.SDK_VERSION) // "1.0.0"
 ```
 
 ---
 
-<a name="submodule-tool-moToLemo"></a>
-#### LemoClient.moToLemo
-```
-LemoClient.moToLemo(mo)
-```
-将单位从mo转换为LEMO
+<a name="submodule-tool-TxType"></a>
 
-##### Parameters
-1. `string|number` - mo
+#### LemoClient.TxType
 
-##### Returns
-`string` - 返回一个bigNumber类型的对象，如果输入的字符串或数字不合法，则会抛出一个异常
+```
+LemoClient.TxType
+```
+
+[交易类型](#data-transaction-type)枚举类型，其中的值都是`number`类型
 
 ##### Example
+
 ```js
-const result = LemoClient.moToLemo('0.1')
-console.log(result.toString(10)) // '0.0000000000000000001'
-```
-
----
-
-<a name="submodule-tool-lemoToMo"></a>
-#### LemoClient.lemoToMo
-```
-LemoClient.lemoToMo(ether)
-```
-将单位从LEMO转换为mo
-
-##### Parameters
-1. `string|number` - LEMO
-
-##### Returns
-`string` - 返回一个bigNumber类型的对象，如果输入的字符串或数字不合法，则会抛出一个异常
-
-##### Example
-```js
-const result = LemoClient.lemoToMo('0.1')
-console.log(result.toString(10)) // '100000000000000000'
-```
-
----
-
-<a name="submodule-tool-toBuffer"></a>
-#### LemoClient.toBuffer
-```
-LemoClient.toBuffer(data)
-```
-将数据转换为Buffer类型
-
-##### Parameters
-1. `number|string|BigNumber|Buffer|null` - 要转换的数据
-
-##### Returns
-`Buffer` - 返回一个Buffer类型的对象，如果传入了不支持的类型，则会抛出一个异常
-
-##### Example
-```js
-const result = LemoClient.toBuffer('{"value": 100}')
-console.log(result.toString('hex')) // '100000000000000000'
-```
-
----
-
-<a name="submodule-tool-signTx"></a>
-#### LemoClient.signTx
-```
-LemoClient.signTx(privateKey, txConfig)
-```
-签名交易并返回签名后的交易信息字符串  
-该方法用于实现安全的离线交易,相较于[`lemo.tx.sign`](#submodule-tx-sign)方法没有校验chainID
-
-1. 在离线电脑上签名
-2. 将签名后的数据拷贝到联网电脑上
-3. 通过[`lemo.tx.send`](#submodule-tx-send)方法发送到 LemoChain
-
-##### Parameters
-
-1. `string` - 账户私钥
-2. `object` - 签名前的交易信息，细节参考[`lemo.tx.sendTx`](#submodule-tx-sendTx)
-
-##### Returns
-
-`string` - 签名后的[交易](#data-structure-transaction)信息字符串
-
-##### Example
-```js
-const txInfo = {from: 'Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D', to: 'Lemo83BYKZJ4RN4TKC9C78RFW7YHW6S87TPRSH34', amount: 100}
-const signedTxStr = LemoClient.signTx('0xfdbd9978910ce9e1ed276a75132aacb0a12e6c517d9bd0311a736c57a228ee52', txInfo)
-console.log(signedTxStr)
-// {"type":"1","version":"1","chainID":"1","gasPrice":"3000000000","gasLimit":"2000000","amount":"100","expirationTime":"1560244840","from":"Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D","to":"Lemo83BYKZJ4RN4TKC9C78RFW7YHW6S87TPRSH34","sigs":["0x55fe70309bb74aaad62a7fe4ab4085dd8c8bd450ce9eab8dd7906cc5453cbaab500f50e1d05ff746248bc806f4738be2fcaafc78a557edf1e34c976a21d6f0c200"],"gasPayerSigs":[]}
+console.log(LemoClient.TxType.VOTE) // 1
 ```
 
 ---
