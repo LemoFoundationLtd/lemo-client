@@ -92,6 +92,11 @@ describe('module_tx_send', () => {
             }),
         )
     })
+    it('different chainID', async () => {
+        const lemo = new LemoClient({chainID})
+        const result = await lemo.tx.send(emptyTxInfo.txConfig, testPrivate)
+        assert.equal(result, emptyTxInfo.hashAfterSign)
+    })
     it('send a string txConfig', () => {
         return Promise.all(
             txInfos.map(async (test, i) => {
@@ -103,7 +108,8 @@ describe('module_tx_send', () => {
     })
     it('send a signed tx', async () => {
         return Promise.all(
-            txInfos.map(async (test, i) => {
+            // txInfos[0] (emptyTxInfo) has no chainID, so can't be signed
+            txInfos.slice(1).map(async (test, i) => {
                 const lemo = new LemoClient({chainID})
                 const tx = new LemoTx(test.txConfig)
                 tx.signWith(testPrivate)
