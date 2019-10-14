@@ -393,7 +393,7 @@ lemo.chain.getBlockByNumber(0).then(function(block) {
 ```json
 {
     "minerAddress": "Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG",
-    "nodeID": "5e3600755f9b512a65603b38e30885c98cbac70259c3235c9b3f42ee563b480edea351ba0ff5748a638fe0aeff5d845bf37a3b437831871b48fd32f33cd9a3c0",
+    "nodeID": "0x5e3600755f9b512a65603b38e30885c98cbac70259c3235c9b3f42ee563b480edea351ba0ff5748a638fe0aeff5d845bf37a3b437831871b48fd32f33cd9a3c0",
     "host": "127.0.0.1",
     "port": "7001",
     "votes": "50000"
@@ -401,7 +401,7 @@ lemo.chain.getBlockByNumber(0).then(function(block) {
 ```
 
 -   `minerAddress` 节点的挖矿收益账号地址
--   `nodeID` 节点的 ID，即节点对区块签名时的私钥对应的公钥。长度为128个字符，不要加`0x`
+-   `nodeID` 节点的 ID，即节点对区块签名时的私钥对应的公钥。长度为130个字符，需要加`0x`
 -   `host` 节点的 IP 地址或域名。最大长度为128字符
 -   `port` 与其它节点连接用的端口号
 -   `votes` 节点的总票数
@@ -435,7 +435,7 @@ lemo.chain.getBlockByNumber(0).then(function(block) {
             "host": "www.lemochain.com",
             "isCandidate": "true",
             "minerAddress": "Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG",
-            "nodeID": "5e3600755f9b512a65603b38e30885c98cbac70259c3235c9b3f42ee563b480edea351ba0ff5748a638fe0aeff5d845bf37a3b437831871b48fd32f33cd9a3c0",
+            "nodeID": "0x5e3600755f9b512a65603b38e30885c98cbac70259c3235c9b3f42ee563b480edea351ba0ff5748a638fe0aeff5d845bf37a3b437831871b48fd32f33cd9a3c0",
             "port": "7001"
         }
     },
@@ -459,7 +459,7 @@ lemo.chain.getBlockByNumber(0).then(function(block) {
         - `host` 候选者的节点服务器连接地址，可以是IP或域名
         - `isCandidate` 该账户是否是候选者。用来取消候选者身份
         - `minerAddress` 节点的挖矿收益账号地址
-        - `nodeID` 节点的 ID，即节点对区块签名时的私钥对应的公钥。长度为128个字符，不要加`0x`
+        - `nodeID` 节点的 ID，即节点对区块签名时的私钥对应的公钥。长度为130个字符，需要加`0x`
         - `port` 候选者的节点服务器端口号
 -   `signers` 多重签名账户，权重大于100才能对多重签名账户进行签名
         - `address` 多重签名账户地址
@@ -674,7 +674,7 @@ lemo.getCandidateList(index, limit)
 lemo.getCandidateList(0, 10).then(function(result) {
     console.log(result.total) // 1
     console.log(result.candidateList[0].address) // Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG
-    console.log(JSON.stringify(result.candidateList)) // [{"address":"Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG","profile":{"host":"127.0.0.1","isCandidate":true,"minerAddress":"Lemobw","nodeID":"5e3600755f9b512a65603b38e30885c98cbac70259c3235c9b3f42ee563b480edea351ba0ff5748a638fe0aeff5d845bf37a3b437831871b48fd32f33cd9a3c0","port":7001},"votes":"1599999000"}]
+    console.log(JSON.stringify(result.candidateList)) // [{"address":"Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG","profile":{"host":"127.0.0.1","isCandidate":true,"minerAddress":"Lemobw","nodeID":"0x5e3600755f9b512a65603b38e30885c98cbac70259c3235c9b3f42ee563b480edea351ba0ff5748a638fe0aeff5d845bf37a3b437831871b48fd32f33cd9a3c0","port":7001},"votes":"1599999000"}]
 })
 ```
 
@@ -698,7 +698,7 @@ lemo.getCandidateTop30()
 lemo.getCandidateTop30().then(function(candidateList) {
     console.log(candidateList.length) // 1
     console.log(candidateList[0].address) // Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG
-    console.log(JSON.stringify(candidateList)) // [{"address":"Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG","profile":{"host":"127.0.0.1","isCandidate":true,"minerAddress":"Lemobw","nodeID":"5e3600755f9b512a65603b38e30885c98cbac70259c3235c9b3f42ee563b480edea351ba0ff5748a638fe0aeff5d845bf37a3b437831871b48fd32f33cd9a3c0","port":7001},"votes":"1599999000"}]
+    console.log(JSON.stringify(candidateList)) // [{"address":"Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG","profile":{"host":"127.0.0.1","isCandidate":true,"minerAddress":"Lemobw","nodeID":"0x5e3600755f9b512a65603b38e30885c98cbac70259c3235c9b3f42ee563b480edea351ba0ff5748a638fe0aeff5d845bf37a3b437831871b48fd32f33cd9a3c0","port":7001},"votes":"1599999000"}]
 })
 ```
 
