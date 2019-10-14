@@ -1,7 +1,7 @@
 {
     "name": "lemo-client",
     "namespace": "LemoFoundationLtd",
-    "version": "0.10.13",
+    "version": "0.10.14",
     "description": "Lemochain JavaScript SDK, access to a lemochain distribution node over RPC",
     "main": "dist/lemo-client.cjs.js",
     "module": "dist/lemo-client.esm.js",
@@ -12,7 +12,7 @@
         "bignumber.js": "9.0.0",
         "core-js": "^3.2.1",
         "deep-eql": "^4.0.0",
-        "lemo-tx": "^1.1.7",
+        "lemo-tx": "^1.1.8",
         "lemo-utils": "^1.1.7"
     },
     "devDependencies": {
