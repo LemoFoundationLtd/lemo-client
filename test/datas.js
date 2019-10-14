@@ -218,8 +218,10 @@ export const formattedCurrentBlock = {
     transactions: [
         {
             ...currentBlock.transactions[0],
+            gasPriceText: '3000000000',
             gasPrice: new BigNumber('3000000000'),
             gasLimit: 2000000,
+            amountText: '101',
             amount: new BigNumber('101'),
             expirationTime: 1541649536,
             type: 0,
@@ -309,8 +311,10 @@ export const formattedBlock1 = {
     transactions: [
         {
             ...block1.transactions[0],
+            gasPriceText: '3000000000',
             gasPrice: new BigNumber('3000000000'),
             gasLimit: 2000000,
+            amountText: '100',
             gasUsed: 0,
             amount: new BigNumber('100'),
             expirationTime: 1541649535,
@@ -454,9 +458,11 @@ const tx1 = {
 const formattedTx1 = {
     ...tx1,
     from: testAddr,
+    gasPriceText: '3000000000',
     gasPrice: new BigNumber('3000000000'),
     gasLimit: 2000000,
     expirationTime: 1544584596,
+    amountText: '0',
     amount: new BigNumber('0'),
     type: 0,
     typeText: 'ORDINARY',
@@ -468,8 +474,10 @@ const tx2 = {
     version: '1',
     type: '0',
     gasPrice: '2',
+    gasPriceText: '2',
     gasLimit: '100',
     gasUsed: 0,
+    amountText: '1',
     amount: '1',
     expirationTime: '1544584596',
     sigs: ['0x8c0499083cb3d27bead4f21994aeebf8e75fa11df6bfe01c71cad583fc9a3c70778a437607d072540719a866adb630001fabbfb6b032d1a8dfbffac7daed8f0201'],
@@ -478,9 +486,11 @@ const tx2 = {
 const formattedTx2 = {
     ...tx2,
     from: testAddr,
+    gasPriceText: '2',
     gasPrice: new BigNumber('2'),
     gasLimit: 100,
     expirationTime: 1544584596,
+    amountText: '1',
     amount: new BigNumber('1'),
     type: 0,
     typeText: 'ORDINARY',
@@ -502,6 +512,8 @@ const tx3 = {
 const formattedTx3 = {
     ...tx3,
     from: testAddr,
+    amountText: '0x111111111111111111111111111111111111111111111111111111111111',
+    gasPriceText: '0x111111111111111111111111111111111111111111111111111111111111',
     gasPrice: new BigNumber(bigNum),
     gasLimit: 100,
     expirationTime: 1544584596,
@@ -524,7 +536,7 @@ export const txRes1 = {
     tx: tx1,
     pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
     assetCode: '0x0000000000000000000000000000000000000000000000000000000000000000',
-    assetId: '0x0000000000000000000000000000000000000000000000000000000000000000'
+    assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
 }
 
 export const formattedTxRes1 = {
@@ -534,7 +546,7 @@ export const formattedTxRes1 = {
     pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
     blockHash: '0x425f4ca99da879aa97bd6feaef0d491096ff3437934a139f423fecf06f9fd5ab',
     assetCode: '0x0000000000000000000000000000000000000000000000000000000000000000',
-    assetId: '0x0000000000000000000000000000000000000000000000000000000000000000'
+    assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
 }
 
 export const txRes2 = {
