@@ -37,7 +37,6 @@ describe('module_tx_getTxListByAddress', () => {
     it('got 3 txs', async () => {
         const lemo = new LemoClient({chainID})
         const result = await lemo.tx.getTxListByAddress('Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D', 0, 10)
-        console.log('>>>>', result)
         assert.deepEqual(result, formattedTxListRes)
     })
     it('got 1 tx', async () => {
