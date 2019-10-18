@@ -55,9 +55,9 @@ export const miner = {
 }
 export const formatedMiner = {
     ...miner,
-    balance: new BigNumber('1599999999999999999999999900'),
+    balance: '1599999999999999999999999900',
     records: {
-        BalanceLog: {
+        1: {
             height: 1,
             version: 3,
         },
@@ -66,11 +66,10 @@ export const formatedMiner = {
         profile: {
             ...miner.candidate.profile,
             isCandidate: true,
-            port: 7001,
+            port: '7001',
         },
         votes: '1599999000',
     },
-    txCount: 0,
 }
 export const formattedSpecialLemoBase = {
     ...emptyAccount,
@@ -218,14 +217,12 @@ export const formattedCurrentBlock = {
     transactions: [
         {
             ...currentBlock.transactions[0],
-            gasPriceText: '3000000000',
-            gasPrice: new BigNumber('3000000000'),
+            gasPrice: '3000000000',
             gasLimit: 2000000,
-            amountText: '101',
-            amount: new BigNumber('101'),
+            amount: '101',
             expirationTime: 1541649536,
             type: 0,
-            typeText: 'ORDINARY',
+            parsedData: undefined,
             version: 1,
         },
     ],
@@ -311,32 +308,30 @@ export const formattedBlock1 = {
     transactions: [
         {
             ...block1.transactions[0],
-            gasPriceText: '3000000000',
-            gasPrice: new BigNumber('3000000000'),
+            gasPrice: '3000000000',
             gasLimit: 2000000,
-            amountText: '100',
             gasUsed: 0,
-            amount: new BigNumber('100'),
+            amount: '100',
             expirationTime: 1541649535,
             type: 0,
-            typeText: 'ORDINARY',
+            parsedData: undefined,
             version: 1,
         },
     ],
     changeLogs: [
         {
             ...block1.changeLogs[0],
-            type: 'BalanceLog',
+            type: '1',
             version: 2,
         },
         {
             ...block1.changeLogs[1],
-            type: 'BalanceLog',
+            type: '1',
             version: 1,
         },
         {
             ...block1.changeLogs[2],
-            type: 'BalanceLog',
+            type: '1',
             version: 3,
         },
     ],
@@ -432,7 +427,7 @@ export const formattedOneChangeLogBlock = {
     changeLogs: [
         {
             ...oneChangeLogBlock.changeLogs[0],
-            type: 'BalanceLog',
+            type: '1',
             version: 2,
         },
     ],
@@ -458,14 +453,12 @@ const tx1 = {
 const formattedTx1 = {
     ...tx1,
     from: testAddr,
-    gasPriceText: '3000000000',
-    gasPrice: new BigNumber('3000000000'),
+    gasPrice: '3000000000',
     gasLimit: 2000000,
     expirationTime: 1544584596,
-    amountText: '0',
-    amount: new BigNumber('0'),
+    amount: '0',
     type: 0,
-    typeText: 'ORDINARY',
+    parsedData: undefined,
     version: 1,
 }
 
@@ -486,14 +479,12 @@ const tx2 = {
 const formattedTx2 = {
     ...tx2,
     from: testAddr,
-    gasPriceText: '2',
-    gasPrice: new BigNumber('2'),
+    gasPrice: '2',
     gasLimit: 100,
     expirationTime: 1544584596,
-    amountText: '1',
-    amount: new BigNumber('1'),
+    amount: '1',
     type: 0,
-    typeText: 'ORDINARY',
+    parsedData: undefined,
     version: 1,
 }
 
@@ -512,14 +503,12 @@ const tx3 = {
 const formattedTx3 = {
     ...tx3,
     from: testAddr,
-    amountText: '0x111111111111111111111111111111111111111111111111111111111111',
-    gasPriceText: '0x111111111111111111111111111111111111111111111111111111111111',
-    gasPrice: new BigNumber(bigNum),
+    gasPrice: '0x111111111111111111111111111111111111111111111111111111111111',
     gasLimit: 100,
     expirationTime: 1544584596,
-    amount: new BigNumber(bigNum),
+    amount: '0x111111111111111111111111111111111111111111111111111111111111',
     type: 0,
-    typeText: 'ORDINARY',
+    parsedData: undefined,
     version: 1,
 }
 
@@ -667,7 +656,7 @@ const formattedCandidate1 = {
     profile: {
         ...candidate1.profile,
         isCandidate: true,
-        port: 7001,
+        port: '7001',
     },
     votes: '1599999000000000000000000001',
 }
@@ -689,7 +678,7 @@ const formattedCandidate2 = {
     profile: {
         ...candidate2.profile,
         isCandidate: true,
-        port: 8080,
+        port: '8080',
     },
 }
 
@@ -716,7 +705,7 @@ export const formattedEquities = [
     {
         assertCode: '0xd0befd3850c574b7f6ad6f7943fe19b212affb90162978adc2193a035ced8884',
         assetId: '0x34b04e018488f37f449193af2f24feb3b034c994cde95d30e3181403ac76528a',
-        equity: new BigNumber(1),
+        equity: 1,
     },
 ]
 
