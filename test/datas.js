@@ -1,8 +1,10 @@
 import BigNumber from 'bignumber.js'
+import {ChangeLogTypes} from '../lib/const'
 
 const bigNum = '0x111111111111111111111111111111111111111111111111111111111111'
 const bigString = '888888888888888888888888888888888888888888888888888888888888'
 const bigData = '0x4949494949494949'
+const balanceLog = ChangeLogTypes.BalanceLog
 
 export const testPrivate = '0x432a86ab8765d82415a803e29864dcfc1ed93dac949abf6f95a583179f27e4bb'
 export const testAddr = 'Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D'
@@ -22,7 +24,7 @@ export const infos = {
 }
 
 export const emptyAccount = {
-    balance: '0x0',
+    balance: '0',
     codeHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
     records: {},
     root: '0x0000000000000000000000000000000000000000000000000000000000000000',
@@ -33,9 +35,9 @@ export const miner = {
     balance: '1599999999999999999999999900',
     codeHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
     records: {
-        1: {
-            height: '1',
-            version: '3',
+        [balanceLog]: {
+            height: 1,
+            version: 3,
         },
     },
     root: '0x0000000000000000000000000000000000000000000000000000000000000000',
@@ -57,7 +59,7 @@ export const formatedMiner = {
     ...miner,
     balance: '1599999999999999999999999900',
     records: {
-        1: {
+        [balanceLog]: {
             height: 1,
             version: 3,
         },
@@ -66,7 +68,6 @@ export const formatedMiner = {
         profile: {
             ...miner.candidate.profile,
             isCandidate: true,
-            port: '7001',
         },
         votes: '1599999000',
     },
@@ -321,17 +322,17 @@ export const formattedBlock1 = {
     changeLogs: [
         {
             ...block1.changeLogs[0],
-            type: '1',
+            type: 1,
             version: 2,
         },
         {
             ...block1.changeLogs[1],
-            type: '1',
+            type: 1,
             version: 1,
         },
         {
             ...block1.changeLogs[2],
-            type: '1',
+            type: 1,
             version: 3,
         },
     ],
@@ -427,7 +428,7 @@ export const formattedOneChangeLogBlock = {
     changeLogs: [
         {
             ...oneChangeLogBlock.changeLogs[0],
-            type: '1',
+            type: 1,
             version: 2,
         },
     ],

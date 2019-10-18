@@ -1,5 +1,4 @@
 import {assert} from 'chai'
-import BigNumber from 'bignumber.js'
 import LemoClient from '../../lib/index'
 import {
     chainID,
@@ -70,7 +69,7 @@ describe('module_account_getBalance', () => {
     it('no-balance', async () => {
         const lemo = new LemoClient()
         const result = await lemo.account.getBalance('Lemo846Q4NQCKJ2YWY6GHTSQHC7K24JDC7CPCWYH')
-        assert.strictEqual(result instanceof BigNumber, false)
+        assert.strictEqual(result, '0')
     })
     it('balance', async () => {
         const lemo = new LemoClient()
