@@ -26,6 +26,7 @@ import {
     metaData,
     creatAsset1,
     metaData1,
+    termRewardInfo1,
 } from './datas'
 
 const mockInfos = [
@@ -69,6 +70,13 @@ const mockInfos = [
         reply([assetId]) {
             const result = assetId === metaData.assetId ? metaData : metaData1
             return {...result}
+        },
+    },
+    {
+        method: 'account_getTermReward',
+        paramsCount: 1,
+        reply() {
+            return termRewardInfo1
         },
     },
     {
