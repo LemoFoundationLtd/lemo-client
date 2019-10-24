@@ -748,12 +748,12 @@ lemo.getTermReward(height)
 获取换届奖励信息
 
 ##### Parameters
-1. `number` - 区块高度
+1. `number` - 区块高度，将根据该高度找到这一届中发放奖励的区块
 
 ##### Returns
 `object` - 换届奖励信息，包括：
-    `term` - (number)届数，从0开始
-    `value` - (string)发放奖励的总量，单位为`mo`
+    `term` - (number)届数，从 `0` 开始
+    `value` - (string)发放奖励的总量，单位为 `mo`
     `rewardHeight` - (number)发放奖励区块的高度
 
 ##### Example
