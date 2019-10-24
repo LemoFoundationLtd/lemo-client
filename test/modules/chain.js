@@ -11,7 +11,7 @@ import {
     deputyNodes,
     nodeVersion,
     HxGasPriceAdvice,
-    termRewardInfo2,
+    formattedTermRewardInfo,
 } from '../datas'
 import '../mock'
 import {DEFAULT_POLL_DURATION} from '../../lib/const'
@@ -202,7 +202,7 @@ describe('module_account_getTermReward', () => {
     it('normal_account_getTermReward', async () => {
         const lemo = new LemoClient({chainID})
         const result = await lemo.getTermReward(10001)
-        assert.deepEqual(result, termRewardInfo2)
+        assert.deepEqual(result, formattedTermRewardInfo)
     })
     it('error', async () => {
         const lemo = new LemoClient({chainID})

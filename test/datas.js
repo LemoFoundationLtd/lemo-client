@@ -752,12 +752,12 @@ export const metaData1 = {
     owner: 'Lemo8498CBCJSY9G7JF4CGZDP64PRRNGP4HQ2QPF',
 }
 
-export const termRewardInfo1 = {
+export const termRewardInfo = {
     term: '0',
     value: '1000000000',
     rewardHeight: '10001',
 }
-export const termRewardInfo2 = {
+export const formattedTermRewardInfo = {
     term: 0,
     value: '1000000000',
     rewardHeight: 10001,

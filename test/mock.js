@@ -26,7 +26,7 @@ import {
     metaData,
     creatAsset1,
     metaData1,
-    termRewardInfo1,
+    termRewardInfo,
 } from './datas'
 
 const mockInfos = [
@@ -101,7 +101,7 @@ const mockInfos = [
         method: 'chain_getTermReward',
         paramsCount: 1,
         reply() {
-            return termRewardInfo1
+            return termRewardInfo
         },
     },
     {
