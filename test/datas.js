@@ -753,6 +753,11 @@ export const metaData1 = {
 }
 
 export const termRewardInfo1 = {
+    term: '0',
+    value: '1000000000',
+    rewardHeight: '10001',
+}
+export const termRewardInfo2 = {
     term: 0,
     value: '1000000000',
     rewardHeight: 10001,

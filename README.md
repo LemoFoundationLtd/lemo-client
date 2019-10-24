@@ -1079,7 +1079,7 @@ lemo.account.getTermReward(height)
 ##### Example
 ```js
 lemo.account.getTermReward(1001).then(function(result){
-console.log(JSON.stringify(result)) // {"term":"6","value":"1000000000","rewardHeight":"10001"}
+console.log(JSON.stringify(result)) // {"term":0,"value":"1000000000","rewardHeight":10001}
 })
 ```
 
