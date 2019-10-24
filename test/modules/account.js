@@ -8,7 +8,6 @@ import {
     creatAsset,
     metaData,
     metaData1,
-    termRewardInfo1,
 } from '../datas'
 
 import '../mock'
@@ -131,19 +130,5 @@ describe('module_account_getAssetMetaData', () => {
         const result = await lemo.account.getAssetMetaData('0x34b04e018488f37f449193af2f24feb3b034c994cde95d30e3181403ac76652v')
         assert.equal(result.assetCode, metaData1.assetCode)
         assert.equal(result.owner, metaData1.owner)
-    })
-})
-
-describe('module_account_getTermReward', () => {
-    it('normal_account_getTermReward', async () => {
-        const lemo = new LemoClient({chainID})
-        const result = await lemo.account.getTermReward(10001)
-        assert.deepEqual(result, termRewardInfo1)
-    })
-    it('error', async () => {
-        const lemo = new LemoClient({chainID})
-        assert.throws(() => {
-            lemo.account.getTermReward('10001')
-        }, errors.InvalidHeight())
     })
 })

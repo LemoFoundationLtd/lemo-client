@@ -73,13 +73,6 @@ const mockInfos = [
         },
     },
     {
-        method: 'account_getTermReward',
-        paramsCount: 1,
-        reply() {
-            return termRewardInfo1
-        },
-    },
-    {
         method: 'chain_currentBlock',
         paramsCount: 1,
         reply([withBody]) {
@@ -102,6 +95,13 @@ const mockInfos = [
                 result = {...result, transactions: null}
             }
             return result
+        },
+    },
+    {
+        method: 'chain_getTermReward',
+        paramsCount: 1,
+        reply() {
+            return termRewardInfo1
         },
     },
     {
