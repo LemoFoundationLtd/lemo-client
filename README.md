@@ -65,7 +65,8 @@ lemo.chain.getBlockByNumber(0).then(function(block) {
 | [lemo.account.getAssetMetaData(assetId)](#submodule-account-getAssetMetaData) | 获取指定资产中保存的自定义数据                 | ✓    | ✓          |
 | [lemo.account.createTempAddress(from, userId)](#submodule-account-createTempAddress) | 创建临时账户                 | ✖    | ✓          |
 | [lemo.account.isTempAddress(address)](#submodule-account-isTempAddress) | 是否是临时账户                 | ✖    | ✓          |
-| [lemo.account.isContractAddress(address)](#submodule-account-isContractAddress) | 是否是合约账户账户                 | ✖    | ✓          |
+| [lemo.account.isContractAddress(address)](#submodule-account-isContractAddress) | 是否是合约账户                | ✖    | ✓          |
+| [lemo.account.getTermReward(height)](#submodule-account-getTermReward) | 获取换届奖励信息                 | ✖    | ✓          |
 | [lemo.tx.getTx(txHash)](#submodule-tx-getTx)                               | 根据交易hash获取交易            | ✓    | ✓          |
 | [lemo.tx.getTxListByAddress(address, index, limit)](#submodule-tx-getTxListByAddress)     | 根据账户地址分页拉取交易列表      | ✓    | ✓          |
 | [lemo.tx.send(signedTxInfo, privateKey)](#submodule-tx-send)                           | 发送交易并返回交易hash字符串               | ✓    | ✓          |
@@ -725,7 +726,6 @@ lemo.getDeputyNodeList().then(function(nodeList) {
     lemo.net.connect(nodeList[0])
 })
 ```
-
 ---
 
 <a name="submodule-chain-getDistributionVersion"></a>
@@ -1056,6 +1056,31 @@ lemo.account.isContractAddress(address)
 ```js
 const result = lemo.account.isContractAddress('Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D')
 console.log(result) // false
+```
+
+---
+
+<a name="submodule-account-getTermReward"></a>
+#### lemo.account.getTermReward
+```
+lemo.account.getTermReward(height)
+```
+获取换届奖励信息
+
+##### Parameters
+1. `number` - 区块高度
+
+##### Returns
+`object` - 换届奖励信息，包括：
+    `term` - (number)届数，从0开始
+    `value` - (string)发放奖励的总量，单位为`mo`
+    `rewardHeight` - (number)发放奖励区块的高度
+
+##### Example
+```js
+lemo.account.getTermReward(1001).then(function(result){
+console.log(JSON.stringify(result)) // {"term":0,"value":"1000000000","rewardHeight":10001}
+})
 ```
 
 ---

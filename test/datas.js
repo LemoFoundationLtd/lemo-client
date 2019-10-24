@@ -751,3 +751,14 @@ export const metaData1 = {
     assetCode: '0x78d01bf80c705796328167963b0fdc857a4991aa1829fa68a7495d2980771228',
     owner: 'Lemo8498CBCJSY9G7JF4CGZDP64PRRNGP4HQ2QPF',
 }
+
+export const termRewardInfo = {
+    term: '0',
+    value: '1000000000',
+    rewardHeight: '10001',
+}
+export const formattedTermRewardInfo = {
+    term: 0,
+    value: '1000000000',
+    rewardHeight: 10001,
+}

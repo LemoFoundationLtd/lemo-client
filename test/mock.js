@@ -26,6 +26,7 @@ import {
     metaData,
     creatAsset1,
     metaData1,
+    termRewardInfo,
 } from './datas'
 
 const mockInfos = [
@@ -94,6 +95,13 @@ const mockInfos = [
                 result = {...result, transactions: null}
             }
             return result
+        },
+    },
+    {
+        method: 'chain_getTermReward',
+        paramsCount: 1,
+        reply() {
+            return termRewardInfo
         },
     },
     {

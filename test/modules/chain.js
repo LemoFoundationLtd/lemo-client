@@ -1,5 +1,4 @@
 import {assert} from 'chai'
-import BigNumber from 'bignumber.js'
 import LemoClient from '../../lib/index'
 import {
     chainID,
@@ -11,10 +10,12 @@ import {
     formattedCandidateListRes,
     deputyNodes,
     nodeVersion,
-    HxGasPriceAdvice
+    HxGasPriceAdvice,
+    formattedTermRewardInfo,
 } from '../datas'
 import '../mock'
 import {DEFAULT_POLL_DURATION} from '../../lib/const'
+import errors from '../../lib/errors'
 
 
 describe('module_chain_getNewestBlock', () => {
@@ -194,5 +195,22 @@ describe('module_chain_getDeputyNodeList', () => {
         const lemo = new LemoClient()
         const result = await lemo.getDeputyNodeList()
         assert.deepEqual(result, deputyNodes)
+    })
+})
+
+describe('module_account_getTermReward', () => {
+    it('normal_account_getTermReward', async () => {
+        const lemo = new LemoClient({chainID})
+        const result = await lemo.getTermReward(10001)
+        assert.deepEqual(result, formattedTermRewardInfo)
+    })
+    it('error', async () => {
+        const lemo = new LemoClient({chainID})
+        const expectedErr = errors.InvalidHeight()
+        return lemo.getTermReward('10001').then(() => {
+            assert.fail('success', `throw error: ${expectedErr}`)
+        }, e => {
+            return assert.equal(e.message, expectedErr)
+        })
     })
 })
