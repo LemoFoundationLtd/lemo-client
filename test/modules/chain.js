@@ -8,7 +8,7 @@ import {
     formattedBlock1,
     currentHeight,
     formattedCandidateListRes,
-    deputyNodes,
+    formattedDeputyNodes,
     nodeVersion,
     HxGasPriceAdvice,
     formattedTermRewardInfo,
@@ -194,7 +194,7 @@ describe('module_chain_getDeputyNodeList', () => {
     it('got 1 deputy nodes', async () => {
         const lemo = new LemoClient()
         const result = await lemo.getDeputyNodeList()
-        assert.deepEqual(result, deputyNodes)
+        assert.deepEqual(result, formattedDeputyNodes)
     })
 })
 
