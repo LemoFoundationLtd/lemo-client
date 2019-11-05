@@ -22,6 +22,7 @@ import {
     candidateList,
     deputyNodes,
     equities,
+    bigEquities,
     creatAsset,
     metaData,
     creatAsset1,
@@ -52,6 +53,9 @@ const mockInfos = [
             let list = []
             if (address === 'Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D') {
                 list = equities.slice(index, index + limit)
+            }
+            if (address === 'Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG') {
+                list = bigEquities.slice(index, index + limit)
             }
             return {equities: list, total: String(list.length)}
         },
