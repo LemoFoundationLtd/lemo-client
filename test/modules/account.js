@@ -8,6 +8,7 @@ import {
     creatAsset,
     metaData,
     metaData1,
+    bigFormattedEquities,
 } from '../datas'
 
 import '../mock'
@@ -106,6 +107,15 @@ describe('module_account_getAssetEquityByAddress', () => {
         const result = await lemo.account.getAllAssets('Lemobw', 0, 10)
         assert.equal(result.equities.length, 0)
         assert.equal(result.total, 0)
+    })
+    it('big_equities', async () => {
+        const lemo = new LemoClient({chainID, host: '127.0.0.1:8001'})
+        const result = await lemo.account.getAllAssets('Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG', 0, 10)
+        result.equities.forEach((item, index) => {
+            assert.deepEqual(item, bigFormattedEquities[index])
+        })
+        assert.equal(result.equities.length, bigFormattedEquities.length)
+        assert.equal(result.total, bigFormattedEquities.length)
     })
 })
 
