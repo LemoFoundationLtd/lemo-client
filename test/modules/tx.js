@@ -14,6 +14,7 @@ import {
     txList,
     block1,
     formattedAssetTxListRes,
+    formattedSpecialTxList,
 } from '../datas'
 import '../mock'
 import {DEFAULT_POLL_DURATION} from '../../lib/const'
@@ -53,6 +54,11 @@ describe('module_tx_getTxListByAddress', () => {
         const lemo = new LemoClient({chainID})
         const result = await lemo.tx.getTxListByAddress('Lemobw', 0, 10)
         assert.equal(result.txList.length, 0)
+    })
+    it('get special tx', async () => {
+        const lemo = new LemoClient({chainID})
+        const result = await lemo.tx.getTxListByAddress('Lemo83DZ5J99JSK5ZH89TCW7T6ZZCWJ8H7FDGA7W', 0, 10)
+        assert.deepEqual(result, formattedSpecialTxList)
     })
 })
 
@@ -285,7 +291,7 @@ describe('module_tx_waitConfirm', () => {
             },
         })
         const expectedErr = errors.InvalidTxTimeOut()
-        lemo1.tx.waitConfirm(txHash, txConfig.expirationTime).then(() => {
+        lemo1.tx.waitConfirm(txHash, txConfig.expirationTime).catch(() => {
             assert.fail('success', `throw error: ${expectedErr}`)
         }, e => {
             return assert.equal(e.message, expectedErr)

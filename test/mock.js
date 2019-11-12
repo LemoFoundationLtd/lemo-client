@@ -28,6 +28,7 @@ import {
     creatAsset1,
     metaData1,
     termRewardInfo,
+    specialTxList,
 } from './datas'
 
 const mockInfos = [
@@ -231,6 +232,9 @@ const mockInfos = [
             let list = []
             if (address === 'Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D') {
                 list = txList.slice(index, index + limit)
+            }
+            if (address === 'Lemo83DZ5J99JSK5ZH89TCW7T6ZZCWJ8H7FDGA7W') {
+                list = specialTxList.slice(index, index + limit)
             }
             return {txList: list, total: String(list.length)}
         },
