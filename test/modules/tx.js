@@ -14,6 +14,7 @@ import {
     txList,
     block1,
     formattedAssetTxListRes,
+    formattedSpecialTxList,
 } from '../datas'
 import '../mock'
 import {DEFAULT_POLL_DURATION} from '../../lib/const'
@@ -53,6 +54,11 @@ describe('module_tx_getTxListByAddress', () => {
         const lemo = new LemoClient({chainID})
         const result = await lemo.tx.getTxListByAddress('Lemobw', 0, 10)
         assert.equal(result.txList.length, 0)
+    })
+    it('get special tx', async () => {
+        const lemo = new LemoClient({chainID})
+        const result = await lemo.tx.getTxListByAddress('Lemo83DZ5J99JSK5ZH89TCW7T6ZZCWJ8H7FDGA7W', 0, 10)
+        assert.deepEqual(result, formattedSpecialTxList)
     })
 })
 
@@ -237,10 +243,10 @@ describe('module_tx_waitConfirm', () => {
             chainID,
             serverMode: true,
             send: (value) => {
-                if (value.id === 3) {
-                    return {jsonrpc: '2.0', id: 3, result: txConfig}
-                } else {
+                if (value.id === 2) {
                     return {jsonrpc: '2.0', id: 2, result: blockData}
+                } else {
+                    return {jsonrpc: '2.0', id: 3, result: txConfig}
                 }
             },
         })
@@ -277,18 +283,20 @@ describe('module_tx_waitConfirm', () => {
             chainID,
             serverMode: true,
             send: (value) => {
-                if (value.id === 3) {
-                    return {jsonrpc: '2.0', id: 3, result: txConfig}
-                } else {
+                if (value.id === 2) {
                     return {jsonrpc: '2.0', id: 2, result: blockData}
+                } else {
+                    return {jsonrpc: '2.0', id: 3, result: null}
                 }
             },
         })
         const expectedErr = errors.InvalidTxTimeOut()
-        lemo1.tx.waitConfirm(txHash, txConfig.expirationTime).then(() => {
-            assert.fail('success', `throw error: ${expectedErr}`)
+        return lemo1.tx.waitConfirm(txHash, txConfig.expirationTime).then(() => {
+            throw new Error(`expected error: ${expectedErr}`)
         }, e => {
-            return assert.equal(e.message, expectedErr)
+            if (e.message !== expectedErr) {
+                throw new Error(`expected error: ${expectedErr}`)
+            }
         })
     })
     it('waitConfirm_timeOut', async () => {
