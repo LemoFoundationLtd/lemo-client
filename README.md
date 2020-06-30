@@ -9,7 +9,7 @@
 
 通过 JSON RPC 协议访问 LemoChain 分发节点上的数据
 
-> 需要先在本地通过`--rpc`参数启动一个[LemoChain 分发节点](https://github.com/LemoFoundationLtd/lemochain-core)，或远程连接到一个已存在的 LemoChain 分发节点，才能运行本项目
+> 需要先在本地通过`--rpc`参数启动一个[LemoChain 分发节点](https://github.com/LemoFoundationLtd/lemochain-distribution)，或远程连接到一个已存在的 LemoChain 分发节点，才能运行本项目
 
 ## 安装
 
