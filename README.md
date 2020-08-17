@@ -777,8 +777,8 @@ lemo.getAllRewardValue()
 无
 
 ##### Returns
-`object` - 换届奖励信息，包括：
-    `term` - (number)届数，从0开始
+`object` - 矿工的获奖信息，包括：
+    `term` - (string)届数，从0开始
     `value` - (string)该届设置的奖励金额
     `times` - (number)这届奖励金额的修改次数
 
