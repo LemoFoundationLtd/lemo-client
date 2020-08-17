@@ -29,6 +29,7 @@ import {
     metaData1,
     termRewardInfo,
     specialTxList,
+    RewardValue,
 } from './datas'
 
 const mockInfos = [
@@ -107,6 +108,15 @@ const mockInfos = [
         paramsCount: 1,
         reply() {
             return termRewardInfo
+        },
+    },
+    {
+        method: 'chain_getAllRewardValue',
+        paramsCount: 0,
+        reply() {
+            return  {
+                RewardValue,
+            }
         },
     },
     {

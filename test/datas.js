@@ -871,3 +871,10 @@ export const formattedSpecialTxList = {
     ],
     total: 3,
 }
+
+export const RewardValue = {
+    term: '1',
+    value: '1000000001',
+    times: '0',
+}
+
