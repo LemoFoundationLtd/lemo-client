@@ -780,12 +780,12 @@ lemo.getAllRewardValue()
 `object` - 矿工的获奖信息，包括：
     `term` - (string)届数，从0开始
     `value` - (string)该届设置的奖励金额
-    `times` - (string)这届奖励金额的修改次数
+    `times` - (string)这届奖励金额的修改次数，修改次数为1或2
 
 ##### Example
 ```js
 lemo.getAllRewardValue().then(function(result){
-console.log(result) // { 0: { term: '1', value: '1000000001', times: '0' } }
+console.log(result) // { 0: { term: '1', value: '1000000001', times: '1' } }
 })
 ```
 
