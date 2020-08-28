@@ -29,6 +29,7 @@ import {
     metaData1,
     termRewardInfo,
     specialTxList,
+    RewardValue,
 } from './datas'
 
 const mockInfos = [
@@ -110,6 +111,15 @@ const mockInfos = [
         },
     },
     {
+        method: 'chain_getAllRewardValue',
+        paramsCount: 0,
+        reply() {
+            return  {
+                RewardValue,
+            }
+        },
+    },
+    {
         method: 'chain_getBlockByHash',
         paramsCount: 2,
         reply([hash, withBody]) {
@@ -181,9 +191,13 @@ const mockInfos = [
     },
     {
         method: 'chain_getDeputyNodeList',
-        paramsCount: 0,
-        reply() {
-            return deputyNodes
+        paramsCount: 1,
+        reply([onlyBlockSigner]) {
+            if (onlyBlockSigner) {
+                return deputyNodes
+            } else {
+                return deputyNodes
+            }
         },
     },
     {
