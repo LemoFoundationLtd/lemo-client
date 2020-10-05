@@ -26,9 +26,9 @@ import {
     deputyNodes,
     equitiesResList,
     creatAsset,
-    metaData,
+    assetToken1,
+    assetToken2,
     creatAsset1,
-    metaData1,
     termRewardInfo,
     RewardValue,
 } from './datas'
@@ -91,7 +91,7 @@ const mockInfos = [
         method: 'account_getAssetToken',
         paramsCount: 1,
         reply([assetId]) {
-            const result = assetId === metaData.assetId ? metaData : metaData1
+            const result = [assetToken1, assetToken2].find(item => item.assetId === assetId)
             return {...result}
         },
     },

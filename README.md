@@ -65,7 +65,7 @@ API | 功能 | 异步
 [lemo.account.getEquityList(address, index, limit)](#submodule-account-getEquityList) | 获取指定账户持有的所有资产权益 | ✓
 [lemo.account.getEquityListByAssetCode(address, assetCode, index, limit)](#submodule-account-getEquityListByAssetCode) | 根据资产Code获取指定账户持有的相关资产权益 | ✓
 [lemo.account.getAssetInfo(assetCode)](#submodule-account-getAssetInfo) | 获取指定资产类型的发行信息 | ✓
-[lemo.account.getAssetMetaData(assetId)](#submodule-account-getAssetMetaData) | 获取指定资产中保存的自定义数据 | ✓
+[lemo.account.getAssetToken(assetId)](#submodule-account-getAssetToken) | 获取指定资产通证的发行数据 | ✓
 [lemo.account.createTempAddress(from, userId)](#submodule-account-createTempAddress) | 创建临时账户 |
 [lemo.account.isTempAddress(address)](#submodule-account-isTempAddress) | 是否是临时账户 |
 [lemo.account.isContractAddress(address)](#submodule-account-isContractAddress) | 是否是合约账户 |
@@ -982,24 +982,27 @@ lemo.account.getAssetInfo('0xd0befd3850c574b7f6ad6f7943fe19b212affb90162978adc21
 
 ---
 
-<a name="submodule-account-getAssetMetaData"></a>
-#### lemo.account.getAssetMetaData
+<a name="submodule-account-getAssetToken"></a>
+#### lemo.account.getAssetToken
 ```
-lemo.account.getAssetMetaData(assetId) 
+lemo.account.getAssetToken(assetId) 
 ```
-获取指定资产中保存的自定义数据
+获取指定资产通证的发行数据
 
 ##### Parameters
 1. `string` - 资产id
 
 ##### Returns
-`Promise` - 通过`then`可以获取到指定资产保存的自定义数据。这个对象中增加了以下属性：  
-    - `string` 资产拥有者地址 
+`Promise` - 通过`then`可以获取到指定资产通证的发行数据。其属性有  
+    - id `string` 资产id
+    - code `string` 资产code
+    - owner `string` 资产拥有者地址 
+    - metaData `string` 附加在通证中的额外信息
 
 ##### Example
 ```js
-lemo.account.getAssetMetaData('0x34b04e018488f37f449193af2f24feb3b034c994cde95d30e3181403ac76528a').then(function(result) {
-    console.log(result.metaDate) // "This is user-defined data"
+lemo.account.getAssetToken('0x34b04e018488f37f449193af2f24feb3b034c994cde95d30e3181403ac76528a').then(function(result) {
+    console.log(result.metaData) // "This is user-defined data"
     console.log(result.owner) // "Lemo8498CBCJSY9G7JF4CGZDP64PRRNGP4HQ2QPF"
 })
 ```

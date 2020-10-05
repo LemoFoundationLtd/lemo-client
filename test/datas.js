@@ -696,13 +696,13 @@ export const creatAsset1 = {
     },
 }
 
-export const metaData = {
+export const assetToken1 = {
     assetId: '0x34b04e018488f37f449193af2f24feb3b034c994cde95d30e3181403ac76528a',
     assetCode: '0xd0befd3850c574b7f6ad6f7943fe19b212affb90162978adc2193a035ced8884',
     owner: 'Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D',
     metaData: 'This is user-defined data',
 }
-export const metaData1 = {
+export const assetToken2 = {
     assetId: '0x34b04e018488f37f449193af2f24feb3b034c994cde95d30e3181403ac76652v',
     assetCode: '0x78d01bf80c705796328167963b0fdc857a4991aa1829fa68a7495d2980771228',
     owner: 'Lemo8498CBCJSY9G7JF4CGZDP64PRRNGP4HQ2QPF',

@@ -6,9 +6,9 @@ import {
     formatedMiner,
     formattedEquities,
     creatAsset,
-    metaData,
-    metaData1,
-    equitiesResList
+    assetToken1,
+    assetToken2,
+    equitiesResList,
 } from '../datas'
 
 import '../mock'
@@ -145,17 +145,18 @@ describe('module_account_getAssetInfo', () => {
     })
 })
 
-describe('module_account_getAssetMetaData', () => {
-    it('normal_account_getAssetMetaData', async () => {
+describe('module_account_getAssetToken', () => {
+    it('normal_account_getAssetToken', async () => {
         const lemo = new LemoClient({chainID})
-        const result = await lemo.account.getAssetMetaData('0x34b04e018488f37f449193af2f24feb3b034c994cde95d30e3181403ac76528a')
-        assert.equal(result.assetCode, metaData.assetCode)
-        assert.equal(result.metaDate, metaData.metaDate)
+        const result = await lemo.account.getAssetToken('0x34b04e018488f37f449193af2f24feb3b034c994cde95d30e3181403ac76528a')
+        assert.equal(result.assetCode, assetToken1.assetCode)
+        assert.equal(result.metaData, assetToken1.metaData)
     })
     it('no_metaData', async () => {
         const lemo = new LemoClient({chainID})
-        const result = await lemo.account.getAssetMetaData('0x34b04e018488f37f449193af2f24feb3b034c994cde95d30e3181403ac76652v')
-        assert.equal(result.assetCode, metaData1.assetCode)
-        assert.equal(result.owner, metaData1.owner)
+        const result = await lemo.account.getAssetToken('0x34b04e018488f37f449193af2f24feb3b034c994cde95d30e3181403ac76652v')
+        assert.equal(result.assetCode, assetToken2.assetCode)
+        assert.equal(result.owner, assetToken2.owner)
+        assert.equal(result.metaData, '')
     })
 })
