@@ -24,8 +24,7 @@ import {
     txInfos,
     candidateList,
     deputyNodes,
-    equities,
-    bigEquities,
+    equitiesResList,
     creatAsset,
     metaData,
     creatAsset1,
@@ -51,15 +50,31 @@ const mockInfos = [
         },
     },
     {
-        method: 'account_getAssetEquity',
+        method: 'account_getEquity',
+        paramsCount: 2,
+        reply([address, assetId]) {
+            return equitiesResList[0]
+        },
+    },
+    {
+        method: 'account_getEquityList',
         paramsCount: 3,
         reply([address, index, limit]) {
             let list = []
             if (address === 'Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D') {
-                list = equities.slice(index, index + limit)
+                list = equitiesResList.slice(index, index + limit)
             }
-            if (address === 'Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG') {
-                list = bigEquities.slice(index, index + limit)
+            return {equities: list, total: String(list.length)}
+        },
+    },
+    {
+        method: 'account_getEquityListByAssetCode',
+        paramsCount: 4,
+        reply([address, assetCode, index, limit]) {
+            let list = []
+            if (address === 'Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D') {
+                list = equitiesResList.filter(item => item.assetCode === assetCode)
+                    .slice(index, index + limit)
             }
             return {equities: list, total: String(list.length)}
         },
@@ -73,7 +88,7 @@ const mockInfos = [
         },
     },
     {
-        method: 'account_getMetaData',
+        method: 'account_getAssetToken',
         paramsCount: 1,
         reply([assetId]) {
             const result = assetId === metaData.assetId ? metaData : metaData1

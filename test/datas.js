@@ -654,25 +654,17 @@ export const formattedDeputyNodes = [
     },
 ]
 
-export const equities = [
-    {
-        assertCode: '0xd0befd3850c574b7f6ad6f7943fe19b212affb90162978adc2193a035ced8884',
-        assetId: '0x34b04e018488f37f449193af2f24feb3b034c994cde95d30e3181403ac76528a',
-        equity: '1',
-    },
-]
+export const equitiesResList = [{
+    assetCode: '0xd0befd3850c574b7f6ad6f7943fe19b212affb90162978adc2193a035ced8884',
+    assetId: '0xd0befd3850c574b7f6ad6f7943fe19b212affb90162978adc2193a035ced8884',
+    equity: '1',
+}, {
+    assetCode: '0x34b04e018488f37f449193af2f24feb3b034c994cde95d30e3181403ac76528a',
+    assetId: '0x34b04e018488f37f449193af2f24feb3b034c994cde95d30e3181403ac76528a',
+    equity: '100000000000020000000000019',
+}]
 
-export const formattedEquities = equities
-
-export const bigEquities = [
-    {
-        assertCode: '0xd0befd3850c574b7f6ad6f7943fe19b212affb90162978adc2193a035ced8884',
-        assetId: '0x34b04e018488f37f449193af2f24feb3b034c994cde95d30e3181403ac76528a',
-        equity: '100000000000020000000000019',
-    },
-]
-
-export const bigFormattedEquities = bigEquities
+export const formattedEquities = equitiesResList
 
 export const creatAsset = {
     assetCode: '0xd0befd3850c574b7f6ad6f7943fe19b212affb90162978adc2193a035ced8884',

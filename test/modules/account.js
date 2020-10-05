@@ -8,7 +8,7 @@ import {
     creatAsset,
     metaData,
     metaData1,
-    bigFormattedEquities,
+    equitiesResList
 } from '../datas'
 
 import '../mock'
@@ -86,36 +86,53 @@ describe('module_account_getBalance', () => {
     })
 })
 
-describe('module_account_getAssetEquityByAddress', () => {
+describe('module_account_getEquity', () => {
     it('equities', async () => {
         const lemo = new LemoClient({chainID, host: '127.0.0.1:8001'})
-        const result = await lemo.account.getAllAssets('Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D', 0, 10)
-        result.equities.forEach((item, index) => {
-            assert.deepEqual(item, formattedEquities[index])
-        })
-        assert.equal(result.equities.length, formattedEquities.length)
+        const result = await lemo.account.getEquity('Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D', equitiesResList[0].assetId)
+        assert.deepEqual(result, formattedEquities[0])
+    })
+})
+
+describe('module_account_getEquityList', () => {
+    it('equities', async () => {
+        const lemo = new LemoClient({chainID, host: '127.0.0.1:8001'})
+        const result = await lemo.account.getEquityList('Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D', 0, 10)
+        assert.deepEqual(result.equities, formattedEquities)
         assert.equal(result.total, formattedEquities.length)
     })
     it('0 equity', async () => {
         const lemo = new LemoClient({chainID, host: '127.0.0.1:8001'})
-        const result = await lemo.account.getAllAssets('Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24A', 0, 10)
+        const result = await lemo.account.getEquityList('Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24A', 0, 10)
         assert.equal(result.equities.length, 0)
         assert.equal(result.total, 0)
     })
-    it('get from empty account', async () => {
+    it('get from invalid account', async () => {
         const lemo = new LemoClient({chainID, host: '127.0.0.1:8001'})
-        const result = await lemo.account.getAllAssets('Lemobw', 0, 10)
+        assert.throws(() => {
+            lemo.account.getEquityList('abc', 0, 10)
+        }, errors.InvalidAddress('abc'))
+    })
+})
+
+describe('module_account_getEquityListByAssetCode', () => {
+    it('equities', async () => {
+        const lemo = new LemoClient({chainID, host: '127.0.0.1:8001'})
+        const result = await lemo.account.getEquityListByAssetCode('Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D', equitiesResList[0].assetCode, 0, 10)
+        assert.deepEqual(result.equities[0], formattedEquities[0])
+        assert.equal(result.total, 1)
+    })
+    it('0 equity', async () => {
+        const lemo = new LemoClient({chainID, host: '127.0.0.1:8001'})
+        const result = await lemo.account.getEquityListByAssetCode('Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24A', '0xabcd', 0, 10)
         assert.equal(result.equities.length, 0)
         assert.equal(result.total, 0)
     })
-    it('big_equities', async () => {
+    it('get from invalid account', async () => {
         const lemo = new LemoClient({chainID, host: '127.0.0.1:8001'})
-        const result = await lemo.account.getAllAssets('Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG', 0, 10)
-        result.equities.forEach((item, index) => {
-            assert.deepEqual(item, bigFormattedEquities[index])
-        })
-        assert.equal(result.equities.length, bigFormattedEquities.length)
-        assert.equal(result.total, bigFormattedEquities.length)
+        assert.throws(() => {
+            lemo.account.getEquityListByAssetCode('abc', equitiesResList[0].assetId, 0, 10)
+        }, errors.InvalidAddress('abc'))
     })
 })
 

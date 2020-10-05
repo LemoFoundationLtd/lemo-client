@@ -61,7 +61,9 @@ API | 功能 | 异步
 [lemo.account.getBalance(addr)](#submodule-account-getBalance) | 获取账户余额 | ✓
 [lemo.account.getAccount(addr)](#submodule-account-getAccount) | 获取账户信息 | ✓
 [lemo.account.getCandidateInfo(addr)](#submodule-account-getCandidateInfo) | 获取候选人信息 | ✓
-[lemo.account.getAllAssets(address, index, limit)](#submodule-account-getAllAssets) | 获取指定账户持有的所有资产权益 | ✓
+[lemo.account.getEquity(address, assetId)](#submodule-account-getEquity) | 获取指定账户持有的指定资产权益 | ✓
+[lemo.account.getEquityList(address, index, limit)](#submodule-account-getEquityList) | 获取指定账户持有的所有资产权益 | ✓
+[lemo.account.getEquityListByAssetCode(address, assetCode, index, limit)](#submodule-account-getEquityListByAssetCode) | 根据资产Code获取指定账户持有的相关资产权益 | ✓
 [lemo.account.getAssetInfo(assetCode)](#submodule-account-getAssetInfo) | 获取指定资产类型的发行信息 | ✓
 [lemo.account.getAssetMetaData(assetId)](#submodule-account-getAssetMetaData) | 获取指定资产中保存的自定义数据 | ✓
 [lemo.account.createTempAddress(from, userId)](#submodule-account-createTempAddress) | 创建临时账户 |
@@ -884,10 +886,35 @@ lemo.account.getCandidateInfo('Lemo83BYKZJ4RN4TKC9C78RFW7YHW6S87TPRSH34')
 
 ---
 
-<a name="submodule-account-getAllAssets"></a>
-#### lemo.account.getAllAssets
+<a name="submodule-account-getEquity"></a>
+#### lemo.account.getEquity
 ```
-lemo.account.getAllAssets(address, index, limit)
+lemo.account.getEquity(address, assetId)
+```
+获取指定账户持有的指定资产权益
+
+##### Parameters
+1. `string` - 账户地址
+2. `string` - 资产id
+
+##### Returns
+`Promise` - 通过`then`可以获取到账户持有的该资产信息
+
+##### Example
+```js
+lemo.account.getEquity('Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG', '0xdb1e51e71fde226556ce8eb0d16b616b3213fc5d8906926889745a6c9c66a315').then(function(result) {
+     console.log(result.assetCode) // '0xd1e09b2a55e5b1a8f60b678eeb9ba7af1da67c6e5cfa41dd8bf14698ab76966b'
+     console.log(result.assetId) // '0xdb1e51e71fde226556ce8eb0d16b616b3213fc5d8906926889745a6c9c66a315'
+     console.log(result.equity) // '123456000000000000000'
+})
+```
+
+---
+
+<a name="submodule-account-getEquityList"></a>
+#### lemo.account.getEquityList
+```
+lemo.account.getEquityList(address, index, limit)
 ```
 获取指定账户持有的所有资产权益
 
@@ -901,7 +928,31 @@ lemo.account.getAllAssets(address, index, limit)
 
 ##### Example
 ```js
-lemo.account.getAllAssets('Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG', 0, 10).then(function(result) {
+lemo.account.getEquityList('Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG', 0, 10).then(function(result) {
+     console.log(result.equities[0].assetId) // 0xdb1e51e71fde226556ce8eb0d16b616b3213fc5d8906926889745a6c9c66a315
+})
+```
+
+---
+
+<a name="submodule-account-getEquityListByAssetCode"></a>
+#### lemo.account.getAssetInfo
+```
+lemo.account.getEquityListByAssetCode(address, assetCode, index, limit) 
+```
+根据资产Code获取指定账户持有的相关资产权益
+
+##### Parameters
+1. `string` - 账户地址
+2. `number` - 账户信息的下标
+3. `number` - 获取账户的数量
+
+##### Returns
+`Promise` - 通过`then`可以获取到账户持有所有资产的信息
+
+##### Example
+```js
+lemo.account.getEquityList('Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG', '0x41968aa5e7b0a4c99fb5bf7d3e89a7a7ca1c11bd8ac96cb77b29c02a9168461c', 0, 10).then(function(result) {
      console.log(result.equities[0].assetId) // 0xdb1e51e71fde226556ce8eb0d16b616b3213fc5d8906926889745a6c9c66a315
 })
 ```
