@@ -27,7 +27,7 @@ describe('module_account_getAccount', () => {
         return lemo.account.getAccount(addr).then(() => {
             assert.fail('success', `throw error: ${expectedErr}`)
         }, e => {
-            return assert.equal(e.message, expectedErr)
+            return assert.strictEqual(e.message, expectedErr)
         })
     })
 
@@ -38,7 +38,7 @@ describe('module_account_getAccount', () => {
         return lemo.account.getAccount(addr).then(() => {
             assert.fail('success', `throw error: ${expectedErr}`)
         }, e => {
-            return assert.equal(e.message, expectedErr)
+            return assert.strictEqual(e.message, expectedErr)
         })
     })
 })
@@ -52,7 +52,7 @@ describe('module_account_getCandidateInfo', () => {
     it('not candidate', async () => {
         const lemo = new LemoClient()
         const result = await lemo.account.getCandidateInfo('Lemo846Q4NQCKJ2YWY6GHTSQHC7K24JDC7CPCWYH')
-        assert.equal(result, undefined)
+        assert.strictEqual(result, undefined)
     })
     it('error candidate', () => {
         const lemo = new LemoClient()
@@ -61,7 +61,7 @@ describe('module_account_getCandidateInfo', () => {
         return lemo.account.getCandidateInfo(addr).then(() => {
             assert.fail('success', `throw error: ${expectedErr}`)
         }, e => {
-            return assert.equal(e.message, expectedErr)
+            return assert.strictEqual(e.message, expectedErr)
         })
     })
 })
@@ -75,7 +75,7 @@ describe('module_account_getBalance', () => {
     it('balance', async () => {
         const lemo = new LemoClient()
         const result = await lemo.account.getBalance('Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG')
-        assert.equal(result, '1599999999999999999999999900')
+        assert.strictEqual(result, '1599999999999999999999999900')
     })
     it('getBalance_error', async () => {
         const lemo = new LemoClient()
@@ -83,7 +83,7 @@ describe('module_account_getBalance', () => {
         try {
             await lemo.account.getBalance(addr)
         } catch (e) {
-            assert.equal(e.message, errors.InvalidAddress(addr))
+            assert.strictEqual(e.message, errors.InvalidAddress(addr))
             return
         }
         assert.fail(undefined, errors.InvalidAddress(addr))
@@ -103,13 +103,13 @@ describe('module_account_getEquityList', () => {
         const lemo = new LemoClient({chainID, host: '127.0.0.1:8001'})
         const result = await lemo.account.getEquityList('Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D', 0, 10)
         assert.deepEqual(result.equities, formattedEquities)
-        assert.equal(result.total, formattedEquities.length)
+        assert.strictEqual(result.total, formattedEquities.length)
     })
     it('0 equity', async () => {
         const lemo = new LemoClient({chainID, host: '127.0.0.1:8001'})
         const result = await lemo.account.getEquityList('Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24A', 0, 10)
-        assert.equal(result.equities.length, 0)
-        assert.equal(result.total, 0)
+        assert.strictEqual(result.equities.length, 0)
+        assert.strictEqual(result.total, 0)
     })
     it('get from invalid account', async () => {
         const lemo = new LemoClient({chainID, host: '127.0.0.1:8001'})
@@ -117,7 +117,7 @@ describe('module_account_getEquityList', () => {
         try {
             await lemo.account.getEquityList(addr, 0, 10)
         } catch (e) {
-            assert.equal(e.message, errors.InvalidAddress(addr))
+            assert.strictEqual(e.message, errors.InvalidAddress(addr))
             return
         }
         assert.fail(undefined, errors.InvalidAddress(addr))
@@ -129,13 +129,13 @@ describe('module_account_getEquityListByAssetCode', () => {
         const lemo = new LemoClient({chainID, host: '127.0.0.1:8001'})
         const result = await lemo.account.getEquityListByAssetCode('Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D', equitiesResList[0].assetCode, 0, 10)
         assert.deepEqual(result.equities[0], formattedEquities[0])
-        assert.equal(result.total, 1)
+        assert.strictEqual(result.total, 1)
     })
     it('0 equity', async () => {
         const lemo = new LemoClient({chainID, host: '127.0.0.1:8001'})
         const result = await lemo.account.getEquityListByAssetCode('Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24A', '0xabcd', 0, 10)
-        assert.equal(result.equities.length, 0)
-        assert.equal(result.total, 0)
+        assert.strictEqual(result.equities.length, 0)
+        assert.strictEqual(result.total, 0)
     })
     it('get from invalid account', async () => {
         const lemo = new LemoClient({chainID, host: '127.0.0.1:8001'})
@@ -143,7 +143,7 @@ describe('module_account_getEquityListByAssetCode', () => {
         try {
             await lemo.account.getEquityListByAssetCode(addr, equitiesResList[0].assetId, 0, 10)
         } catch (e) {
-            assert.equal(e.message, errors.InvalidAddress(addr))
+            assert.strictEqual(e.message, errors.InvalidAddress(addr))
             return
         }
         assert.fail(undefined, errors.InvalidAddress(addr))
@@ -154,8 +154,8 @@ describe('module_account_getAssetInfo', () => {
     it('normal_account_getAssetInfo', async () => {
         const lemo = new LemoClient({chainID})
         const result = await lemo.account.getAssetInfo('0xd0befd3850c574b7f6ad6f7943fe19b212affb90162978adc2193a035ced8884')
-        assert.equal(result.category, creatAsset.category)
-        assert.equal(result.profile.suggestedGasLimit, creatAsset.profile.suggestedGasLimit)
+        assert.strictEqual(result.category, creatAsset.category)
+        assert.strictEqual(result.profile.suggestedGasLimit, creatAsset.profile.suggestedGasLimit)
     })
 })
 
@@ -163,14 +163,14 @@ describe('module_account_getAssetToken', () => {
     it('normal_account_getAssetToken', async () => {
         const lemo = new LemoClient({chainID})
         const result = await lemo.account.getAssetToken('0x34b04e018488f37f449193af2f24feb3b034c994cde95d30e3181403ac76528a')
-        assert.equal(result.assetCode, assetToken1.assetCode)
-        assert.equal(result.metaData, assetToken1.metaData)
+        assert.strictEqual(result.assetCode, assetToken1.assetCode)
+        assert.strictEqual(result.metaData, assetToken1.metaData)
     })
     it('no_metaData', async () => {
         const lemo = new LemoClient({chainID})
         const result = await lemo.account.getAssetToken('0x34b04e018488f37f449193af2f24feb3b034c994cde95d30e3181403ac76652v')
-        assert.equal(result.assetCode, assetToken2.assetCode)
-        assert.equal(result.owner, assetToken2.owner)
-        assert.equal(result.metaData, '')
+        assert.strictEqual(result.assetCode, assetToken2.assetCode)
+        assert.strictEqual(result.owner, assetToken2.owner)
+        assert.strictEqual(result.metaData, '')
     })
 })

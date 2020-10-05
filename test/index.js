@@ -17,8 +17,8 @@ describe('LemoClient_static', () => {
 describe('LemoClient_new', () => {
     it('no config', () => {
         const lemo = new LemoClient()
-        assert.equal(lemo.requester.conn instanceof HttpConn, true)
-        assert.equal(lemo.config.chainID, 1)
+        assert.strictEqual(lemo.requester.conn instanceof HttpConn, true)
+        assert.strictEqual(lemo.config.chainID, 1)
         assert.deepEqual(lemo.config.conn, {
             send: undefined,
             host: 'http://127.0.0.1:8001',
@@ -31,7 +31,7 @@ describe('LemoClient_new', () => {
             pollDuration: 3000,
             maxPollRetry: 5,
         })
-        assert.equal(lemo.config.httpTimeOut, 120000)
+        assert.strictEqual(lemo.config.httpTimeOut, 120000)
     })
     it('full config', () => {
         const config = {
@@ -46,7 +46,7 @@ describe('LemoClient_new', () => {
             httpTimeOut: 1000,
         }
         const lemo = new LemoClient(config)
-        assert.equal(lemo.config.chainID, config.chainID)
+        assert.strictEqual(lemo.config.chainID, config.chainID)
         assert.deepEqual(lemo.config.conn, {
             send: undefined,
             host: config.host,
@@ -59,16 +59,16 @@ describe('LemoClient_new', () => {
             pollDuration: config.pollDuration,
             maxPollRetry: config.maxPollRetry,
         })
-        assert.equal(lemo.config.httpTimeOut, config.httpTimeOut)
+        assert.strictEqual(lemo.config.httpTimeOut, config.httpTimeOut)
     })
     it('http conn', () => {
         const lemo = new LemoClient({host: 'http://127.0.0.1:8002'})
-        assert.equal(lemo.requester.conn instanceof HttpConn, true)
-        assert.equal(lemo.requester.conn.host, 'http://127.0.0.1:8002')
+        assert.strictEqual(lemo.requester.conn instanceof HttpConn, true)
+        assert.strictEqual(lemo.requester.conn.host, 'http://127.0.0.1:8002')
     })
     it('http conn localhost', () => {
         const lemo = new LemoClient({host: 'http://localhost:8002'})
-        assert.equal(lemo.requester.conn.host, 'http://localhost:8002')
+        assert.strictEqual(lemo.requester.conn.host, 'http://localhost:8002')
     })
     it('custom conn', async () => {
         let sendRecord = null
@@ -80,7 +80,7 @@ describe('LemoClient_new', () => {
         }
 
         const lemo = new LemoClient(conn)
-        assert.equal(lemo.requester.conn.send, conn.send)
+        assert.strictEqual(lemo.requester.conn.send, conn.send)
         await lemo.getNewestBlock()
         assert.deepEqual(sendRecord, [
             {
@@ -93,13 +93,13 @@ describe('LemoClient_new', () => {
     })
     it('conn.host no http ip', () => {
         const lemo = new LemoClient({host: '127.0.0.1:8001'})
-        assert.equal(lemo.requester.conn instanceof HttpConn, true)
-        assert.equal(lemo.requester.conn.host, 'http://127.0.0.1:8001')
+        assert.strictEqual(lemo.requester.conn instanceof HttpConn, true)
+        assert.strictEqual(lemo.requester.conn.host, 'http://127.0.0.1:8001')
     })
     it('conn.host no http domain', () => {
         const lemo = new LemoClient({host: 'lemochain.com'})
-        assert.equal(lemo.requester.conn instanceof HttpConn, true)
-        assert.equal(lemo.requester.conn.host, 'http://lemochain.com')
+        assert.strictEqual(lemo.requester.conn instanceof HttpConn, true)
+        assert.strictEqual(lemo.requester.conn.host, 'http://lemochain.com')
     })
     it('hide property', () => {
         const hideProperties = ['requester', 'blockWatcher', 'txWatcher', 'createAPI', 'parser']
@@ -160,10 +160,10 @@ describe('LemoClient_createAPI', () => {
         const params = 'abc'
         const conn = {
             send: payload => {
-                assert.equal(payload.method, methodName)
+                assert.strictEqual(payload.method, methodName)
                 assert.isArray(payload.params)
-                assert.equal(payload.params.length, 1)
-                assert.equal(payload.params[0], params)
+                assert.strictEqual(payload.params.length, 1)
+                assert.strictEqual(payload.params[0], params)
                 return {jsonrpc: '2.0', id: 1, result: {}}
             },
         }
@@ -178,7 +178,7 @@ describe('LemoClient_createAPI', () => {
         // eslint-disable-next-line func-names
         lemo.createAPI('', 'setData2', function(param) {
             assert.exists(this.requester)
-            assert.equal(param, testParam)
+            assert.strictEqual(param, testParam)
         })
         lemo.setData2(testParam)
     })

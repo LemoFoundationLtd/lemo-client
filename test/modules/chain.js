@@ -66,7 +66,7 @@ describe('module_chain_getBlock', () => {
     it('getBlockByHash not exist', async () => {
         const lemo = new LemoClient()
         const result = await lemo.getBlock('0x1234')
-        assert.equal(result, null)
+        assert.strictEqual(result, null)
     })
 })
 
@@ -98,7 +98,7 @@ describe('module_chain_getGasPriceAdvice', () => {
     it('getGasPriceAdvice', async () => {
         const lemo = new LemoClient()
         const result = await lemo.getGasPriceAdvice()
-        assert.equal(result, HxGasPriceAdvice)
+        assert.strictEqual(result, HxGasPriceAdvice)
     })
 })
 
@@ -106,7 +106,7 @@ describe('module_chain_getDistributionVersion', () => {
     it('getNodeVersion', async () => {
         const lemo = new LemoClient()
         const result = await lemo.getDistributionVersion()
-        assert.equal(result, nodeVersion)
+        assert.strictEqual(result, nodeVersion)
     })
 })
 
@@ -148,7 +148,7 @@ describe('module_chain_watchBlock', () => {
             done()
         })
         lemo.stopWatchBlock(watchId1)
-        assert.equal(watchId1 + 1, watchId2)
+        assert.strictEqual(watchId1 + 1, watchId2)
     })
     it('multiple_watchBlock(false)_watchBlock(true)', function itFunc(done) {
         this.timeout(DEFAULT_POLL_DURATION + 50)
@@ -174,12 +174,12 @@ describe('module_chain_getCandidateList', () => {
     it('got 1 candidate', async () => {
         const lemo = new LemoClient()
         const result = await lemo.getCandidateList(0, 1)
-        assert.equal(result.candidateList.length, 1)
+        assert.strictEqual(result.candidateList.length, 1)
     })
     it('got 0 candidate', async () => {
         const lemo = new LemoClient()
         const result = await lemo.getCandidateList(0, 0)
-        assert.equal(result.candidateList.length, 0)
+        assert.strictEqual(result.candidateList.length, 0)
     })
 })
 
@@ -221,7 +221,7 @@ describe('module_account_getTermReward', () => {
         return lemo.getTermReward('10001').then(() => {
             assert.fail('success', `throw error: ${expectedErr}`)
         }, e => {
-            return assert.equal(e.message, expectedErr)
+            return assert.strictEqual(e.message, expectedErr)
         })
     })
 })
