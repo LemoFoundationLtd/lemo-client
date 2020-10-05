@@ -69,6 +69,7 @@ API | 功能 | 异步
 [lemo.account.isContractAddress(address)](#submodule-account-isContractAddress) | 是否是合约账户 |
 [lemo.tx.getTx(txHash)](#submodule-tx-getTx) | 根据交易hash获取交易 | ✓
 [lemo.tx.getTxListByAddress(address, index, limit)](#submodule-tx-getTxListByAddress) | 根据账户地址分页拉取交易列表 | ✓
+[lemo.tx.getAssetTxList(address, assetCodeOrId, index, limit)](#submodule-tx-getAssetTxList) | 根据账户地址和资产Code或资产Id分页拉取交易列表 | ✓
 [lemo.tx.send(signedTxInfo, privateKey)](#submodule-tx-send) | 发送交易并返回交易hash字符串 | ✓
 [lemo.tx.waitConfirm(txHash)](#submodule-tx-waitConfirm) | 等待交易上链 | ✓
 [lemo.tx.watchTx(filterTxConfig, callback)](#submodule-tx-watchTx) | 监听过滤区块的交易 |
@@ -81,6 +82,7 @@ API | 功能 | 异步
 ---|---
 [LemoClient.SDK_VERSION](#submodule-tool-SDK_VERSION) | js SDK 版本号
 [LemoClient.TxType](#submodule-tool-TxType) | 交易类型枚举
+[LemoClient.ChangeLogType](#submodule-tool-ChangeLogType) | 修改记录类型枚举
 [LemoClient.BigNumber](https://github.com/MikeMcl/bignumber.js) | 大数处理库 |
 
 ---
@@ -322,18 +324,29 @@ chainID | 说明
 - `version` 账户数据的版本号，每种`type`的数据版本号彼此独立
 - 根据`type`的不同，`newValue`和`extra`内保存的数据也不同
 
-type | 功能 | newValue | extra
----|---|---|---
-BalanceLog | 账户余额变化 | 新的余额 | -
-StorageLog | 合约账户存储数据变化 | value | key
-CodeLog | 合约账户创建 | 合约 code | -
-AddEventLog | 产生一条合约日志 | 合约日志 | -
-SuicideLog | 合约账户销毁 | - | -
-VoteForLog | 修改投票对象账号地址 | 新的投票对象地址 | -
-VotesLog | 候选者收到的票数变化 | 新的票数 | -
-CandidateProfileLog | 候选者修改自己的节点信息 | 节点信息对象 | -
-TxCountLog | 交易数量的变化 | 交易数量 | -
-SignersLog | 多重签名账户的变化 | 多重签名对象 | -
+<a name="data-change-log-type"></a>
+
+type | 数值 | 功能 | newValue | extra
+---|---|---|---|---
+lemo.ChangeLogType.BalanceLog | 1 | 账户余额变化 | 新的余额 | -
+lemo.ChangeLogType.StorageLog | 2 | 合约账户存储数据变化 | value | key
+lemo.ChangeLogType.StorageRootLog | 3 | 合约账户存储树的根节点变化 | 存储树的根节点hash | -
+lemo.ChangeLogType.AssetCodeLog | 4 | 创建资产类型信息 | 完整的资产类型信息 | 资产code
+lemo.ChangeLogType.AssetCodeStateLog | 5 | 修改资产类型信息中的字段 | 字段值 | 资产code和字段key
+lemo.ChangeLogType.AssetCodeRootLog | 6 | 账户创建的资产类型信息的树的根节点变化 | 资产类型信息树的根节点hash | -
+lemo.ChangeLogType.AssetCodeTotalSupplyLog | 7 | 发行、增发或销毁资产 | 资产总量 | 资产code
+lemo.ChangeLogType.AssetIdLog | 8 | 发行资产通证或修改其metadata | 资产通证中的metadata | 资产id
+lemo.ChangeLogType.AssetIdRootLog | 9 | 账户发行的资产通证信息的树的根节点变化 | 资产通证信息树的根节点hash | -
+lemo.ChangeLogType.EquityLog | 10 | 账户持有资产的余额变化 | 资产余额信息 | 资产id
+lemo.ChangeLogType.EquityRootLog | 11 | 账户持有资产的余额树的根节点变化 | 资产余额树的根节点hash | -
+lemo.ChangeLogType.CandidateLog | 12 | 创建或修改竞选信息 | 竞选信息对象 | -
+lemo.ChangeLogType.CandidateStateLog | 13 | 账户竞选信息的某字段变化 | 字段值 | 字段key
+lemo.ChangeLogType.CodeLog | 14 | 创建合约账户 | 合约 code | -
+lemo.ChangeLogType.AddEventLog | 15 | 产生一条合约日志 | 合约日志 | -
+lemo.ChangeLogType.SuicideLog | 16 | 销毁合约账户 | - | -
+lemo.ChangeLogType.VoteForLog | 17 | 修改投票对象账号地址 | 新的投票对象地址 | -
+lemo.ChangeLogType.VotesLog | 18 | 候选者收到的票数变化 | 新的票数 | -
+lemo.ChangeLogType.SignersLog | 19 | 多重签名账户的变化 | 多重签名对象 | -
 
 <a name="data-structure-confirm"></a>
 #### confirm
@@ -1023,7 +1036,10 @@ lemo.tx.getTx(txHash)
     - `blockHash` 交易所在区块的hash  
     - `blockHeight` 交易所在区块的高度  
     - `minedTime` 交易所在区块的出块时间  
-
+    - `pHash` 如果这是一个箱子交易中的子交易，则该值代表父交易的hash。否则为`0x0000000000000000000000000000000000000000000000000000000000000000`  
+    - `assetCode` 如果这是一个资产相关的交易，则该值为相关的资产assetCode。否则为`0x0000000000000000000000000000000000000000000000000000000000000000`  
+    - `assetId` 如果这是一个资产相关的交易，则该值为相关的资产assetId。否则为`0x0000000000000000000000000000000000000000000000000000000000000000`  
+    - `parsedData` 解析后的特殊交易data字段  
 ##### Example
 ```js
 lemo.tx.getTx('0xdb1e51e71fde226556ce8eb0d16b616b3213fc5d8906926889745a6c9c66a315').then(function(tx) {
@@ -1034,9 +1050,13 @@ lemo.tx.getTx('0xdb1e51e71fde226556ce8eb0d16b616b3213fc5d8906926889745a6c9c66a31
     console.log(tx.gasLimit) // 2000000
     console.log(tx.expirationTime) // 1541649535
     console.log(tx.message) // ''
+    console.log(tx.blockHash) // '0x425f4ca99da879aa97bd6feaef0d491096ff3437934a139f423fecf06f9fd5ab'
     console.log(tx.blockHeight) // 100
     console.log(tx.minedTime) // 1541649535
-    console.log(tx.blockHash) // '0x425f4ca99da879aa97bd6feaef0d491096ff3437934a139f423fecf06f9fd5ab'
+    console.log(tx.pHash) // '0xf1f570231c4403f4b46998c6430fd2312de0d21f9c36343e95da94a8c48bc265'
+    console.log(tx.assetCode) // '0x41968aa5e7b0a4c99fb5bf7d3e89a7a7ca1c11bd8ac96cb77b29c02a9168461c'
+    console.log(tx.assetId) // '0x41968aa5e7b0a4c99fb5bf7d3e89a7a7ca1c11bd8ac96cb77b29c02a9168461c'
+    console.log(tx.parsedData) // {"assetId": "0x41968aa5e7b0a4c99fb5bf7d3e89a7a7ca1c11bd8ac96cb77b29c02a9168461c", "transferAmount": "1000000000"}
 })
 ```
 
@@ -1056,15 +1076,44 @@ lemo.tx.getTxListByAddress(address, index, limit)
 
 ##### Returns
 `Promise` - 通过`then`可以获取到一个`{txList:Array, total:number}`对象。其中  
-    - `txList` [交易](#data-structure-transaction)的数组，其中增加了`minedTime`属性，表示所在区块的出块时间  
+    - `txList` 交易的数组，其中元素的格式与[lemo.tx.getTx](#submodule-tx-getTx)的返回值相同  
     - `total` 该账户下的交易总数  
 
 ##### Example
 ```js
 lemo.tx.getTxListByAddress('Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D', 0, 10).then(function(result) {
-    console.log(result.total) // 3
+    console.log(result.total) // 1
     console.log(result.txList[0].minedTime) // 1541649535
-    console.log(JSON.stringify(result.txList)) // [{"chainID":"1","expirationTime":1544584596,"from":"Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D","version":1,"type":0,"toName":"","gasPrice":"3000000000","gasLimit":2000000,"amount":"0","data":"0x","message":"","sigs":["0xf642fbc4588fbab945a6db57381fb756221607c96f5519c5f5092ca212b454e7529b1c78da1927bc99d07f0b0f3e18442b6d911ce71a45a6f0da101e84b88e3c01"],"typeText":"UnknonwType(0)","minedTime":1541649535},{"chainID":200,"version":1,"type":0,"to":"0x1000000000000000000000000000000000000000","toName":"888888888888888888888888888888888888888888888888888888888888","gasPrice":"1.17789804318558955305553166716194567721832259791707930541440413419507985e+71","gasLimit":100,"amount":"1.17789804318558955305553166716194567721832259791707930541440413419507985e+71","data":"0x4949494949494949","expirationTime":1544584596,"message":"888888888888888888888888888888888888888888888888888888888888","from":"Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D","sigs":["0xacba6ce994874d7b856d663a7f1d04bc7bf65278d33afb0a7fd8da69f626292a01e6badf976c360673b71c54ff363bbcb521ae545fec47cb0bf83eb4c83332b601"],"typeText":"UnknonwType(0)","minedTime":1541649536}]
+    console.log(JSON.stringify(result.txList)) // [{"type":8,"version":1,"chainID":"1","from":"Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D","gasPayer":null,"to":"Lemo83W3DBN8QASNAR2D5386QSNGC8DAN8TSRK53","toName":"","gasPrice":"3000000000","gasLimit":2000000,"gasUsed":37480,"amount":"0","data":"0x7b2261737365744964223a22307830613930346366663464313630333937323430626531653264306335326332346334313565323630383332646537333562666564623162356636396335623636222c227472616e73666572416d6f756e74223a2231303030303030303030227d","expirationTime":1601899822,"message":"","sigs":["0xe3c84e1e1abdbb1c62f3e338badf2f4c58a3af3ebc9b4dd87c1e1ab0d3c9bcba404861e86c98c9fff926df76ccedfc7e3d84313ced7126a3872f7fb2fa0c7f3d00"],"hash":"0xf1f570231c4403f4b46998c6430fd2312de0d21f9c36343e95da94a8c48bc265","gasPayerSigs":[],"parsedData":{"assetId":"0x0a904cff4d160397240be1e2d0c52c24c415e260832de735bfedb1b5f69c5b66","transferAmount":"1000000000"},"minedTime":1601898052,"pHash":"0x0000000000000000000000000000000000000000000000000000000000000000","blockHeight":1579,"blockHash":"0x51cb2d05acc247db302d3e42535a4f59e7ecbf3999322a185b7bfdfd6aebab4d","assetId":"0x0a904cff4d160397240be1e2d0c52c24c415e260832de735bfedb1b5f69c5b66","assetCode":"0x0a904cff4d160397240be1e2d0c52c24c415e260832de735bfedb1b5f69c5b66"}]
+})
+```
+
+---
+
+<a name="submodule-tx-getAssetTxList"></a>
+#### lemo.tx.getAssetTxList
+```
+lemo.tx.getAssetTxList(address, assetCodeOrId, index, limit)
+```
+根据账户地址分页拉取交易列表
+
+##### Parameters
+1. `string` - 账户地址
+2. `string` - 资产Code或资产Id
+3. `number` - 要获取的第一条交易的序号
+4. `number` - 获取交易的最大条数
+
+##### Returns
+`Promise` - 通过`then`可以获取到一个`{txList:Array, total:number}`对象。其中  
+    - `txList` 交易的数组，其中元素的格式与[lemo.tx.getTx](#submodule-tx-getTx)的返回值相同  
+    - `total` 该账户下的交易总数  
+
+##### Example
+```js
+lemo.tx.getAssetTxList('Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D', '0x41968aa5e7b0a4c99fb5bf7d3e89a7a7ca1c11bd8ac96cb77b29c02a9168461c', 0, 10).then(function(result) {
+    console.log(result.total) // 1
+    console.log(result.txList[0].minedTime) // 1541649535
+    console.log(JSON.stringify(result.txList)) // [{"type":8,"version":1,"chainID":"1","from":"Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D","gasPayer":null,"to":"Lemo83W3DBN8QASNAR2D5386QSNGC8DAN8TSRK53","toName":"","gasPrice":"3000000000","gasLimit":2000000,"gasUsed":37480,"amount":"0","data":"0x7b2261737365744964223a22307830613930346366663464313630333937323430626531653264306335326332346334313565323630383332646537333562666564623162356636396335623636222c227472616e73666572416d6f756e74223a2231303030303030303030227d","expirationTime":1601899822,"message":"","sigs":["0xe3c84e1e1abdbb1c62f3e338badf2f4c58a3af3ebc9b4dd87c1e1ab0d3c9bcba404861e86c98c9fff926df76ccedfc7e3d84313ced7126a3872f7fb2fa0c7f3d00"],"hash":"0xf1f570231c4403f4b46998c6430fd2312de0d21f9c36343e95da94a8c48bc265","gasPayerSigs":[],"parsedData":{"assetId":"0x0a904cff4d160397240be1e2d0c52c24c415e260832de735bfedb1b5f69c5b66","transferAmount":"1000000000"},"minedTime":1601898052,"pHash":"0x0000000000000000000000000000000000000000000000000000000000000000","blockHeight":1579,"blockHash":"0x51cb2d05acc247db302d3e42535a4f59e7ecbf3999322a185b7bfdfd6aebab4d","assetId":"0x41968aa5e7b0a4c99fb5bf7d3e89a7a7ca1c11bd8ac96cb77b29c02a9168461c","assetCode":"0x0a904cff4d160397240be1e2d0c52c24c415e260832de735bfedb1b5f69c5b66"}]
 })
 ```
 
@@ -1253,6 +1302,24 @@ LemoClient.TxType
 
 ```js
 console.log(LemoClient.TxType.VOTE) // 1
+```
+
+---
+
+<a name="submodule-tool-ChangeLogType"></a>
+
+#### LemoClient.ChangeLogType
+
+```
+LemoClient.ChangeLogType
+```
+
+[修改记录类型](#data-change-log-type)枚举类型，其中的值都是`number`类型
+
+##### Example
+
+```js
+console.log(LemoClient.ChangeLogType.BalanceLog) // 1
 ```
 
 ---

@@ -1,10 +1,11 @@
 import BigNumber from 'bignumber.js'
-import {ChangeLogTypes, TxType} from '../lib/const'
+import LemoTx from 'lemo-tx'
+import {ChangeLogType} from '../lib/const'
 
 const bigNum = '0x111111111111111111111111111111111111111111111111111111111111'
 const bigString = '888888888888888888888888888888888888888888888888888888888888'
 const bigData = '0x4949494949494949'
-const balanceLog = ChangeLogTypes.BalanceLog
+const balanceLog = ChangeLogType.BalanceLog
 
 export const testPrivate = '0x432a86ab8765d82415a803e29864dcfc1ed93dac949abf6f95a583179f27e4bb'
 export const testAddr = 'Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D'
@@ -103,7 +104,7 @@ export const txInfo = {
     txConfig: {
         chainID,
         version: 1,
-        type: TxType.ORDINARY,
+        type: LemoTx.TxType.ORDINARY,
         to: 'Lemo846Q4NQCKJ2YWY6GHTSQHC7K24JDC7CPCWYH',
         toName: 'aa',
         gasPrice: 2,
@@ -127,7 +128,7 @@ export const bigTxInfo = {
     txConfig: {
         chainID,
         version: 1,
-        type: TxType.ORDINARY,
+        type: LemoTx.TxType.ORDINARY,
         to: 'Lemo837J796DDHYTQTRTQDT7B4QJJ9B6H559BCCT',
         toName: bigString,
         gasPrice: bigNum,
@@ -188,7 +189,7 @@ export const currentBlock = {
         {
             chainID: '1',
             version: '1',
-            type: TxType.ORDINARY,
+            type: `${LemoTx.TxType.ORDINARY}`,
             from: 'Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D',
             to: 'Lemo83JW7TBPA7P2P6AR9ZC2WCQJYRNHZ4NJD4CY',
             toName: 'aa',
@@ -222,7 +223,7 @@ export const formattedCurrentBlock = {
             gasLimit: 2000000,
             amount: '101',
             expirationTime: 1541649536,
-            type: TxType.ORDINARY,
+            type: LemoTx.TxType.ORDINARY,
             parsedData: undefined,
             version: 1,
         },
@@ -253,7 +254,7 @@ export const block1 = {
         {
             chainID: '1',
             version: '1',
-            type: TxType.ORDINARY,
+            type: `${LemoTx.TxType.ORDINARY}`,
             from: 'Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG',
             to: 'Lemo83JW7TBPA7P2P6AR9ZC2WCQJYRNHZ4NJD4CY',
             toName: '',
@@ -271,21 +272,21 @@ export const block1 = {
     ],
     changeLogs: [
         {
-            type: TxType.ORDINARY,
+            type: `${LemoTx.TxType.ORDINARY}`,
             address: 'Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG',
             version: '2',
             newValue: '0x8c052b7d2dcc8093e1eb610f9c',
             extra: '',
         },
         {
-            type: TxType.ORDINARY,
+            type: `${LemoTx.TxType.ORDINARY}`,
             address: 'Lemo83JW7TBPA7P2P6AR9ZC2WCQJYRNHZ4NJD4CY',
             version: '1',
             newValue: '0x64',
             extra: '',
         },
         {
-            type: TxType.ORDINARY,
+            type: `${LemoTx.TxType.ORDINARY}`,
             address: 'Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG',
             version: '3',
             newValue: '0x8c052b7d2dcc80cd2e3fffff9c',
@@ -314,7 +315,7 @@ export const formattedBlock1 = {
             gasUsed: 0,
             amount: '100',
             expirationTime: 1541649535,
-            type: TxType.ORDINARY,
+            type: LemoTx.TxType.ORDINARY,
             parsedData: undefined,
             version: 1,
         },
@@ -322,17 +323,17 @@ export const formattedBlock1 = {
     changeLogs: [
         {
             ...block1.changeLogs[0],
-            type: TxType.ORDINARY,
+            type: LemoTx.TxType.ORDINARY,
             version: 2,
         },
         {
             ...block1.changeLogs[1],
-            type: TxType.ORDINARY,
+            type: LemoTx.TxType.ORDINARY,
             version: 1,
         },
         {
             ...block1.changeLogs[2],
-            type: TxType.ORDINARY,
+            type: LemoTx.TxType.ORDINARY,
             version: 3,
         },
     ],
@@ -395,7 +396,7 @@ export const oneChangeLogBlock = {
     transactions: [],
     changeLogs: [
         {
-            type: TxType.VOTE,
+            type: `${LemoTx.TxType.VOTE}`,
             address: 'Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG',
             version: '2',
             newValue: '0x8c052b7d2dcc8093e1eb610f9c',
@@ -428,7 +429,7 @@ export const formattedOneChangeLogBlock = {
     changeLogs: [
         {
             ...oneChangeLogBlock.changeLogs[0],
-            type: TxType.VOTE,
+            type: LemoTx.TxType.VOTE,
             version: 2,
         },
     ],
@@ -439,7 +440,7 @@ export const txInfos = [emptyTxInfo, txInfo, bigTxInfo]
 const tx1 = {
     ...emptyTxInfo.txConfig,
     version: '1',
-    type: TxType.ORDINARY,
+    type: `${LemoTx.TxType.ORDINARY}`,
     toName: '',
     gasPrice: '3000000000',
     gasLimit: '2000000',
@@ -458,7 +459,7 @@ const formattedTx1 = {
     gasLimit: 2000000,
     expirationTime: 1544584596,
     amount: '0',
-    type: TxType.ORDINARY,
+    type: LemoTx.TxType.ORDINARY,
     parsedData: undefined,
     version: 1,
 }
@@ -466,7 +467,7 @@ const formattedTx1 = {
 const tx2 = {
     ...txInfo.txConfig,
     version: '1',
-    type: TxType.ORDINARY,
+    type: `${LemoTx.TxType.ORDINARY}`,
     gasPrice: '2',
     gasPriceText: '2',
     gasLimit: '100',
@@ -484,7 +485,7 @@ const formattedTx2 = {
     gasLimit: 100,
     expirationTime: 1544584596,
     amount: '1',
-    type: TxType.ORDINARY,
+    type: LemoTx.TxType.ORDINARY,
     parsedData: undefined,
     version: 1,
 }
@@ -492,7 +493,7 @@ const formattedTx2 = {
 const tx3 = {
     ...bigTxInfo.txConfig,
     version: '1',
-    type: TxType.ORDINARY,
+    type: `${LemoTx.TxType.ORDINARY}`,
     gasPrice: bigNum,
     gasLimit: '100',
     gasUsed: 10,
@@ -508,7 +509,7 @@ const formattedTx3 = {
     gasLimit: 100,
     expirationTime: 1544584596,
     amount: '0x111111111111111111111111111111111111111111111111111111111111',
-    type: TxType.ORDINARY,
+    type: LemoTx.TxType.ORDINARY,
     parsedData: undefined,
     version: 1,
 }
@@ -519,125 +520,67 @@ export const tx4 = {
     from: testAddr,
 }
 
+// tx1的回包
 export const txRes1 = {
+    tx: tx1,
     blockHash: '0x425f4ca99da879aa97bd6feaef0d491096ff3437934a139f423fecf06f9fd5ab',
     height: '100',
     time: '1541649535',
-    tx: tx1,
     pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
-    assetCode: '0x0000000000000000000000000000000000000000000000000000000000000000',
-    assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+    assetCode: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
+    assetId: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
 }
-
+// 经过SDK格式化后的tx1回包
 export const formattedTxRes1 = {
     ...formattedTx1,
     blockHeight: 100,
     minedTime: 1541649535,
     pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
     blockHash: '0x425f4ca99da879aa97bd6feaef0d491096ff3437934a139f423fecf06f9fd5ab',
-    assetCode: '0x0000000000000000000000000000000000000000000000000000000000000000',
-    assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+    assetCode: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
+    assetId: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
 }
 
+// tx2的回包
 export const txRes2 = {
+    tx: tx2,
     blockHash: '0x425f4ca99da879aa97bd6feaef0d491096ff3437934a139f423fecf06f9fd5ab',
     height: '100',
     time: '1541649535',
-    tx: tx2,
     pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
+    assetCode: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
+    assetId: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
 }
-
+// 经过SDK格式化后的tx2回包
 export const formattedTxRes2 = {
     ...formattedTx2,
     blockHeight: 100,
     minedTime: 1541649535,
     pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
     blockHash: '0x425f4ca99da879aa97bd6feaef0d491096ff3437934a139f423fecf06f9fd5ab',
+    assetCode: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
+    assetId: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
 }
+
+// tx3的回包
 export const txRes3 = {
+    tx: tx3,
     blockHash: '0x425f4ca99da879aa97bd6feaef0d491096ff3437934a139f423fecf06f9fd5ab',
     height: '100',
     time: '1541649535',
-    tx: tx3,
     pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
+    assetId: '0x8dd85a833c482b4cb24f261e2d5378c14507eb01a92d89eb4a8278302f70cff5',
+    assetCode: '0x8dd85a833c482b4cb24f261e2d5378c14507eb01a92d89eb4a8278302f70cff5',
 }
-
+// 经过SDK格式化后的tx3回包
 export const formattedTxRes3 = {
     ...formattedTx3,
     blockHeight: 100,
     minedTime: 1541649535,
+    pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
     blockHash: '0x425f4ca99da879aa97bd6feaef0d491096ff3437934a139f423fecf06f9fd5ab',
-}
-
-export const txList = [
-    {
-        tx: tx1,
-        time: '1541649535',
-        pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        assetId: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
-        assetCode: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
-    },
-    {
-        tx: tx2,
-        time: '1541649536',
-        pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        assetId: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
-        assetCode: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
-    },
-    {
-        tx: tx3,
-        time: '1541649536',
-        pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        assetId: '0x8dd85a833c482b4cb24f261e2d5378c14507eb01a92d89eb4a8278302f70cff5',
-        assetCode: '0x8dd85a833c482b4cb24f261e2d5378c14507eb01a92d89eb4a8278302f70cff5',
-    },
-]
-
-
-export const formattedAssetTxListRes = {
-    txList: [
-        {
-            ...formattedTx1,
-            minedTime: 1541649535,
-            pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
-            assetId: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
-            assetCode: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
-        },
-        {
-            ...formattedTx2,
-            minedTime: 1541649536,
-            pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
-            assetId: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
-            assetCode: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
-        },
-    ],
-    total: 2,
-}
-export const formattedTxListRes = {
-    txList: [
-        {
-            ...formattedTx1,
-            minedTime: 1541649535,
-            pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
-            assetId: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
-            assetCode: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
-        },
-        {
-            ...formattedTx2,
-            minedTime: 1541649536,
-            pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
-            assetId: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
-            assetCode: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
-        },
-        {
-            ...formattedTx3,
-            minedTime: 1541649536,
-            pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
-            assetId: '0x8dd85a833c482b4cb24f261e2d5378c14507eb01a92d89eb4a8278302f70cff5',
-            assetCode: '0x8dd85a833c482b4cb24f261e2d5378c14507eb01a92d89eb4a8278302f70cff5',
-        },
-    ],
-    total: 3,
+    assetId: '0x8dd85a833c482b4cb24f261e2d5378c14507eb01a92d89eb4a8278302f70cff5',
+    assetCode: '0x8dd85a833c482b4cb24f261e2d5378c14507eb01a92d89eb4a8278302f70cff5',
 }
 
 const candidate1 = {
@@ -784,92 +727,73 @@ export const formattedTermRewardInfo = {
     rewardHeight: 10001,
 }
 
-export const specialTxList = [
-    {
-        tx: {
-            ...tx1,
-            type: TxType.CREATE_CONTRACT,
-            data: '0x000000100000100',
-        },
-        time: '1541649535',
-        pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        assetId: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
-        assetCode: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
-    }, {
-        tx: {
-            ...tx2,
-            type: TxType.VOTE,
-        },
-        time: '1541649536',
-        pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        assetId: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
-        assetCode: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
-    }, {
-        tx: {
-            ...tx3,
-            type: TxType.BOX_TX,
-            data: '0x7b2273756254784c697374223a5b7b2274797065223a2230222c2276657273696f6e223a2231222c22636861696e4944223a22313030222c2266726f6d223a224c656d6f3833474e3732475948324e5a3842413732395a39544354374b5135464333435236444a47222c226761735061796572223a6e756c6c2c22746f223a224c656d6f38334a57375442504137503250364152395a43325743514a59524e485a344e4a44344359222c22746f4e616d65223a22222c226761735072696365223a2233303030303030303030222c226761734c696d6974223a2232303030303030222c2267617355736564223a223231303030222c22616d6f756e74223a2235303030303030303030303030303030303030222c2264617461223a223078222c2265787069726174696f6e54696d65223a2231353733353239353139222c226d657373616765223a22222c2273696773223a5b22307836306330386431373735623536393465656134633130326462333330666636303638303861323136646366323862343433346661616432303865346537653761343930386130323164303766306332396630616365313932306133643666316366363961646264346364653030616261366465636537323562323835333339313031225d2c2268617368223a22307863633232343535663833663130666664333864393862636265393161313066626366616130333437653737383935346264653966613833616236343635396635222c22676173506179657253696773223a5b5d7d5d7d',
-        },
-        time: '1541649536',
-        pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        assetId: '0x8dd85a833c482b4cb24f261e2d5378c14507eb01a92d89eb4a8278302f70cff5',
-        assetCode: '0x8dd85a833c482b4cb24f261e2d5378c14507eb01a92d89eb4a8278302f70cff5',
-    }]
+// 在txRes1的基础上修改为特殊交易
+export const specialTxRes1 = {
+    ...txRes1,
+    tx: {
+        ...txRes1.tx,
+        type: `${LemoTx.TxType.CREATE_CONTRACT}`,
+        data: '0x000000100000100',
+    },
+}
+// 在txRes3的基础上修改为特殊交易
+export const specialTxRes2 = {
+    ...txRes2,
+    tx: {
+        ...txRes2.tx,
+        type: `${LemoTx.TxType.VOTE}`,
+    },
+}
+// 在txRes3的基础上修改为特殊交易
+export const specialTxRes3 = {
+    ...txRes3,
+    tx: {
+        ...txRes3.tx,
+        type: `${LemoTx.TxType.BOX_TX}`,
+        data: '0x7b2273756254784c697374223a5b7b2274797065223a2230222c2276657273696f6e223a2231222c22636861696e4944223a22313030222c2266726f6d223a224c656d6f3833474e3732475948324e5a3842413732395a39544354374b5135464333435236444a47222c226761735061796572223a6e756c6c2c22746f223a224c656d6f38334a57375442504137503250364152395a43325743514a59524e485a344e4a44344359222c22746f4e616d65223a22222c226761735072696365223a2233303030303030303030222c226761734c696d6974223a2232303030303030222c2267617355736564223a223231303030222c22616d6f756e74223a2235303030303030303030303030303030303030222c2264617461223a223078222c2265787069726174696f6e54696d65223a2231353733353239353139222c226d657373616765223a22222c2273696773223a5b22307836306330386431373735623536393465656134633130326462333330666636303638303861323136646366323862343433346661616432303865346537653761343930386130323164303766306332396630616365313932306133643666316366363961646264346364653030616261366465636537323562323835333339313031225d2c2268617368223a22307863633232343535663833663130666664333864393862636265393161313066626366616130333437653737383935346264653966613833616236343635396635222c22676173506179657253696773223a5b5d7d5d7d',
+    },
+}
 
-export const formattedSpecialTxList = {
-    txList: [
+// 在formattedTxRes1的基础上修改为特殊交易
+export const formattedSpecialTxRes1 = {
+    ...formattedTxRes1,
+    type: LemoTx.TxType.CREATE_CONTRACT,
+    data: '0x000000100000100',
+}
+// 在formattedTxRes3的基础上修改为特殊交易
+export const formattedSpecialTxRes2 = {
+    ...formattedTxRes2,
+    type: LemoTx.TxType.VOTE,
+}
+// 在formattedTxRes3的基础上修改为特殊交易
+export const formattedSpecialTxRes3 = {
+    ...formattedTxRes3,
+    type: LemoTx.TxType.BOX_TX,
+    data: '0x7b2273756254784c697374223a5b7b2274797065223a2230222c2276657273696f6e223a2231222c22636861696e4944223a22313030222c2266726f6d223a224c656d6f3833474e3732475948324e5a3842413732395a39544354374b5135464333435236444a47222c226761735061796572223a6e756c6c2c22746f223a224c656d6f38334a57375442504137503250364152395a43325743514a59524e485a344e4a44344359222c22746f4e616d65223a22222c226761735072696365223a2233303030303030303030222c226761734c696d6974223a2232303030303030222c2267617355736564223a223231303030222c22616d6f756e74223a2235303030303030303030303030303030303030222c2264617461223a223078222c2265787069726174696f6e54696d65223a2231353733353239353139222c226d657373616765223a22222c2273696773223a5b22307836306330386431373735623536393465656134633130326462333330666636303638303861323136646366323862343433346661616432303865346537653761343930386130323164303766306332396630616365313932306133643666316366363961646264346364653030616261366465636537323562323835333339313031225d2c2268617368223a22307863633232343535663833663130666664333864393862636265393161313066626366616130333437653737383935346264653966613833616236343635396635222c22676173506179657253696773223a5b5d7d5d7d',
+    parsedData: [
         {
-            ...formattedTx1,
-            type: TxType.CREATE_CONTRACT,
-            data: '0x000000100000100',
-            minedTime: 1541649535,
-            pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
-            assetId: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
-            assetCode: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
-        },
-        {
-            ...formattedTx2,
-            type: TxType.VOTE,
-            minedTime: 1541649536,
-            pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
-            assetId: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
-            assetCode: '0x1b9ef0086053ca7e41b7b5e5f0db422e4c987a5504f373fed5176635838ca446',
-        },
-        {
-            ...formattedTx3,
-            minedTime: 1541649536,
-            type: TxType.BOX_TX,
-            data: '0x7b2273756254784c697374223a5b7b2274797065223a2230222c2276657273696f6e223a2231222c22636861696e4944223a22313030222c2266726f6d223a224c656d6f3833474e3732475948324e5a3842413732395a39544354374b5135464333435236444a47222c226761735061796572223a6e756c6c2c22746f223a224c656d6f38334a57375442504137503250364152395a43325743514a59524e485a344e4a44344359222c22746f4e616d65223a22222c226761735072696365223a2233303030303030303030222c226761734c696d6974223a2232303030303030222c2267617355736564223a223231303030222c22616d6f756e74223a2235303030303030303030303030303030303030222c2264617461223a223078222c2265787069726174696f6e54696d65223a2231353733353239353139222c226d657373616765223a22222c2273696773223a5b22307836306330386431373735623536393465656134633130326462333330666636303638303861323136646366323862343433346661616432303865346537653761343930386130323164303766306332396630616365313932306133643666316366363961646264346364653030616261366465636537323562323835333339313031225d2c2268617368223a22307863633232343535663833663130666664333864393862636265393161313066626366616130333437653737383935346264653966613833616236343635396635222c22676173506179657253696773223a5b5d7d5d7d',
-            pHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
-            parsedData: [
-                {
-                    amount: '5000000000000000000',
-                    chainID: '100',
-                    data: '0x',
-                    expirationTime: 1573529519,
-                    from: 'Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG',
-                    gasLimit: 2000000,
-                    gasPayer: null,
-                    gasPayerSigs: [],
-                    gasPrice: '3000000000',
-                    gasUsed: 21000,
-                    hash: '0xcc22455f83f10ffd38d98bcbe91a10fbcfaa0347e778954bde9fa83ab64659f5',
-                    message: '',
-                    parsedData: undefined,
-                    sigs: [
-                        '0x60c08d1775b5694eea4c102db330ff606808a216dcf28b4434faad208e4e7e7a4908a021d07f0c29f0ace1920a3d6f1cf69adbd4cde00aba6dece725b285339101',
-                    ],
-                    to: 'Lemo83JW7TBPA7P2P6AR9ZC2WCQJYRNHZ4NJD4CY',
-                    toName: '',
-                    type: 0,
-                    version: 1,
-                },
+            amount: '5000000000000000000',
+            chainID: '100',
+            data: '0x',
+            expirationTime: 1573529519,
+            from: 'Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG',
+            gasLimit: 2000000,
+            gasPayer: null,
+            gasPayerSigs: [],
+            gasPrice: '3000000000',
+            gasUsed: 21000,
+            hash: '0xcc22455f83f10ffd38d98bcbe91a10fbcfaa0347e778954bde9fa83ab64659f5',
+            message: '',
+            parsedData: undefined,
+            sigs: [
+                '0x60c08d1775b5694eea4c102db330ff606808a216dcf28b4434faad208e4e7e7a4908a021d07f0c29f0ace1920a3d6f1cf69adbd4cde00aba6dece725b285339101',
             ],
-            assetId: '0x8dd85a833c482b4cb24f261e2d5378c14507eb01a92d89eb4a8278302f70cff5',
-            assetCode: '0x8dd85a833c482b4cb24f261e2d5378c14507eb01a92d89eb4a8278302f70cff5',
+            to: 'Lemo83JW7TBPA7P2P6AR9ZC2WCQJYRNHZ4NJD4CY',
+            toName: '',
+            type: 0,
+            version: 1,
         },
     ],
-    total: 3,
 }
 
 export const RewardValue = {

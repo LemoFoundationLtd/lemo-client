@@ -2,19 +2,21 @@ import {assert} from 'chai'
 import LemoTx from 'lemo-tx'
 import LemoClient from '../../lib/index'
 import {
-    txInfos,
     chainID,
     testPrivate,
+    txRes1,
+    txRes3,
     formattedTxRes1,
-    formattedTxListRes,
+    formattedTxRes2,
+    formattedTxRes3,
+    formattedSpecialTxRes1,
+    formattedSpecialTxRes2,
+    formattedSpecialTxRes3,
+    block1,
     tx4,
     txInfo,
     testAddr,
     emptyTxInfo,
-    txList,
-    block1,
-    formattedAssetTxListRes,
-    formattedSpecialTxList,
 } from '../datas'
 import '../mock'
 import {DEFAULT_POLL_DURATION} from '../../lib/const'
@@ -38,55 +40,63 @@ describe('module_tx_getTxListByAddress', () => {
     it('got 3 txs', async () => {
         const lemo = new LemoClient({chainID})
         const result = await lemo.tx.getTxListByAddress('Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D', 0, 10)
-        assert.deepEqual(result, formattedTxListRes)
+        assert.deepEqual(result.txList, [formattedTxRes1, formattedTxRes2, formattedTxRes3])
+        assert.equal(result.total, 3)
     })
     it('got 1 tx', async () => {
         const lemo = new LemoClient({chainID})
         const result = await lemo.tx.getTxListByAddress('Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D', 0, 1)
-        assert.equal(result.txList.length, 1)
+        assert.deepEqual(result.txList, [formattedTxRes1])
+        assert.equal(result.total, 1)
     })
     it('got 0 tx', async () => {
         const lemo = new LemoClient({chainID})
         const result = await lemo.tx.getTxListByAddress('Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D', 0, 0)
         assert.equal(result.txList.length, 0)
+        assert.equal(result.total, 0)
     })
     it('get from empty account', async () => {
         const lemo = new LemoClient({chainID})
         const result = await lemo.tx.getTxListByAddress('Lemobw', 0, 10)
         assert.equal(result.txList.length, 0)
+        assert.equal(result.total, 0)
     })
     it('get special tx', async () => {
         const lemo = new LemoClient({chainID})
         const result = await lemo.tx.getTxListByAddress('Lemo83DZ5J99JSK5ZH89TCW7T6ZZCWJ8H7FDGA7W', 0, 10)
-        assert.deepEqual(result, formattedSpecialTxList)
+        assert.deepEqual(result.txList, [formattedSpecialTxRes1, formattedSpecialTxRes2, formattedSpecialTxRes3])
+        assert.equal(result.total, 3)
     })
 })
 
 describe('module_tx_getAssetTxList', () => {
-    it('get_two_asset_tx_list', async () => {
+    it('get 2 txs by assetId', async () => {
         const lemo = new LemoClient({chainID})
-        const assetId = txList[0].assetId
+        const assetId = txRes1.assetId // it's same with txRes2
         const result = await lemo.tx.getAssetTxList(testAddr, assetId, 0, 10)
-        assert.equal(result.txList[0].assetId, formattedAssetTxListRes.txList[0].assetId)
-        assert.equal(result.txList.length, 2)
+        assert.deepEqual(result.txList, [formattedTxRes1, formattedTxRes2])
+        assert.equal(result.total, 2)
     })
-    it('get from empty assetId', async () => {
+    it('get 1 tx by assetId', async () => {
         const lemo = new LemoClient({chainID})
-        const assetId = '0x6c0b14755a4caba0f42cef903db72bbeae7dd8ef2d8c6c71c79136d8c6d8046f'
+        const assetId = txRes3.assetId
         const result = await lemo.tx.getAssetTxList(testAddr, assetId, 0, 10)
-        assert.equal(result.txList.length, 0)
+        assert.deepEqual(result.txList, [formattedTxRes3])
+        assert.equal(result.total, 1)
     })
     it('got 0 tx', async () => {
         const lemo = new LemoClient({chainID})
-        const assetId = txList[0].assetId
+        const assetId = '0x6c0b14755a4caba0f42cef903db72bbeae7dd8ef2d8c6c71c79136d8c6d8046f'
         const result = await lemo.tx.getAssetTxList(testAddr, assetId, 0, 0)
         assert.equal(result.txList.length, 0)
+        assert.equal(result.total, 0)
     })
-    it('account is empty', async () => {
+    it('account not exist', async () => {
         const lemo = new LemoClient({chainID})
-        const assetId = txList[0].assetId
+        const assetId = txRes1.assetId
         const result = await lemo.tx.getAssetTxList('Lemo123', assetId, 0, 10)
         assert.equal(result.txList.length, 0)
+        assert.equal(result.total, 0)
     })
 })
 

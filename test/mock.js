@@ -1,6 +1,7 @@
 import nock from 'nock'
 import Tx from 'lemo-tx'
 import {
+    testAddr,
     miner,
     emptyAccount,
     currentBlock,
@@ -17,8 +18,10 @@ import {
     txRes1,
     txRes2,
     txRes3,
+    specialTxRes1,
+    specialTxRes2,
+    specialTxRes3,
     txInfos,
-    txList,
     candidateList,
     deputyNodes,
     equities,
@@ -28,7 +31,6 @@ import {
     creatAsset1,
     metaData1,
     termRewardInfo,
-    specialTxList,
     RewardValue,
 } from './datas'
 
@@ -114,7 +116,7 @@ const mockInfos = [
         method: 'chain_getAllRewardValue',
         paramsCount: 0,
         reply() {
-            return  {
+            return {
                 RewardValue,
             }
         },
@@ -244,11 +246,11 @@ const mockInfos = [
         paramsCount: 3,
         reply([address, index, limit]) {
             let list = []
-            if (address === 'Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D') {
-                list = txList.slice(index, index + limit)
+            if (address === testAddr) {
+                list = [txRes1, txRes2, txRes3].slice(index, index + limit)
             }
             if (address === 'Lemo83DZ5J99JSK5ZH89TCW7T6ZZCWJ8H7FDGA7W') {
-                list = specialTxList.slice(index, index + limit)
+                list = [specialTxRes1, specialTxRes2, specialTxRes3].slice(index, index + limit)
             }
             return {txList: list, total: String(list.length)}
         },
@@ -258,8 +260,8 @@ const mockInfos = [
         paramsCount: 4,
         reply([address, assetId, index, limit]) {
             let list = []
-            if (address === 'Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D') {
-                list = txList.filter(item => item.assetId === assetId).slice(index, index + limit)
+            if (address === testAddr) {
+                list = [txRes1, txRes2, txRes3].filter(item => item.assetId === assetId).slice(index, index + limit)
             }
             return {txList: list, total: String(list.length)}
         },
@@ -275,7 +277,6 @@ const mockInfos = [
 
 function startMock() {
     nock('http://127.0.0.1:8001')
-    // .log(console.log)
         .post('/', body => {
             const mockInfo = mockInfos.find(info => info.method === body.method)
             return (
