@@ -69,6 +69,33 @@ describe('module_tx_getTxListByAddress', () => {
     })
 })
 
+describe('module_tx_getTxListByType', () => {
+    it('get 1 tx by txType', async () => {
+        const lemo = new LemoClient({chainID})
+        let result = await lemo.tx.getTxListByType(testAddr, LemoTx.TxType.CREATE_CONTRACT, 0, 10)
+        assert.deepEqual(result.txList[0], formattedSpecialTxRes1)
+        assert.equal(result.total, 1)
+        result = await lemo.tx.getTxListByType(testAddr, LemoTx.TxType.VOTE, 0, 10)
+        assert.deepEqual(result.txList[0], formattedSpecialTxRes2)
+        assert.equal(result.total, 1)
+        result = await lemo.tx.getTxListByType(testAddr, LemoTx.TxType.BOX_TX, 0, 10)
+        assert.deepEqual(result.txList[0], formattedSpecialTxRes3)
+        assert.equal(result.total, 1)
+    })
+    it('got 0 tx', async () => {
+        const lemo = new LemoClient({chainID})
+        const result = await lemo.tx.getTxListByType(testAddr, LemoTx.TxType.ISSUE_ASSET, 0, 10)
+        assert.equal(result.txList.length, 0)
+        assert.equal(result.total, 0)
+    })
+    it('account not exist', async () => {
+        const lemo = new LemoClient({chainID})
+        const result = await lemo.tx.getTxListByType('Lemo123', LemoTx.TxType.CREATE_CONTRACT, 0, 10)
+        assert.equal(result.txList.length, 0)
+        assert.equal(result.total, 0)
+    })
+})
+
 describe('module_tx_getAssetTxList', () => {
     it('get 2 txs by assetId', async () => {
         const lemo = new LemoClient({chainID})

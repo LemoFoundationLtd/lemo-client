@@ -256,6 +256,17 @@ const mockInfos = [
         },
     },
     {
+        method: 'tx_getTxListByType',
+        paramsCount: 4,
+        reply([address, txType, index, limit]) {
+            let list = []
+            if (address === testAddr) {
+                list = [specialTxRes1, specialTxRes2, specialTxRes3].filter(item => parseInt(item.tx.type, 10) === txType).slice(index, index + limit)
+            }
+            return {txList: list, total: String(list.length)}
+        },
+    },
+    {
         method: 'tx_getAssetTxList',
         paramsCount: 4,
         reply([address, assetId, index, limit]) {

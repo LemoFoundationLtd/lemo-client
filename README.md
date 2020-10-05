@@ -69,6 +69,7 @@ API | 功能 | 异步
 [lemo.account.isContractAddress(address)](#submodule-account-isContractAddress) | 是否是合约账户 |
 [lemo.tx.getTx(txHash)](#submodule-tx-getTx) | 根据交易hash获取交易 | ✓
 [lemo.tx.getTxListByAddress(address, index, limit)](#submodule-tx-getTxListByAddress) | 根据账户地址分页拉取交易列表 | ✓
+[lemo.tx.getTxListByType(address, txType, index, limit)](#submodule-tx-getTxListByType) | 根据账户地址和交易类型分页拉取交易列表 | ✓
 [lemo.tx.getAssetTxList(address, assetCodeOrId, index, limit)](#submodule-tx-getAssetTxList) | 根据账户地址和资产Code或资产Id分页拉取交易列表 | ✓
 [lemo.tx.send(signedTxInfo, privateKey)](#submodule-tx-send) | 发送交易并返回交易hash字符串 | ✓
 [lemo.tx.waitConfirm(txHash)](#submodule-tx-waitConfirm) | 等待交易上链 | ✓
@@ -1082,6 +1083,35 @@ lemo.tx.getTxListByAddress(address, index, limit)
 ##### Example
 ```js
 lemo.tx.getTxListByAddress('Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D', 0, 10).then(function(result) {
+    console.log(result.total) // 1
+    console.log(result.txList[0].minedTime) // 1541649535
+    console.log(JSON.stringify(result.txList)) // [{"type":8,"version":1,"chainID":"1","from":"Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D","gasPayer":null,"to":"Lemo83W3DBN8QASNAR2D5386QSNGC8DAN8TSRK53","toName":"","gasPrice":"3000000000","gasLimit":2000000,"gasUsed":37480,"amount":"0","data":"0x7b2261737365744964223a22307830613930346366663464313630333937323430626531653264306335326332346334313565323630383332646537333562666564623162356636396335623636222c227472616e73666572416d6f756e74223a2231303030303030303030227d","expirationTime":1601899822,"message":"","sigs":["0xe3c84e1e1abdbb1c62f3e338badf2f4c58a3af3ebc9b4dd87c1e1ab0d3c9bcba404861e86c98c9fff926df76ccedfc7e3d84313ced7126a3872f7fb2fa0c7f3d00"],"hash":"0xf1f570231c4403f4b46998c6430fd2312de0d21f9c36343e95da94a8c48bc265","gasPayerSigs":[],"parsedData":{"assetId":"0x0a904cff4d160397240be1e2d0c52c24c415e260832de735bfedb1b5f69c5b66","transferAmount":"1000000000"},"minedTime":1601898052,"pHash":"0x0000000000000000000000000000000000000000000000000000000000000000","blockHeight":1579,"blockHash":"0x51cb2d05acc247db302d3e42535a4f59e7ecbf3999322a185b7bfdfd6aebab4d","assetId":"0x0a904cff4d160397240be1e2d0c52c24c415e260832de735bfedb1b5f69c5b66","assetCode":"0x0a904cff4d160397240be1e2d0c52c24c415e260832de735bfedb1b5f69c5b66"}]
+})
+```
+
+---
+
+<a name="submodule-tx-getTxListByType"></a>
+#### lemo.tx.getTxListByType
+```
+lemo.tx.getTxListByType(address, txType, index, limit)
+```
+根据账户地址分页拉取交易列表
+
+##### Parameters
+1. `string` - 账户地址
+2. `number` - 交易类型，其值为枚举`LemoClient.TxType`
+3. `number` - 要获取的第一条交易的序号
+4. `number` - 获取交易的最大条数
+
+##### Returns
+`Promise` - 通过`then`可以获取到一个`{txList:Array, total:number}`对象。其中  
+    - `txList` 交易的数组，其中元素的格式与[lemo.tx.getTx](#submodule-tx-getTx)的返回值相同  
+    - `total` 该账户下的交易总数  
+
+##### Example
+```js
+lemo.tx.getTxListByType('Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D', lemo.TxType.TRANSFER_ASSET, 0, 10).then(function(result) {
     console.log(result.total) // 1
     console.log(result.txList[0].minedTime) // 1541649535
     console.log(JSON.stringify(result.txList)) // [{"type":8,"version":1,"chainID":"1","from":"Lemo836BQKCBZ8Z7B7N4G4N4SNGBT24ZZSJQD24D","gasPayer":null,"to":"Lemo83W3DBN8QASNAR2D5386QSNGC8DAN8TSRK53","toName":"","gasPrice":"3000000000","gasLimit":2000000,"gasUsed":37480,"amount":"0","data":"0x7b2261737365744964223a22307830613930346366663464313630333937323430626531653264306335326332346334313565323630383332646537333562666564623162356636396335623636222c227472616e73666572416d6f756e74223a2231303030303030303030227d","expirationTime":1601899822,"message":"","sigs":["0xe3c84e1e1abdbb1c62f3e338badf2f4c58a3af3ebc9b4dd87c1e1ab0d3c9bcba404861e86c98c9fff926df76ccedfc7e3d84313ced7126a3872f7fb2fa0c7f3d00"],"hash":"0xf1f570231c4403f4b46998c6430fd2312de0d21f9c36343e95da94a8c48bc265","gasPayerSigs":[],"parsedData":{"assetId":"0x0a904cff4d160397240be1e2d0c52c24c415e260832de735bfedb1b5f69c5b66","transferAmount":"1000000000"},"minedTime":1601898052,"pHash":"0x0000000000000000000000000000000000000000000000000000000000000000","blockHeight":1579,"blockHash":"0x51cb2d05acc247db302d3e42535a4f59e7ecbf3999322a185b7bfdfd6aebab4d","assetId":"0x0a904cff4d160397240be1e2d0c52c24c415e260832de735bfedb1b5f69c5b66","assetCode":"0x0a904cff4d160397240be1e2d0c52c24c415e260832de735bfedb1b5f69c5b66"}]
