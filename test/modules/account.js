@@ -77,12 +77,16 @@ describe('module_account_getBalance', () => {
         const result = await lemo.account.getBalance('Lemo83GN72GYH2NZ8BA729Z9TCT7KQ5FC3CR6DJG')
         assert.equal(result, '1599999999999999999999999900')
     })
-    it('getBalance_error', () => {
+    it('getBalance_error', async () => {
         const lemo = new LemoClient()
         const addr = '0x015780F8456F9c1532645087a19DcF9a7e0c7F97'
-        assert.throws(() => {
-            lemo.account.getBalance(addr)
-        }, errors.InvalidAddress(addr))
+        try {
+            await lemo.account.getBalance(addr)
+        } catch (e) {
+            assert.equal(e.message, errors.InvalidAddress(addr))
+            return
+        }
+        assert.fail(undefined, errors.InvalidAddress(addr))
     })
 })
 
@@ -109,9 +113,14 @@ describe('module_account_getEquityList', () => {
     })
     it('get from invalid account', async () => {
         const lemo = new LemoClient({chainID, host: '127.0.0.1:8001'})
-        assert.throws(() => {
-            lemo.account.getEquityList('abc', 0, 10)
-        }, errors.InvalidAddress('abc'))
+        const addr = 'abc'
+        try {
+            await lemo.account.getEquityList(addr, 0, 10)
+        } catch (e) {
+            assert.equal(e.message, errors.InvalidAddress(addr))
+            return
+        }
+        assert.fail(undefined, errors.InvalidAddress(addr))
     })
 })
 
@@ -130,9 +139,14 @@ describe('module_account_getEquityListByAssetCode', () => {
     })
     it('get from invalid account', async () => {
         const lemo = new LemoClient({chainID, host: '127.0.0.1:8001'})
-        assert.throws(() => {
-            lemo.account.getEquityListByAssetCode('abc', equitiesResList[0].assetId, 0, 10)
-        }, errors.InvalidAddress('abc'))
+        const addr = 'abc'
+        try {
+            await lemo.account.getEquityListByAssetCode(addr, equitiesResList[0].assetId, 0, 10)
+        } catch (e) {
+            assert.equal(e.message, errors.InvalidAddress(addr))
+            return
+        }
+        assert.fail(undefined, errors.InvalidAddress(addr))
     })
 })
 
