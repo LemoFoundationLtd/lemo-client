@@ -101,17 +101,6 @@ describe('LemoClient_new', () => {
         assert.strictEqual(lemo.requester.conn instanceof HttpConn, true)
         assert.strictEqual(lemo.requester.conn.host, 'http://lemochain.com')
     })
-    it('hide property', () => {
-        const hideProperties = ['requester', 'blockWatcher', 'txWatcher', 'createAPI', 'parser']
-        hideProperties.forEach(property => {
-            const lemo = new LemoClient()
-            assert.exists(lemo[property], `property = ${property}`)
-            // eslint-disable-next-line guard-for-in
-            Object.keys(lemo).forEach(key => {
-                assert.notEqual(key, property)
-            })
-        })
-    })
 })
 
 describe('LemoClient_createAPI', () => {
