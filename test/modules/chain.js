@@ -163,6 +163,15 @@ describe('module_chain_watchBlock', () => {
             done()
         })
     })
+    it('stopWatchBlock without param', () => {
+        const lemo = new LemoClient()
+        const watchId = lemo.watchBlock(false, () => {
+        })
+        assert.throws(() => {
+            lemo.stopWatchBlock()
+        }, errors.InvalidWatchId())
+        lemo.stopWatchBlock(watchId)
+    })
 })
 
 describe('module_chain_getCandidateList', () => {
