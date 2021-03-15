@@ -32,7 +32,7 @@ const lemo = new LemoClient({
     host: 'http://127.0.0.1:8001'
 })
 
-lemo.chain.getBlockByNumber(0).then(function(block) {
+lemo.getBlock(0).then(function(block) {
     console.log(block)
 })
 ```
